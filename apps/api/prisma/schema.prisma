@@ -10,12 +10,102 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  password    String
+  role        UserRole
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  archive     Boolean       @default(false)
+  Shift       Shift[]
+  Transaction Transaction[]
+}
 
-  @@map("samples") // if you want to use snake_case format
+enum UserRole {
+  ADMIN
+  CASHIER
+}
+
+model Product {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  description         String                @db.Text
+  category_id         Int?
+  price               Decimal
+  stock               Int
+  image               String
+  archive             Boolean               @default(false)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  category            Category?             @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Transaction_Product Transaction_Product[]
+}
+
+model StockLog {
+  id             Int          @id @default(autoincrement())
+  product_id     Int
+  type           StockLogType
+  quantityChange Int
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum StockLogType {
+  Addition
+  Reduction
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  archive   Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+}
+
+model Transaction {
+  id                  Int                   @id @default(autoincrement())
+  user_id             Int
+  shift_id            Int
+  invoice             String                @unique
+  amount              Decimal       
+  method              PaymentMethod
+  cardNumber          Int?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  user                User                  @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  shift               Shift                 @relation(fields: [shift_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Transaction_Product Transaction_Product[]
+}
+
+enum PaymentMethod {
+  DEBIT
+  CASH
+}
+
+model Transaction_Product {
+  id             Int         @id @default(autoincrement())
+  transaction_id Int
+  product_id     Int
+  quantity       Int
+  price          Decimal
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  product        Product     @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+}
+
+model Shift {
+  id           Int           @id @default(autoincrement())
+  user_id      Int
+  start_time   DateTime      @default(now())
+  end_time     DateTime?
+  initial_cash Decimal
+  final_cash   Decimal?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [user_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  Transaction  Transaction[]
 }
