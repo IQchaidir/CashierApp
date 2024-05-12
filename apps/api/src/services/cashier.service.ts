@@ -1,5 +1,5 @@
 import prisma from '@/prisma';
-import { hashPassword } from '@/utils/hashPassword';
+import { hashPassword } from '@/lib/hashPassword';
 import { resBadRequest, resCreated, resNotFound, resSuccess } from '@/utils/responses';
 import { User } from '@prisma/client';
 
@@ -21,15 +21,17 @@ export class CashierService {
         return resCreated(newCashier);
     }
 
-    async getCashier() {
-        let cashier: User[] = [];
+    async getCashier(pageNumber: number) {
+        const pageSize = 10;
+        const skipAmount = (pageNumber - 1) * pageSize;
         const getCashier = await prisma.user.findMany({
             where: { role: 'CASHIER', archive: false },
+            skip: skipAmount,
+            orderBy: { id: 'asc' },
         });
 
         if (getCashier.length > 0) {
-            cashier = getCashier;
-            return resSuccess(cashier);
+            return resSuccess(getCashier);
         }
         return resNotFound('cashier not found');
     }

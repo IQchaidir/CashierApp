@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import prisma from '@/prisma';
-import { generateJwt } from '@/utils/generateJwt';
-import { hashPassword } from '@/utils/hashPassword';
+import { generateJwt } from '@/lib/generateJwt';
+import { hashPassword } from '@/lib/hashPassword';
 import { resBadRequest, resCreated, resNotFound, resSuccess, resUnauthorized } from '@/utils/responses';
 
 export class AuthService {

@@ -1,15 +1,26 @@
 import prisma from '@/prisma';
+import { deleteExistingImage } from '@/utils/deleteExistingImage';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
-import { Prisma, Product } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
 export class ProductService {
+    async checkProduct(productId: number) {
+        const product = await prisma.product.findUnique({
+            where: { id: productId, archive: false },
+        });
+        if (!product) {
+            return false;
+        }
+        return true;
+    }
+
     async createProduct(
         file: string | undefined,
         name: string,
         description: string,
         price: number,
         stock: number,
-        categoryId: number,
+        category?: string,
     ) {
         if (!file) {
             return resBadRequest('No image uploaded');
@@ -29,7 +40,11 @@ export class ProductService {
                 description,
                 price,
                 stock,
-                category_id: categoryId,
+                // category: {
+                //     connect: {
+                //         name: category,
+                //     },
+                // },
                 image: process.env.BASE_URL + 'images/' + file,
             },
         });
@@ -37,8 +52,9 @@ export class ProductService {
         return resSuccess(newProduct);
     }
 
-    async getProduct(category?: string, name?: string) {
-        let products: Product[] = [];
+    async getProduct(pageNumber: number, category?: string, name?: string) {
+        const pageSize = 10;
+        const skipAmount = (pageNumber - 1) * pageSize;
         const whereClause: Prisma.ProductWhereInput = { archive: false };
 
         if (category) {
@@ -49,42 +65,52 @@ export class ProductService {
             whereClause.name = name ? { contains: name } : undefined;
         }
 
-        const product = await prisma.product.findMany({
+        const products = await prisma.product.findMany({
             where: whereClause,
+            skip: skipAmount,
+            orderBy: { id: 'asc' },
         });
-        if (product.length > 0) {
-            products = product;
+        if (products.length > 0) {
             return resSuccess(products);
         }
         return resNotFound('product not found');
     }
 
     async getProductById(id: number) {
-        const product = await prisma.product.findUnique({
-            where: { id },
-        });
+        const product = await this.checkProduct(id);
         if (!product) {
-            return { status: 400, response: { message: 'product not found' } };
+            return resNotFound('product not found');
         }
-        return { status: 200, response: { data: product, message: 'succes get product' } };
+        return resSuccess(product);
     }
 
     async updateProduct(
         id: number,
-        file?: string,
         name?: string,
         description?: string,
         price?: number,
         category?: string,
+        file?: string,
     ) {
+        const existingProduct = await prisma.product.findUnique({
+            where: { id, archive: false },
+        });
+        if (!existingProduct) {
+            return resBadRequest('Product not found');
+        }
+
         const existingName = await prisma.product.findUnique({
             where: { name, NOT: { id: Number(id) } },
         });
         if (existingName) {
-            return { status: 400, response: { message: 'product name already exist' } };
+            return resBadRequest('Product already exist');
         }
 
-        const updateData: any = { name, price, description, category: { connect: { name: category } } };
+        const updateData: any = { name, price, description };
+
+        if (category) {
+            updateData.category = { connect: { name: category } };
+        }
 
         const imageUrl = file ? process.env.BASE_URL + 'images/' + file : undefined;
         if (imageUrl) {
@@ -95,10 +121,11 @@ export class ProductService {
             where: { id },
             data: updateData,
         });
-        if (!updatedProduct) {
-            return { status: 400, response: { message: 'product not foud' } };
+
+        if (existingProduct.image && imageUrl && existingProduct.image !== imageUrl) {
+            deleteExistingImage(existingProduct.image);
         }
-        return { status: 200, repsonse: { data: updatedProduct, message: 'success update product' } };
+        return resSuccess(updatedProduct);
     }
 
     async archiveProduct(id: number) {
@@ -107,8 +134,8 @@ export class ProductService {
             data: { archive: true },
         });
         if (!deleteProduct) {
-            return { status: 400, response: { message: 'product not found' } };
+            return resBadRequest('Product not found');
         }
-        return { status: 200, response: { message: 'success delete product' } };
+        return resSuccess('Success delete product');
     }
 }

@@ -4,6 +4,10 @@ import { PORT } from './config';
 import { AuthRouter } from './routers/auth.router';
 import { CashierRouter } from './routers/cashier.router';
 import { ProductRouter } from './routers/product.router';
+import { CategoryRouter } from './routers/category.router';
+import { ShiftRouter } from './routers/shift.router';
+import { StockRouter } from './routers/stock.router';
+import { TransactionRouter } from './routers/transaction.router';
 
 export default class App {
     private app: Express;
@@ -44,10 +48,19 @@ export default class App {
         const authRouter = new AuthRouter();
         const cashierRouter = new CashierRouter();
         const productRouter = new ProductRouter();
+        const categoryRouter = new CategoryRouter();
+        const shiftRouter = new ShiftRouter();
+        const stockRouter = new StockRouter();
+        const transactionRouter = new TransactionRouter();
 
+        this.app.use(express.static('public'));
         this.app.use('/api/auth', authRouter.getRouter());
         this.app.use('/api/cashier', cashierRouter.getRouter());
         this.app.use('/api/product', productRouter.getRouter());
+        this.app.use('/api/category', categoryRouter.getRouter());
+        this.app.use('/api/shift', shiftRouter.getRouter());
+        this.app.use('/api/stock', stockRouter.getRouter());
+        this.app.use('/api/create', stockRouter.getRouter());
     }
 
     public start(): void {

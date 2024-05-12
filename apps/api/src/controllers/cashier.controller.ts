@@ -3,9 +3,10 @@ import { NextFunction, Request, Response } from 'express';
 
 export class CashierController {
     async getCashier(req: Request, res: Response, next: NextFunction) {
+        const pageNumber = parseInt((req.query.page as string) || '1');
         const cashierService = new CashierService();
         try {
-            const cashier = await cashierService.getCashier();
+            const cashier = await cashierService.getCashier(pageNumber);
             return res.status(cashier.status).json(cashier.response);
         } catch (error) {
             next(error);

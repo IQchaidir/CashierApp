@@ -15,6 +15,8 @@ export class ProductRouter {
     }
 
     private initializeRoutes(): void {
+        this.router.get('/', this.productController.getProduct);
+        this.router.get('/:id', this.productController.getProductById);
         this.router.post(
             '/create',
             verifyToken,
@@ -22,6 +24,14 @@ export class ProductRouter {
             uploader('IMG', '/images').single('file'),
             this.productController.createProduct,
         );
+        this.router.patch(
+            '/update/:id',
+            verifyToken,
+            verifyAdmin,
+            uploader('IMG', '/images').single('file'),
+            this.productController.updateProduct,
+        );
+        this.router.delete('/delete/:id', verifyToken, verifyAdmin, this.productController.deleteProduct);
     }
 
     getRouter(): Router {

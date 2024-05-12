@@ -1,9 +1,25 @@
 import prisma from '@/prisma';
-import { Prisma, Shift } from '@prisma/client';
+import { calculateTotalAmount } from '@/utils/calculateTotalAmount';
+import { formattedUtcDate } from '@/utils/formatUtcDate';
+import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
+import { Prisma } from '@prisma/client';
 
 export class ShiftService {
-    async getShift(whereClause: Prisma.ShiftWhereInput = {}, pageSize: number, skipAmount: number) {
-        let shift: Shift[] = [];
+    async getShift(pageNumber: number, startDate?: string, endDate?: string) {
+        const pageSize = 10;
+        const skipAmount = (pageNumber - 1) * pageSize;
+        let whereClause: Prisma.ShiftWhereInput = { final_cash: { not: null }, end_time: { not: null } };
+
+        if (startDate && endDate) {
+            const startUtcDate = formattedUtcDate(startDate);
+            const endUtcDate = formattedUtcDate(endDate, true);
+
+            whereClause.createdAt = {
+                gte: startUtcDate,
+                lte: endUtcDate,
+            };
+        }
+
         const getShift = await prisma.shift.findMany({
             where: whereClause,
             skip: skipAmount,
@@ -13,9 +29,9 @@ export class ShiftService {
             },
         });
         if (getShift.length > 0) {
-            shift = getShift;
+            return resSuccess(getShift);
         }
-        return { status: 200, response: { data: shift, message: 'get all shift' } };
+        return resNotFound('Shift not found');
     }
 
     async getShiftById(id: number) {
@@ -25,53 +41,75 @@ export class ShiftService {
         });
 
         if (!shift) {
-            return { status: 400, response: { message: 'shift not found' } };
+            return resNotFound('Shift not found');
         }
-
+        const totalTransactions = shift.Transaction.length;
         const cashTransaction = shift.Transaction.filter((transaction) => transaction.method === 'CASH');
         const debitTransaction = shift.Transaction.filter((transaction) => transaction.method === 'DEBIT');
 
-        const totalCash = cashTransaction.reduce((total, transaction) => total + Number(transaction.amount), 0);
-        const totalDebit = debitTransaction.reduce((total, transaction) => total + Number(transaction.amount), 0);
+        const totalCash = calculateTotalAmount(cashTransaction);
+        const totalDebit = calculateTotalAmount(debitTransaction);
+        const totalAmount = totalCash + totalDebit;
 
         const shiftWithTotals = {
             ...shift,
+            totalTransactions,
             totalCash,
             totalDebit,
+            totalAmount,
         };
 
-        return { status: 200, response: { data: shiftWithTotals, message: 'success get shift' } };
+        return resSuccess(shiftWithTotals);
     }
 
-    async checkShift() {}
+    async checkShift(id: number) {
+        const activeShift = await prisma.shift.findFirst({
+            where: {
+                user_id: { not: id },
+                start_time: { lte: new Date() },
+                end_time: null,
+            },
+        });
 
-    async startShift(initialCash: number, id: number) {
+        const noShift = await prisma.shift.findFirst({
+            where: {
+                user_id: id,
+                end_time: null,
+            },
+        });
+
+        return { activeShift, noShift };
+    }
+
+    async startShift(initial_cash: number, id: number) {
         const user = await prisma.user.findFirst({
             where: { id },
         });
 
         if (!user) {
-            return { status: 400, response: { message: 'user not found' } };
+            return resNotFound('User not found');
+        }
+
+        const checkShift = await this.checkShift(id);
+
+        if (checkShift.activeShift) {
+            return resBadRequest('there is still an ongoing shift');
         }
 
         const shift = await prisma.shift.create({
-            data: { user_id: id, initial_cash: initialCash },
+            data: { user_id: id, initial_cash: initial_cash },
         });
-        return { status: 200, response: { data: shift, message: 'shift created' } };
+        return resSuccess(shift);
     }
 
-    async endShift(finalCash: number, id: number) {
-        const shift = await prisma.shift.findFirst({
-            where: { id },
+    async endShift(id: number, final_cash: number) {
+        const shift = await prisma.shift.update({
+            where: { id, end_time: null },
+            data: { final_cash, end_time: new Date().toISOString() },
         });
-
         if (!shift) {
-            return { status: 400, response: { message: 'shift not found' } };
+            return resBadRequest('shift not found');
         }
-        const endShift = await prisma.shift.update({
-            where: { id },
-            data: { final_cash: finalCash, end_time: new Date().toISOString() },
-        });
-        return { status: 200, response: { data: endShift, message: 'shift ended' } };
+        return resSuccess(shift);
     }
 }
