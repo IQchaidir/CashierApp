@@ -60,7 +60,7 @@ export default class App {
         this.app.use('/api/category', categoryRouter.getRouter());
         this.app.use('/api/shift', shiftRouter.getRouter());
         this.app.use('/api/stock', stockRouter.getRouter());
-        this.app.use('/api/create', stockRouter.getRouter());
+        this.app.use('/api/transaction', transactionRouter.getRouter());
     }
 
     public start(): void {
