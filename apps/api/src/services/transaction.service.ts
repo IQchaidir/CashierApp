@@ -29,7 +29,7 @@ export class TransactionService {
         const checkShift = await shiftService.checkShift(userId);
         if (checkShift.activeShift) {
             return resBadRequest('there is still an ongoing shift');
-        } else if (checkShift.noShift) {
+        } else if (!checkShift.noShift) {
             return resBadRequest('Create a new shift first');
         }
 
@@ -62,19 +62,17 @@ export class TransactionService {
             const createTransaction = await tx.transaction.create({
                 data: dataTransaction,
             });
-            await Promise.all(
-                products.map(async (product) => {
-                    await tx.transaction_Product.create({
-                        data: {
-                            transaction_id: createTransaction.id,
-                            product_id: product.productId,
-                            quantity: product.quantity,
-                            price: product.price,
-                        },
-                    });
-                    await stockService.reduceStock(product.productId, product.quantity);
-                }),
-            );
+            for (const product of products) {
+                await tx.transaction_Product.create({
+                    data: {
+                        transaction_id: createTransaction.id,
+                        product_id: product.productId,
+                        quantity: product.quantity,
+                        price: product.price,
+                    },
+                });
+                await stockService.reduceStockTransaction(product.productId, product.quantity, tx);
+            }
             return createTransaction;
         });
         return resSuccess(newTransaction);

@@ -1,5 +1,6 @@
 import prisma from '@/prisma';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
+import { PrismaClient } from '@prisma/client';
 
 export class StockService {
     async getStockLogProduct(id: number) {
@@ -10,6 +11,17 @@ export class StockService {
             return resSuccess(logStock);
         }
         return resNotFound('Logstock not found');
+    }
+
+    async reduceStockTransaction(id: number, quantity: number, tx: any) {
+        await tx.product.update({
+            where: { id },
+            data: { stock: { decrement: quantity } },
+        });
+        await tx.stockLog.create({
+            data: { product_id: id, quantityChange: quantity, type: 'Reduction' },
+        });
+        return;
     }
 
     async checkStock(productId: number, quantity: number) {

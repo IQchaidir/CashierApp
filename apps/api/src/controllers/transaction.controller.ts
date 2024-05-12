@@ -1,10 +1,10 @@
-import prisma from '@/prisma';
 import { TransactionService } from '@/services/transaction.service';
 import { NextFunction, Request, Response } from 'express';
 
 export class TransactionController {
     async createTransaction(req: Request, res: Response, next: NextFunction) {
-        const { userId, shiftId } = req.params;
+        const userId = req.dataUser.id;
+        const { shiftId } = req.params;
         const { amount, method, cardNumber, products } = req.body;
         const transactionService = new TransactionService();
 

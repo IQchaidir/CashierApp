@@ -77,7 +77,9 @@ export class ProductService {
     }
 
     async getProductById(id: number) {
-        const product = await this.checkProduct(id);
+        const product = await prisma.product.findUnique({
+            where: { id },
+        });
         if (!product) {
             return resNotFound('product not found');
         }
