@@ -3,7 +3,7 @@ import { deleteExistingImage } from '@/utils/deleteExistingImage';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
 import { Prisma } from '@prisma/client';
 
-export class ProductService {
+class ProductService {
     async checkProduct(productId: number) {
         const product = await prisma.product.findUnique({
             where: { id: productId, archive: false },
@@ -53,9 +53,9 @@ export class ProductService {
     }
 
     async getProduct(pageNumber: number, category?: string, name?: string) {
-        const pageSize = 10;
+        const pageSize = 21;
         const skipAmount = (pageNumber - 1) * pageSize;
-        const whereClause: Prisma.ProductWhereInput = { archive: false };
+        const whereClause: Prisma.ProductWhereInput = { archive: false, stock: { gt: 0 } };
 
         if (category) {
             whereClause.category = { name: category };
@@ -65,13 +65,18 @@ export class ProductService {
             whereClause.name = name ? { contains: name } : undefined;
         }
 
+        const totalCount = await prisma.product.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
         const products = await prisma.product.findMany({
             where: whereClause,
             skip: skipAmount,
             orderBy: { id: 'asc' },
         });
+
         if (products.length > 0) {
-            return resSuccess(products);
+            const data = { products, totalPages };
+            return resSuccess(data);
         }
         return resNotFound('product not found');
     }
@@ -141,3 +146,5 @@ export class ProductService {
         return resSuccess('Success delete product');
     }
 }
+
+export default new ProductService();

@@ -29,16 +29,16 @@ enum UserRole {
 
 model Product {
   id                  Int                   @id @default(autoincrement())
-  name                String                @unique
+  name                String                
   description         String                @db.Text
-  category_id         Int?
+  category_id         Int
   price               Decimal
-  stock               Int
+  stock               Int 
   image               String
   archive             Boolean               @default(false)
   createdAt           DateTime              @default(now())
   updatedAt           DateTime              @updatedAt
-  category            Category?             @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  category            Category             @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
   Transaction_Product Transaction_Product[]
 }
 

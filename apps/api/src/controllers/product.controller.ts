@@ -1,11 +1,11 @@
-import { ProductService } from '@/services/product.service';
+import productService from '@/services/product.service';
 import { NextFunction, Request, Response } from 'express';
 
 export class ProductController {
     async createProduct(req: Request, res: Response, next: NextFunction) {
         const { name, description, price, stock, category } = req.body;
         const file: string | undefined = req.file?.filename;
-        const productService = new ProductService();
+        // const productService = new ProductService();
         try {
             const createProduct = await productService.createProduct(
                 file,
@@ -24,7 +24,6 @@ export class ProductController {
     async getProduct(req: Request, res: Response, next: NextFunction) {
         const { search: name, category, page } = req.query;
         const pageNumber = parseInt(page as string, 10) || 1;
-        const productService = new ProductService();
 
         try {
             const product = await productService.getProduct(pageNumber, category as string, name as string);
@@ -36,7 +35,6 @@ export class ProductController {
 
     async getProductById(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        const productService = new ProductService();
 
         try {
             const productById = await productService.getProductById(Number(id));
@@ -50,7 +48,7 @@ export class ProductController {
         const { id } = req.params;
         const { name, description, price, category } = req.body;
         const file: string | undefined = req.file?.filename;
-        const productService = new ProductService();
+        // const productService = new ProductService();
 
         try {
             const updateProduct = await productService.updateProduct(
@@ -69,7 +67,7 @@ export class ProductController {
 
     async deleteProduct(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        const productService = new ProductService();
+        // const productService = new ProductService();
 
         try {
             const deleteProduct = await productService.archiveProduct(Number(id));

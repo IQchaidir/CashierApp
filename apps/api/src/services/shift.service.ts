@@ -1,24 +1,32 @@
 import prisma from '@/prisma';
 import { calculateTotalAmount } from '@/utils/calculateTotalAmount';
+import { filterDate } from '@/utils/filterDate';
 import { formattedUtcDate } from '@/utils/formatUtcDate';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
 import { Prisma } from '@prisma/client';
 
 export class ShiftService {
-    async getShift(pageNumber: number, startDate?: string, endDate?: string) {
+    async getShift(pageNumber: number, dateFilter?: string, startDate?: string, endDate?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
         let whereClause: Prisma.ShiftWhereInput = { final_cash: { not: null }, end_time: { not: null } };
 
-        if (startDate && endDate) {
-            const startUtcDate = formattedUtcDate(startDate);
-            const endUtcDate = formattedUtcDate(endDate, true);
+        // if (dateFilter) {
+        //     let result;
+        //     if (startDate && endDate) {
+        //         result = filterDate(dateFilter, startDate, endDate);
+        //     } else {
+        //         result = filterDate(dateFilter);
+        //     }
 
-            whereClause.createdAt = {
-                gte: startUtcDate,
-                lte: endUtcDate,
-            };
-        }
+        //     if (typeof result === 'object' && result !== null) {
+        //         const { filterStartDate, filterEndDate } = result;
+        //         whereClause.createdAt = {
+        //             gte: filterStartDate,
+        //             lte: filterEndDate,
+        //         };
+        //     }
+        // }
 
         const getShift = await prisma.shift.findMany({
             where: whereClause,
@@ -71,14 +79,14 @@ export class ShiftService {
             },
         });
 
-        const noShift = await prisma.shift.findFirst({
+        const currentShift = await prisma.shift.findFirst({
             where: {
                 user_id: id,
                 end_time: null,
             },
         });
 
-        return { activeShift, noShift };
+        return { activeShift, currentShift };
     }
 
     async startShift(initial_cash: number, id: number) {

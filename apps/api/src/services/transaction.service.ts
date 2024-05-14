@@ -3,8 +3,9 @@ import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
 import { Prisma } from '@prisma/client';
 import { ShiftService } from './shift.service';
 import { StockService } from './stock.service';
-import { ProductService } from './product.service';
+import ProductService from './product.service';
 import { formattedUtcDate } from '@/utils/formatUtcDate';
+import productService from './product.service';
 
 export class TransactionService {
     async getLatestId() {
@@ -24,12 +25,11 @@ export class TransactionService {
     ) {
         const shiftService = new ShiftService();
         const stockService = new StockService();
-        const productService = new ProductService();
 
         const checkShift = await shiftService.checkShift(userId);
         if (checkShift.activeShift) {
             return resBadRequest('there is still an ongoing shift');
-        } else if (!checkShift.noShift) {
+        } else if (!checkShift.currentShift) {
             return resBadRequest('Create a new shift first');
         }
 
