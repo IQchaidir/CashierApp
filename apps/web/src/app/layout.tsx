@@ -3,7 +3,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
 import Navbar from '@/components/Navbar';
+import { CookiesProvider } from 'next-client-cookies/server';
 import { CartProvider } from '@/providers/CartContext';
+import { Toaster } from '@/components/ui/toaster';
+import ApplicationWrapper from '@/components/ApplicationWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,10 +20,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en">
             <body className={inter.className}>
                 <QueryProvider>
-                    <CartProvider>
-                        <Navbar />
-                        {children}
-                    </CartProvider>
+                    <CookiesProvider>
+                        <ApplicationWrapper>
+                            <CartProvider>
+                                {children}
+                                <Toaster />
+                            </CartProvider>
+                        </ApplicationWrapper>
+                    </CookiesProvider>
                 </QueryProvider>
             </body>
         </html>

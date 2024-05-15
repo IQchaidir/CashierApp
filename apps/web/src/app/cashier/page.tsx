@@ -1,7 +1,7 @@
-import ListProduct from '@/components/ListProduct';
-import OrderSummary from '@/components/OrderSummary';
+import ListProduct from '@/app/cashier/_component/ListProduct';
+import OrderSummary from '@/app/cashier/_component/OrderSummary';
 
-export default function Home({
+const CashierPage = ({
     searchParams,
 }: {
     searchParams?: {
@@ -9,7 +9,7 @@ export default function Home({
         category?: string;
         page?: string;
     };
-}) {
+}) => {
     const currentPage = Number(searchParams?.page) || 1;
     const search = searchParams?.search || '';
     const category = searchParams?.category || '';
@@ -20,4 +20,6 @@ export default function Home({
             <ListProduct page={currentPage} search={search} category={category} />
         </div>
     );
-}
+};
+
+export default CashierPage;

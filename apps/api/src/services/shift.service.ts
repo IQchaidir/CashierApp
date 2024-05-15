@@ -79,12 +79,27 @@ export class ShiftService {
             },
         });
 
-        const currentShift = await prisma.shift.findFirst({
+        let currentShift;
+
+        currentShift = await prisma.shift.findFirst({
             where: {
                 user_id: id,
                 end_time: null,
             },
+            include: {
+                Transaction: true,
+            },
         });
+        if (currentShift) {
+            const cashTransaction = currentShift.Transaction.filter((transaction) => transaction.method === 'CASH');
+            const debitTransaction = currentShift.Transaction.filter((transaction) => transaction.method === 'DEBIT');
+
+            const totalCash = calculateTotalAmount(cashTransaction);
+            const totalDebit = calculateTotalAmount(debitTransaction);
+            const totalAmount = totalCash + totalDebit;
+
+            currentShift = { ...currentShift, totalAmount, totalCash, totalDebit };
+        }
 
         return { activeShift, currentShift };
     }
@@ -101,6 +116,9 @@ export class ShiftService {
         const checkShift = await this.checkShift(id);
 
         if (checkShift.activeShift) {
+            return resBadRequest('there is still an ongoing shift');
+        }
+        if (checkShift.currentShift) {
             return resBadRequest('there is still an ongoing shift');
         }
 

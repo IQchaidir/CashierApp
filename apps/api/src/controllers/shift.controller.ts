@@ -1,5 +1,5 @@
 import { ShiftService } from '@/services/shift.service';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, response } from 'express';
 
 export class ShiftController {
     async getShift(req: Request, res: Response, next: NextFunction) {
@@ -53,6 +53,23 @@ export class ShiftController {
         try {
             const endShift = await shiftService.endShift(Number(id), final_cash);
             return res.status(endShift.status).json(endShift.response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async checkShift(req: Request, res: Response, next: NextFunction) {
+        const id = req.dataUser.id;
+        const shiftService = new ShiftService();
+
+        try {
+            const checkShift = await shiftService.checkShift(id);
+            if (checkShift.activeShift) {
+                return res.status(400).json('there is still an ongoing shift');
+            } else if (!checkShift.currentShift) {
+                return res.status(400).json('Create a new shift first');
+            }
+            return res.status(200).json(checkShift.currentShift);
         } catch (error) {
             next(error);
         }

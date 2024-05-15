@@ -3,13 +3,26 @@ import { Calculator, CalendarClock, LogOut } from 'lucide-react';
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
+import { useCookies } from 'next-client-cookies';
+import { useRouter } from 'next/navigation';
 
 export function SheetMenu() {
+    const cookies = useCookies();
+    const session: any = cookies.get('session');
+    if (session) {
+        const { email } = JSON.parse(session);
+    }
+    const router = useRouter();
     const menuItems = [
-        { icon: <Calculator />, text: 'Aplikasi Kasir', link: '/' },
-        { icon: <ReceiptText />, text: 'Transaksi', link: '/Transaksi' },
-        { icon: <CalendarClock />, text: 'Shift', link: '/' },
+        { icon: <Calculator />, text: 'Aplikasi Kasir', link: '/cashier' },
+        { icon: <ReceiptText />, text: 'Transaksi', link: '/transaction' },
+        { icon: <CalendarClock />, text: 'Shift', link: '/shift' },
     ];
+
+    const handleLogout = () => {
+        cookies.remove('session');
+        router.push('/login');
+    };
 
     return (
         <Sheet key={'left'}>
@@ -18,7 +31,7 @@ export function SheetMenu() {
             </SheetTrigger>
             <SheetContent onOpenAutoFocus={(e) => e.preventDefault()} side={'left'} className="bg-gray-50 w-[250px]">
                 <SheetHeader className="mt-10">
-                    <SheetTitle className="flex justify-center text-lg">Iqbal Chaidir</SheetTitle>
+                    <SheetTitle className="flex justify-center text-lg">Cashier1</SheetTitle>
                 </SheetHeader>
                 <div className="grid mt-3 py-4 text-lg">
                     {menuItems.map((item, index) => (
@@ -31,7 +44,10 @@ export function SheetMenu() {
                             </Link>
                         </SheetClose>
                     ))}
-                    <div className="fixed bottom-10 flex py-2 px-1 rounded-sm justify-start items-center space-x-3 cursor-pointer">
+                    <div
+                        onClick={handleLogout}
+                        className="fixed bottom-10 flex py-2 px-1 rounded-sm justify-start items-center space-x-3 cursor-pointer"
+                    >
                         <LogOut />
                         <span className="font-semibold">Keluar</span>
                     </div>

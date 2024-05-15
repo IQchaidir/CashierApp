@@ -23,15 +23,7 @@ export class TransactionService {
         products: { productId: number; quantity: number; price: number }[],
         cardNumber?: string,
     ) {
-        const shiftService = new ShiftService();
         const stockService = new StockService();
-
-        const checkShift = await shiftService.checkShift(userId);
-        if (checkShift.activeShift) {
-            return resBadRequest('there is still an ongoing shift');
-        } else if (!checkShift.currentShift) {
-            return resBadRequest('Create a new shift first');
-        }
 
         for (const product of products) {
             const avaliableProduct = await productService.checkProduct(product.productId);

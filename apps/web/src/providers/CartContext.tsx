@@ -19,6 +19,7 @@ interface CartProviderProps {
 
 export const CartProvider = ({ children }: CartProviderProps) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [totalPrice, setTotalPrice] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -34,6 +35,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     useEffect(() => {
         if (isMounted) {
             localStorage.setItem('cart', JSON.stringify(cartItems));
+            const total = cartItems.reduce((acc, cart) => acc + cart.price * cart.quantity, 0);
+            setTotalPrice(total);
         }
     }, [cartItems, isMounted]);
 
@@ -69,6 +72,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
     const contextValue: CartContextType = {
         cartItems,
+        totalPrice,
         addProduct,
         removeProduct,
         clearCart,

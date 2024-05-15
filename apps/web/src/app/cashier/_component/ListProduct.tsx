@@ -1,8 +1,8 @@
 'use client';
 import { SearchIcon } from 'lucide-react';
-import { SelectCategory } from './SelectCategory';
+import { SelectCategory } from '../../../components/SelectCategory';
 import CardProduct from './CardProduct';
-import Pagination from './Pagination';
+import Pagination from '../../../components/Pagination';
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
@@ -48,19 +48,8 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
         setCurrentPage(page);
     };
 
-    const handleCategoryChange = (category: string) => {
-        const params = new URLSearchParams(searchParams);
-        if (category && category !== 'All Product') {
-            params.set('category', category);
-            params.delete('page');
-        } else {
-            params.delete('category');
-        }
-        router.replace(`${pathname}?${params.toString()}`);
-    };
-
     return (
-        <div className="flex-col p-2 w-2/3 bg-blue-400 ">
+        <div className="flex-col p-2 w-2/3 bg-blue-400 h-[667px] ">
             <div className="flex justify-between">
                 <div className="flex items-center rounded-sm bg-white">
                     <SearchIcon className="w-6 h-6 p-1" />
@@ -72,7 +61,7 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
                         onChange={(e) => handleSearch(e.target.value)}
                     />
                 </div>
-                <SelectCategory onCategoryChange={handleCategoryChange} />
+                <SelectCategory />
             </div>
             {data && (
                 <>

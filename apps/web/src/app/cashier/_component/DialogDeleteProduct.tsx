@@ -1,8 +1,6 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useCart } from '@/providers/CartContext';
 import { CartItem } from '@/types/cart';
-import { DialogClose } from '@radix-ui/react-dialog';
-import { remove } from 'cypress/types/lodash';
 import { Trash2Icon } from 'lucide-react';
 
 export const DialogDeleteProduct = ({ cartItem }: { cartItem: CartItem }) => {

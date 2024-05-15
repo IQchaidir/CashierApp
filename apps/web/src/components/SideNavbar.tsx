@@ -18,7 +18,7 @@ import { Button } from './ui/button';
 import useSession from '@/hooks/useSession';
 import { Badge } from './ui/badge';
 import { useRouter } from 'next/navigation';
-import LogoutDialog from './LogoutDialog';
+// import LogoutDialog from './LogoutDialog';
 
 type Props = {};
 const SideNavbar = (props: Props) => {
@@ -92,7 +92,7 @@ const SideNavbar = (props: Props) => {
                 <Badge className="flex items-center justify-center w-full my-4">Hello, {session?.user_name}</Badge>
             )}
             <Nav isCollapsed={isCollapsed} links={links} />
-            <LogoutDialog />
+            {/* <LogoutDialog /> */}
         </div>
     );
 };

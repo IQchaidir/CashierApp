@@ -6,7 +6,7 @@ export default function useProduct(filterParams: any) {
         queryKey: [`products`, filterParams],
         queryFn: async () => {
             const queryString = new URLSearchParams(filterParams).toString();
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}product?${queryString}`);
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/product?${queryString}`);
             return await res.data;
         },
     });

@@ -11,7 +11,7 @@ export class AuthService {
         });
 
         if (!user) {
-            return resNotFound('User not found');
+            return resNotFound('Invalid email address');
         }
 
         const hashPassword = user.password;

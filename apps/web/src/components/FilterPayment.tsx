@@ -11,34 +11,34 @@ import {
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function SelectCategory() {
+export function FilterPayment() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
-    const [selectCategory, setSelectCategory] = useState(searchParams.get('category') || 'All Product');
+    const [selectPayment, setSelectPayment] = useState(searchParams.get('payment') || 'All Payment');
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams);
-        if (selectCategory && selectCategory !== 'All Product') {
-            params.set('category', selectCategory);
+        if (selectPayment && selectPayment !== 'All Payment') {
+            params.set('payment', selectPayment);
             params.delete('page');
         } else {
-            params.delete('category');
+            params.delete('payment');
         }
         router.replace(`${pathname}?${params.toString()}`);
-    }, [selectCategory]);
+    }, [selectPayment]);
 
-    const handleCategoryChange = (category: string) => {};
+    const handlePaymentChange = (payment: string) => {};
 
     return (
-        <Select value={selectCategory} onValueChange={setSelectCategory}>
+        <Select value={selectPayment} onValueChange={setSelectPayment}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Product" />
+                <SelectValue placeholder="All Payment" />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="All Product">All Product</SelectItem>
+                    <SelectLabel>payment</SelectLabel>
+                    <SelectItem value="All Payment">All Payment</SelectItem>
                     <SelectItem value="apple">Apple</SelectItem>
                     <SelectItem value="banana">Banana</SelectItem>
                     <SelectItem value="blueberry">Blueberry</SelectItem>
