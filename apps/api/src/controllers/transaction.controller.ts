@@ -4,15 +4,12 @@ import { NextFunction, Request, Response } from 'express';
 export class TransactionController {
     async createTransaction(req: Request, res: Response, next: NextFunction) {
         const userId = req.dataUser.id;
-        const { shiftId } = req.params;
-        const { amount, method, cardNumber, products } = req.body;
+        const { method, cardNumber, products } = req.body;
         const transactionService = new TransactionService();
 
         try {
             const transaction = await transactionService.createTransaction(
                 Number(userId),
-                Number(shiftId),
-                amount,
                 method,
                 products,
                 cardNumber,
@@ -50,6 +47,16 @@ export class TransactionController {
             return res.status(transaction.status).json(transaction.response);
         } catch (error) {
             next(error);
+        }
+    }
+
+    async getLatestTransaction(req: Request, res: Response, next: NextFunction) {
+        const transactionService = new TransactionService();
+        try {
+            const latestTransaction = await transactionService.getLatestTransaction();
+            return res.status(200).json(latestTransaction);
+        } catch (error) {
+            return next(error);
         }
     }
 }

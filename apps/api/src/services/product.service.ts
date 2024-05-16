@@ -11,7 +11,7 @@ class ProductService {
         if (!product) {
             return false;
         }
-        return true;
+        return product;
     }
 
     async createProduct(

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import ListTransaction from './_component/ListTransaction';
 import DetailTransaction from './_component/DetailTransaction';
+import useTransaction from '@/hooks/useTransaction';
 
 const TransactionPage = ({
     searchParams,
@@ -15,11 +16,28 @@ const TransactionPage = ({
     const currentPage = Number(searchParams?.page) || 1;
     const search = searchParams?.search || '';
     const payment = searchParams?.payment || '';
-    const [selelectedTransaction, setSelectedTransaction] = useState();
+    const { data } = useTransaction();
+    const [selectedTransaction, setSelectedTransaction] = useState(1);
+
+    const handleChange = (selectedId: any) => {
+        setSelectedTransaction(selectedId);
+    };
+    let dataTransaction = [];
+    let transaction = '';
+    if (data) {
+        transaction = data.find((transaction: any) => transaction.id === selectedTransaction);
+        dataTransaction = data;
+    }
     return (
         <div className="flex">
-            <ListTransaction page={currentPage} search={search} payment={payment} />
-            <DetailTransaction />
+            <ListTransaction
+                page={currentPage}
+                search={search}
+                payment={payment}
+                handleChange={handleChange}
+                data={dataTransaction}
+            />
+            <DetailTransaction transaction={transaction} />
         </div>
     );
 };

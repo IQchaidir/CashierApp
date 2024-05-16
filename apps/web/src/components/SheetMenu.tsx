@@ -9,8 +9,9 @@ import { useRouter } from 'next/navigation';
 export function SheetMenu() {
     const cookies = useCookies();
     const session: any = cookies.get('session');
+    let email;
     if (session) {
-        const { email } = JSON.parse(session);
+        email = JSON.parse(session).email;
     }
     const router = useRouter();
     const menuItems = [
@@ -31,7 +32,7 @@ export function SheetMenu() {
             </SheetTrigger>
             <SheetContent onOpenAutoFocus={(e) => e.preventDefault()} side={'left'} className="bg-gray-50 w-[250px]">
                 <SheetHeader className="mt-10">
-                    <SheetTitle className="flex justify-center text-lg">Cashier1</SheetTitle>
+                    <SheetTitle className="flex justify-center text-lg">{email}</SheetTitle>
                 </SheetHeader>
                 <div className="grid mt-3 py-4 text-lg">
                     {menuItems.map((item, index) => (

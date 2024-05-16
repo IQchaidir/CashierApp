@@ -1,45 +1,55 @@
 import prisma from '@/prisma';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
 import { Prisma } from '@prisma/client';
-import { ShiftService } from './shift.service';
 import { StockService } from './stock.service';
-import ProductService from './product.service';
 import { formattedUtcDate } from '@/utils/formatUtcDate';
 import productService from './product.service';
+import { ShiftService } from './shift.service';
 
 export class TransactionService {
-    async getLatestId() {
+    async getLatestTransaction() {
         const latestTransaction = await prisma.transaction.findFirst({
             orderBy: { id: 'desc' },
         });
-        if (latestTransaction) return latestTransaction.id;
+        if (latestTransaction) return latestTransaction;
     }
 
     async createTransaction(
         userId: number,
-        shiftId: number,
-        amount: number,
+
         method: string,
-        products: { productId: number; quantity: number; price: number }[],
+        products: { productId: number; quantity: number }[],
         cardNumber?: string,
     ) {
         const stockService = new StockService();
+        const shiftService = new ShiftService();
+
+        let shiftId;
+        let dataProductArray: any = [];
+        let amount: number = 0;
+
+        const getShift = await shiftService.checkShift(userId);
+        if (getShift) {
+            shiftId = getShift.currentShift?.id;
+        }
 
         for (const product of products) {
-            const avaliableProduct = await productService.checkProduct(product.productId);
-            if (!avaliableProduct) {
+            const availableProduct = await productService.checkProduct(product.productId);
+            if (!availableProduct) {
                 return resBadRequest(`Product ${product.productId} not found`);
             }
             const availableStock = await stockService.checkStock(product.productId, product.quantity);
             if (!availableStock) {
                 return resBadRequest(`Product ${product.productId} is not available in sufficient quantity`);
             }
+            dataProductArray.push(availableProduct);
+            amount += product.quantity * Number(availableProduct.price);
         }
 
         let invoice;
-        const transactionLatestId = await this.getLatestId();
+        const transactionLatestId = await this.getLatestTransaction();
         if (transactionLatestId) {
-            invoice = `INV-${Date.now()}-${transactionLatestId + 1}`;
+            invoice = `INV-${Date.now()}-${transactionLatestId.id + 1}`;
         } else {
             invoice = `INV-${Date.now()}-${1}`;
         }
@@ -55,14 +65,16 @@ export class TransactionService {
                 data: dataTransaction,
             });
             for (const product of products) {
-                await tx.transaction_Product.create({
-                    data: {
-                        transaction_id: createTransaction.id,
-                        product_id: product.productId,
-                        quantity: product.quantity,
-                        price: product.price,
-                    },
-                });
+                const productData = dataProductArray.find((p: any) => p.id === product.productId);
+                if (productData)
+                    await tx.transaction_Product.create({
+                        data: {
+                            transaction_id: createTransaction.id,
+                            product_id: product.productId,
+                            quantity: product.quantity,
+                            price: productData.price,
+                        },
+                    });
                 await stockService.reduceStockTransaction(product.productId, product.quantity, tx);
             }
             return createTransaction;
@@ -91,6 +103,12 @@ export class TransactionService {
             take: pageSize,
             orderBy: {
                 id: 'asc',
+            },
+            include: {
+                Transaction_Product: {
+                    include: { product: true },
+                },
+                user: true,
             },
         });
         if (getShift.length > 0) {

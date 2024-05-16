@@ -2,13 +2,14 @@
 
 import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
+import SideNavbar from './SideNavbar';
 
 export default function ApplicationWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     if (pathname.includes(`/dashboard`))
         return (
             <div className="min-h-screen w-full bg-white text-black flex">
-                {/* <SideNavbar /> */}
+                <SideNavbar />
                 {children}
             </div>
         );

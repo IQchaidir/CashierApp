@@ -13,6 +13,12 @@ import {
     BarChart3,
     LineChart,
     Tag,
+    SquareMenu,
+    Menu,
+    LayoutDashboardIcon,
+    LogOut,
+    Package,
+    CalendarClock,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import useSession from '@/hooks/useSession';
@@ -33,15 +39,21 @@ const SideNavbar = (props: Props) => {
 
     const links = [
         {
-            title: 'Stores',
-            href: '/dashboard/stores',
-            icon: Store,
+            title: 'Dashboard',
+            href: '/dashboard/report',
+            icon: LayoutDashboardIcon,
             variant: 'ghost',
         },
         {
-            title: 'Product Catalog',
+            title: 'Users',
+            href: '/dashboard/users',
+            icon: UsersRound,
+            variant: 'ghost',
+        },
+        {
+            title: 'Product',
             href: '/dashboard/products',
-            icon: NotebookPen,
+            icon: Package,
             variant: 'ghost',
         },
         {
@@ -51,45 +63,35 @@ const SideNavbar = (props: Props) => {
             variant: 'ghost',
         },
         {
-            title: 'Orders',
-            href: '/dashboard/orders',
+            title: 'Transaction',
+            href: '/dashboard/transactions',
             icon: Tag,
             variant: 'ghost',
         },
         {
-            title: 'Stock Report',
-            href: '/dashboard/stock-report',
-            icon: BarChart3,
+            title: 'Shifts',
+            href: '/dashboard/shifts',
+            icon: CalendarClock,
             variant: 'ghost',
         },
         {
-            title: 'Sales Report',
+            title: 'Logout',
             href: '/dashboard/sales-report',
-            icon: LineChart,
+            icon: LogOut,
             variant: 'ghost',
         },
     ];
 
-    if (session?.role == 'Super_Admin')
-        links.splice(1, 0, {
-            title: 'Users',
-            href: '/dashboard/users',
-            icon: UsersRound,
-            variant: 'ghost',
-        });
-
     return (
-        <div className="relative min-w-[80px] border-r px-3 pb-10 pt-8">
-            <div className="absolute right-[-20px] top-7">
-                <Button onClick={toogleSidebar} variant={'secondary'} className="rounded-full p-2">
-                    <ChevronRight />
-                </Button>
-            </div>
-            <div className="mb-4 w-full flex items-center justify-center">
-                <LayoutDashboard />
+        <div className="relative min-w-[80px] border-r px-3 pb-10 pt-8 bg-blue-500 shadow-md">
+            <div className={`mb-4 w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+                <p className={`text-white ${isCollapsed ? 'hidden' : ''}`}>SMART KASIR</p>
+                <button onClick={toogleSidebar}>
+                    <Menu className="w-10 h-10 text-white" />
+                </button>
             </div>
             {!isCollapsed && (
-                <Badge className="flex items-center justify-center w-full my-4">Hello, {session?.user_name}</Badge>
+                <Badge className="flex bg-white text-black items-center justify-center w-full p-2 mb-4">ADMIN</Badge>
             )}
             <Nav isCollapsed={isCollapsed} links={links} />
             {/* <LogoutDialog /> */}

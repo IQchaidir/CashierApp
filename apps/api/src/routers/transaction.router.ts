@@ -15,8 +15,9 @@ export class TransactionRouter {
 
     private initializeRoutes(): void {
         this.router.get('/', this.transactionController.getTransaction);
+        this.router.get('/latest', this.transactionController.getLatestTransaction);
         this.router.get('/:id', this.transactionController.getTransactionById);
-        this.router.post('/create/:shiftId', verifyToken, this.transactionController.createTransaction);
+        this.router.post('/create', verifyToken, this.transactionController.createTransaction);
     }
 
     getRouter(): Router {

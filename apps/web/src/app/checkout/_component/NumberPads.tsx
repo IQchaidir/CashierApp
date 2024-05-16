@@ -4,11 +4,13 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import TransactionSuccessModal from './TransactionSuccessModal';
 import { toast } from '@/components/ui/use-toast';
+import useCreateTransaction from '@/hooks/useCreateTransaction';
 
 const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
     const [inputValue, setInputValue] = useState('');
     const [showTransactionSuccess, setShowTransactionSuccess] = useState(false);
-    const { totalPrice } = useCart();
+    const { cartItems, totalPrice } = useCart();
+    const { mutate } = useCreateTransaction();
     const router = useRouter();
 
     const handleNumberClick = (number: any) => {
@@ -36,7 +38,33 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                 title: 'Pembayaran tidak boleh kurang dari total belanja!',
             });
         } else {
-            setShowTransactionSuccess(true);
+            let cardNumber = '';
+            if (selectedPayment === 'DEBIT') cardNumber = inputValue;
+
+            const products = cartItems.map((product) => ({
+                productId: product.product.id,
+                quantity: product.quantity,
+            }));
+
+            mutate(
+                { method: selectedPayment, cardNumber, products },
+                {
+                    onSuccess: () => {
+                        toast({
+                            variant: 'success',
+                            title: 'transaksi berhasil diproses!',
+                        });
+                        setShowTransactionSuccess(true);
+                    },
+                    onError: (res: any) => {
+                        toast({
+                            variant: 'destructive',
+                            title: 'gagal memproses transaksi!',
+                            description: res?.response?.data,
+                        });
+                    },
+                },
+            );
         }
     };
 
@@ -44,7 +72,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
         <div className="flex flex-col  items-center w-2/3">
             <div className="flex w-full justify-between bg-blue-400 items-center px-2">
                 <div className="flex items-center">
-                    {selectedPayment === 'cash' ? (
+                    {selectedPayment === 'CASH' ? (
                         <>
                             <Banknote className="w-16 h-16 text-white" />
                             <div className="flex flex-col text-white font-medium text-base">
@@ -63,7 +91,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                     )}
                 </div>
                 <div className="flex gap-3 items-center text-white">
-                    {selectedPayment === 'cash' && (
+                    {selectedPayment === 'CASH' && (
                         <>
                             <button
                                 onClick={() => setInputValue('5000')}

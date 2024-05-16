@@ -1,24 +1,26 @@
+import useLatestTransaction from '@/hooks/useLatestTransaction';
 import { useCart } from '@/providers/CartContext';
 import { CircleCheckBig, PlusIcon, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const TransactionSuccessModal = ({ selectedPayment, inputValue }: { selectedPayment: string; inputValue: string }) => {
     const { clearCart, totalPrice } = useCart();
+    const { data } = useLatestTransaction();
     const router = useRouter();
 
     const handleClose = () => {
         clearCart();
         router.push('/cashier');
     };
-
+    if (!data) return null;
     return (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 flex justify-center items-center z-50">
             <div className="flex flex-col items-center gap-5">
                 <CircleCheckBig className="h-36 w-36 text-green-700" />
-                <p className="text-2xl text-white font-semibold mb-4">INV-12313132-01</p>
+                <p className="text-2xl text-white font-semibold mb-4">{data.invoice}</p>
                 <div className="w-full flex flex-col items-start gap-4 mb-4">
-                    <p className="text-xl text-white font-semibold">Total pembayaran: Rp. 50.000</p>
-                    {selectedPayment === 'cash' ? (
+                    <p className="text-xl text-white font-semibold">Total pembayaran: Rp. {totalPrice}</p>
+                    {selectedPayment === 'CASH' ? (
                         <p className="text-xl text-white font-semibold">
                             Total kembalian: Rp. {Number(inputValue) - totalPrice}
                         </p>

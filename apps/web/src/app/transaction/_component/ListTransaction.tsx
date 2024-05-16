@@ -1,32 +1,35 @@
 'use client';
 import { FilterPayment } from '@/components/FilterPayment';
 import Pagination from '@/components/Pagination';
-import useProduct from '@/hooks/useProduct';
 import { Banknote, CreditCard, SearchIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
+import { format } from 'date-fns';
 
-const ListTransaction = ({ page, search, payment }: { page: number; search: string; payment: string }) => {
+const ListTransaction = ({
+    page,
+    search,
+    payment,
+    handleChange,
+    data,
+}: {
+    page: number;
+    search: string;
+    payment: string;
+    handleChange: any;
+    data: any;
+}) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const [currentPage, setCurrentPage] = useState(searchParams.get('page') || 1);
     const [input, setInput] = useState(search);
-    const { data, isLoading, isError } = useProduct({
-        page,
-        search,
-        payment,
-    });
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-    const transactions = [
-        { invoice: 'INV-123123132-01', amount: '3.000', paymentMethod: 'CASH', date: '15 May 2024 13:55' },
-        { invoice: 'INV-123123132-03', amount: '7.200', paymentMethod: 'DEBIT', date: '17 May 2024 10:10' },
-    ];
 
     const handleItemClick = (index: number) => {
         setActiveIndex(index === activeIndex ? null : index);
+        handleChange(index);
     };
 
     const handleSearch = (term: string) => {
@@ -73,30 +76,35 @@ const ListTransaction = ({ page, search, payment }: { page: number; search: stri
                 <FilterPayment />
             </div>
             <div className="flex flex-col mt-5 px-2 bg-white gap-2">
-                {transactions.map((transaction, index) => (
-                    <div
-                        key={index}
-                        className={`flex justify-between cursor-pointer p-2  border border-white ${
-                            index === activeIndex ? 'bg-blue-100 ' : 'hover:bg-blue-100 hover:border-blue-500'
-                        }`}
-                        onClick={() => handleItemClick(index)}
-                    >
-                        <div className="flex items-center gap-1">
-                            {transaction.paymentMethod === 'CASH' ? (
-                                <Banknote className="text-blue-500 w-16 h-16" />
-                            ) : transaction.paymentMethod === 'DEBIT' ? (
-                                <CreditCard className="text-blue-500 w-16 h-16" />
-                            ) : null}
-                            <div className="flex flex-col font-semibold">
-                                <p className="text-base">{transaction.invoice}</p>
-                                <p className="text-base">
-                                    {transaction.amount} - {transaction.paymentMethod}
-                                </p>
+                {data.length > 0 &&
+                    data.map((transaction: any) => (
+                        <div
+                            key={transaction.id}
+                            className={`flex justify-between cursor-pointer p-2  border border-white ${
+                                transaction.id === activeIndex
+                                    ? 'bg-blue-100 '
+                                    : 'hover:bg-blue-100 hover:border-blue-500'
+                            }`}
+                            onClick={() => handleItemClick(transaction.id)}
+                        >
+                            <div className="flex items-center gap-1">
+                                {transaction.method === 'CASH' ? (
+                                    <Banknote className="text-blue-500 w-9 h-9" />
+                                ) : transaction.method === 'DEBIT' ? (
+                                    <CreditCard className="text-blue-500 w-9 h-9" />
+                                ) : null}
+                                <div className="flex flex-col font-semibold">
+                                    <p className="text-xs">{transaction.invoice}</p>
+                                    <p className="text-xs">
+                                        {transaction.amount} - {transaction.method}
+                                    </p>
+                                </div>
                             </div>
+                            <p className="font-semibold text-xs">
+                                {format(new Date(transaction.createdAt), 'dd/MM/yyyy HH:mm:ss')}
+                            </p>
                         </div>
-                        <p className="font-semibold">{transaction.date}</p>
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     );
