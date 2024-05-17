@@ -14,9 +14,46 @@ export class TransactionService {
         if (latestTransaction) return latestTransaction;
     }
 
+    async getShiftTransaction(id: number, pageNumber: number, payment?: string, invoice?: string) {
+        const pageSize = 10;
+        const skipAmount = (pageNumber - 1) * pageSize;
+        const whereClause: any = { shift: { user_id: id, end_time: null } };
+
+        if (payment) {
+            whereClause.method = payment;
+        }
+
+        if (invoice) {
+            whereClause.invoice = invoice ? { contains: invoice } : undefined;
+        }
+
+        const totalTransactions = await prisma.transaction.count({
+            where: whereClause,
+        });
+
+        const totalPages = Math.ceil(totalTransactions / pageSize);
+
+        const transaction = await prisma.transaction.findMany({
+            where: whereClause,
+            skip: skipAmount,
+            take: pageSize,
+            orderBy: { id: 'asc' },
+            include: {
+                Transaction_Product: {
+                    include: { product: true },
+                },
+                user: true,
+            },
+        });
+        if (transaction.length > 0) {
+            const data = { transaction, totalPages };
+            return resSuccess(data);
+        }
+        return resNotFound('transaction not found');
+    }
+
     async createTransaction(
         userId: number,
-
         method: string,
         products: { productId: number; quantity: number }[],
         cardNumber?: string,
@@ -29,6 +66,9 @@ export class TransactionService {
         let amount: number = 0;
 
         const getShift = await shiftService.checkShift(userId);
+        if (!getShift.activeShift) {
+            return resBadRequest('Masih ada shift yang berjalan!');
+        }
         if (getShift) {
             shiftId = getShift.currentShift?.id;
         }

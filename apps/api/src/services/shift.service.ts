@@ -2,7 +2,7 @@ import prisma from '@/prisma';
 import { calculateTotalAmount } from '@/utils/calculateTotalAmount';
 import { filterDate } from '@/utils/filterDate';
 import { formattedUtcDate } from '@/utils/formatUtcDate';
-import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
+import { resBadRequest, resNotFound, resSuccess, resUnauthorized } from '@/utils/responses';
 import { Prisma } from '@prisma/client';
 
 export class ShiftService {
@@ -128,14 +128,18 @@ export class ShiftService {
         return resSuccess(shift);
     }
 
-    async endShift(id: number, final_cash: number) {
+    async endShift(userId: number, id: number, final_cash: number) {
+        const existingShift = await prisma.shift.findFirst({
+            where: { id, user_id: userId },
+        });
+        if (!existingShift) {
+            return resUnauthorized('Hanya bisa diakhiri oleh kasir yang membuat shift!');
+        }
         const shift = await prisma.shift.update({
-            where: { id, end_time: null },
+            where: { id: existingShift.id },
             data: { final_cash, end_time: new Date().toISOString() },
         });
-        if (!shift) {
-            return resBadRequest('shift not found');
-        }
+
         return resSuccess(shift);
     }
 }

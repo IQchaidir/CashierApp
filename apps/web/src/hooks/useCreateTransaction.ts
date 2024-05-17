@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useCookies } from 'next-client-cookies';
 
@@ -6,6 +6,7 @@ export default function useCreateTransaction() {
     const cookies = useCookies();
     const session: any = cookies.get('session');
     const { token } = JSON.parse(session);
+    const queryClient = useQueryClient();
     const { mutate, isError, isPending } = useMutation({
         mutationFn: async ({
             method,
@@ -25,6 +26,7 @@ export default function useCreateTransaction() {
                     },
                 },
             );
+            queryClient.invalidateQueries({ queryKey: ['products'] });
             return await res.data;
         },
     });

@@ -14,7 +14,6 @@ export class StockRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.get('/:id', this.stockController.getStockLog);
         this.router.patch('/add/:id', verifyToken, verifyAdmin, this.stockController.addStock);
         this.router.patch('/reduce/:id', verifyToken, verifyAdmin, this.stockController.reduceStock);
     }

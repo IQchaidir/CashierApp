@@ -5,6 +5,8 @@ import { useState } from 'react';
 import TransactionSuccessModal from './TransactionSuccessModal';
 import { toast } from '@/components/ui/use-toast';
 import useCreateTransaction from '@/hooks/useCreateTransaction';
+import { formatToRupiah } from '@/utils/formatToRupiah';
+import { validateDebit } from '@/lib/validation';
 
 const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
     const [inputValue, setInputValue] = useState('');
@@ -31,60 +33,70 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
         setInputValue('');
     };
 
-    const handleEnter = () => {
-        if (Number(inputValue) < totalPrice) {
+    const handleEnter = async () => {
+        try {
+            if (Number(inputValue) < totalPrice && selectedPayment === 'CASH') {
+                toast({
+                    variant: 'destructive',
+                    title: 'Pembayaran tidak boleh kurang dari total belanja!',
+                });
+            } else {
+                let cardNumber = '';
+
+                if (selectedPayment === 'DEBIT') {
+                    await validateDebit.validate({ cardNumber: inputValue });
+                    cardNumber = inputValue;
+                }
+
+                const products = cartItems.map((product) => ({
+                    productId: product.product.id,
+                    quantity: product.quantity,
+                }));
+                mutate(
+                    { method: selectedPayment, cardNumber, products },
+                    {
+                        onSuccess: () => {
+                            toast({
+                                variant: 'success',
+                                title: 'transaksi berhasil diproses!',
+                            });
+                            setShowTransactionSuccess(true);
+                        },
+                        onError: (res: any) => {
+                            toast({
+                                variant: 'destructive',
+                                title: 'gagal memproses transaksi!',
+                                description: res?.response?.data,
+                            });
+                        },
+                    },
+                );
+            }
+        } catch (error: any) {
             toast({
                 variant: 'destructive',
-                title: 'Pembayaran tidak boleh kurang dari total belanja!',
+                title: error.message,
             });
-        } else {
-            let cardNumber = '';
-            if (selectedPayment === 'DEBIT') cardNumber = inputValue;
-
-            const products = cartItems.map((product) => ({
-                productId: product.product.id,
-                quantity: product.quantity,
-            }));
-
-            mutate(
-                { method: selectedPayment, cardNumber, products },
-                {
-                    onSuccess: () => {
-                        toast({
-                            variant: 'success',
-                            title: 'transaksi berhasil diproses!',
-                        });
-                        setShowTransactionSuccess(true);
-                    },
-                    onError: (res: any) => {
-                        toast({
-                            variant: 'destructive',
-                            title: 'gagal memproses transaksi!',
-                            description: res?.response?.data,
-                        });
-                    },
-                },
-            );
         }
     };
 
     return (
         <div className="flex flex-col  items-center w-2/3">
-            <div className="flex w-full justify-between bg-blue-400 items-center px-2">
+            <div className="flex w-full justify-between bg-[#04C99E] border-t-2  items-center px-2">
                 <div className="flex items-center">
                     {selectedPayment === 'CASH' ? (
                         <>
                             <Banknote className="w-16 h-16 text-white" />
                             <div className="flex flex-col text-white font-medium text-base">
                                 <p>Cash</p>
-                                <p>Total: Rp {totalPrice}</p>
+                                <p>Total: {formatToRupiah(totalPrice)}</p>
                             </div>
                         </>
                     ) : (
                         <>
                             <CreditCard className="w-16 h-16 text-white" />
                             <div className="flex flex-col text-white font-medium text-base">
-                                <p>Total: Rp {totalPrice}</p>
+                                <p>Total: {formatToRupiah(totalPrice)}</p>
                                 <p>Masukan nomor debit</p>
                             </div>
                         </>
@@ -111,6 +123,18 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                             >
                                 20.000
                             </button>
+                            <button
+                                onClick={() => setInputValue('50000')}
+                                className="border-2 font-medium rounded-sm border-white p-2"
+                            >
+                                50.000
+                            </button>
+                            <button
+                                onClick={() => setInputValue('100000')}
+                                className="border-2 font-medium rounded-sm border-white p-2"
+                            >
+                                100.000
+                            </button>
                         </>
                     )}
                     <button onClick={() => router.push('/cashier')} className="text-white">
@@ -125,7 +149,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                     onChange={handleInputChange}
                     className="w-full border-b-2  focus:border-indigo-500 focus:outline-none py-2 px-4 mb-4 bg-transparent text-end text-5xl"
                 />
-                <div className="grid grid-cols-3 gap-2 w-full px-1">
+                <div className="grid grid-cols-3 gap-2 w-full ">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '00'].map((number: any) => (
                         <button
                             key={number}
@@ -138,7 +162,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                     <button className=" p-4 rounded text-4xl mb-10" onClick={handleClear}>
                         C
                     </button>
-                    <button className="bg-green-600 p-4 rounded text-4xl col-span-3 text-white" onClick={handleEnter}>
+                    <button className="bg-[#04C99E] p-4  text-4xl col-span-3 text-white" onClick={handleEnter}>
                         Bayar
                     </button>
                 </div>

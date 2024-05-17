@@ -3,8 +3,8 @@ import { resBadRequest, resCreated, resNotFound, resSuccess } from '@/utils/resp
 
 export class CategoryService {
     async createCategory(name: string) {
-        const existingCategory = await prisma.category.findUnique({
-            where: { name },
+        const existingCategory = await prisma.category.findFirst({
+            where: { name, archive: false },
         });
         if (existingCategory) {
             return resBadRequest('Category already exist');

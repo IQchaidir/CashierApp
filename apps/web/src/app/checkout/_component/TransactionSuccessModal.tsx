@@ -1,5 +1,6 @@
 import useLatestTransaction from '@/hooks/useLatestTransaction';
 import { useCart } from '@/providers/CartContext';
+import { formatNumberDebit } from '@/utils/formatNumberDebit';
 import { CircleCheckBig, PlusIcon, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -25,10 +26,13 @@ const TransactionSuccessModal = ({ selectedPayment, inputValue }: { selectedPaym
                             Total kembalian: Rp. {Number(inputValue) - totalPrice}
                         </p>
                     ) : (
-                        <p className="text-xl text-white font-semibold">Nomor Debit: {inputValue}</p>
+                        <p className="text-xl text-white font-semibold">Nomor Debit: {formatNumberDebit(inputValue)}</p>
                     )}
                 </div>
-                <button className="flex justify-center items-center gap-1 font-medium bg-green-600 p-3 text-xl text-white rounded-sm w-full">
+                <button
+                    onClick={handleClose}
+                    className="flex justify-center items-center gap-1 font-medium bg-green-600 p-3 text-xl text-white rounded-sm w-full"
+                >
                     <PlusIcon />
                     Buat transaksi baru
                 </button>

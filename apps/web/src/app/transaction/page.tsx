@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ListTransaction from './_component/ListTransaction';
 import DetailTransaction from './_component/DetailTransaction';
-import useTransaction from '@/hooks/useTransaction';
+import useTransactionShift from '@/hooks/useTransactionShift';
 
 const TransactionPage = ({
     searchParams,
@@ -13,29 +13,36 @@ const TransactionPage = ({
         page?: string;
     };
 }) => {
-    const currentPage = Number(searchParams?.page) || 1;
+    const page = Number(searchParams?.page) || 1;
     const search = searchParams?.search || '';
     const payment = searchParams?.payment || '';
-    const { data } = useTransaction();
+    const { data, isLoading } = useTransactionShift({
+        search,
+        payment,
+        page,
+    });
     const [selectedTransaction, setSelectedTransaction] = useState(1);
 
     const handleChange = (selectedId: any) => {
         setSelectedTransaction(selectedId);
     };
+    let totalPages;
     let dataTransaction = [];
     let transaction = '';
     if (data) {
-        transaction = data.find((transaction: any) => transaction.id === selectedTransaction);
-        dataTransaction = data;
+        transaction = data.transaction.find((transaction: any) => transaction.id === selectedTransaction);
+        dataTransaction = data.transaction;
+        totalPages = data.totalPages;
     }
+
     return (
         <div className="flex">
             <ListTransaction
-                page={currentPage}
                 search={search}
-                payment={payment}
                 handleChange={handleChange}
                 data={dataTransaction}
+                isLoading={isLoading}
+                totalPages={totalPages}
             />
             <DetailTransaction transaction={transaction} />
         </div>

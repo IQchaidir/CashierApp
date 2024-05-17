@@ -34,7 +34,7 @@ export const DialogEditProduct = ({ cartItem }: { cartItem: CartItem }) => {
     return (
         <Dialog>
             <DialogTrigger>
-                <Edit className="text-blue-500" />
+                <Edit className="text-[#04C99E]" />
             </DialogTrigger>
             <DialogContent
                 className="flex flex-col"
@@ -43,7 +43,7 @@ export const DialogEditProduct = ({ cartItem }: { cartItem: CartItem }) => {
                 }}
             >
                 <DialogHeader>
-                    <DialogTitle className="text-center mb-5">EDIT</DialogTitle>
+                    <DialogTitle className="text-center mb-5">QUANTITY</DialogTitle>
                     <hr className="bg-black"></hr>
                 </DialogHeader>
                 <div className="flex justify-between">
@@ -58,12 +58,12 @@ export const DialogEditProduct = ({ cartItem }: { cartItem: CartItem }) => {
                 <DialogClose asChild>
                     <div className="flex justify-end gap-5 mt-10">
                         <button
-                            className="border-blue-500 border w-20 rounded-sm"
+                            className="border-[#04C99E] border w-20 rounded-sm"
                             onClick={() => setQuantity(cartItem.quantity)}
                         >
                             Tidak
                         </button>
-                        <button className="bg-blue-500 text-white w-20 rounded-sm" onClick={handleUpdateQuantity}>
+                        <button className="bg-[#04C99E] text-white w-20 rounded-sm" onClick={handleUpdateQuantity}>
                             Ya
                         </button>
                     </div>

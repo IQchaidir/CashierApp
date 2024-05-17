@@ -20,14 +20,14 @@ class ProductService {
         description: string,
         price: number,
         stock: number,
-        category?: string,
+        category_id: number,
     ) {
         if (!file) {
             return resBadRequest('No image uploaded');
         }
 
-        const existingProduct = await prisma.product.findUnique({
-            where: { name },
+        const existingProduct = await prisma.product.findFirst({
+            where: { name, archive: false },
         });
 
         if (existingProduct) {
@@ -40,11 +40,7 @@ class ProductService {
                 description,
                 price,
                 stock,
-                // category: {
-                //     connect: {
-                //         name: category,
-                //     },
-                // },
+                category_id,
                 image: process.env.BASE_URL + 'images/' + file,
             },
         });
@@ -53,7 +49,7 @@ class ProductService {
     }
 
     async getProduct(pageNumber: number, category?: string, name?: string) {
-        const pageSize = 21;
+        const pageSize = 14;
         const skipAmount = (pageNumber - 1) * pageSize;
         const whereClause: Prisma.ProductWhereInput = { archive: false, stock: { gt: 0 } };
 
@@ -71,6 +67,7 @@ class ProductService {
         const products = await prisma.product.findMany({
             where: whereClause,
             skip: skipAmount,
+            take: pageSize,
             orderBy: { id: 'asc' },
         });
 
@@ -106,8 +103,8 @@ class ProductService {
             return resBadRequest('Product not found');
         }
 
-        const existingName = await prisma.product.findUnique({
-            where: { name, NOT: { id: Number(id) } },
+        const existingName = await prisma.product.findFirst({
+            where: { name, NOT: { id: Number(id) }, archive: false },
         });
         if (existingName) {
             return resBadRequest('Product already exist');

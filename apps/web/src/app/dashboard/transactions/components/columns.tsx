@@ -7,36 +7,17 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
+import { DetailTransactionSheet } from './DetailTransactionSheet';
 
-export type Users = {
+export type Transaction = {
     id: string;
-    user_name: string;
-    email: string;
-    role: string;
-    email_verification: boolean;
-    telephone: string | '';
+    invoice: string;
+    method: string;
+    amount: number;
     createdAt: string;
 };
 
-export const roles = [
-    {
-        value: 'Customer',
-        label: 'Customer',
-        icon: CircleHelp,
-    },
-    {
-        value: 'Store_Admin',
-        label: 'Store Admin',
-        icon: CircleIcon,
-    },
-    {
-        value: 'Super_Admin',
-        label: 'Super Admin',
-        icon: ArrowDownIcon,
-    },
-];
-
-export const columns: ColumnDef<Users>[] = [
+export const columns: ColumnDef<Transaction>[] = [
     {
         accessorKey: 'id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,
@@ -45,23 +26,37 @@ export const columns: ColumnDef<Users>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: 'user_name',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Username" />,
+        accessorKey: 'invoice',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Invoice" />,
         cell: ({ row }) => {
+            const transaction = row.original;
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">{row.getValue('user_name')}</span>
+                    <span className="max-w-[500px] truncate font-medium">
+                        <DetailTransactionSheet transaction={transaction} invoice={row.getValue('invoice')} />
+                    </span>
                 </div>
             );
         },
     },
     {
-        accessorKey: 'email',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+        accessorKey: 'method',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Method Payment" />,
         cell: ({ row }) => {
             return (
                 <div className="flex items-center">
-                    <span>{row.getValue('email')}</span>
+                    <span>{row.getValue('method')}</span>
+                </div>
+            );
+        },
+    },
+    {
+        accessorKey: 'amount',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
+        cell: ({ row }) => {
+            return (
+                <div className="flex items-center">
+                    <span>{row.getValue('amount')}</span>
                 </div>
             );
         },
@@ -78,14 +73,6 @@ export const columns: ColumnDef<Users>[] = [
                     </span>
                 </div>
             );
-        },
-    },
-    {
-        id: 'actions',
-        cell: ({ row }) => {
-            const role = row.getValue('role');
-
-            return role == 'Store_Admin' && <DataTableRowActions row={row} />;
         },
     },
 ];

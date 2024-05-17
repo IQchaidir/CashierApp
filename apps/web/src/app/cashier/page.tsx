@@ -1,5 +1,5 @@
 import ListProduct from '@/app/cashier/_component/ListProduct';
-import OrderSummary from '@/app/cashier/_component/OrderSummary';
+import OrderSummary from './_component/OrderSummary';
 
 const CashierPage = ({
     searchParams,

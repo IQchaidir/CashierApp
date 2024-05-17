@@ -4,9 +4,10 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import CreateCategory1 from './CreateCategory1';
 
 export default function CreateProduct() {
     const [files, setFiles] = useState<File[]>([]);
@@ -102,6 +103,19 @@ export default function CreateProduct() {
                 </div>
                 <div>
                     <div className="mb-2 font-semibold">Category</div>
+                    <Select
+                        onValueChange={(value) => {
+                            formik.setFieldValue('category', value);
+                        }}
+                    >
+                        <SelectTrigger className="text-slate-800 border-slate-300"></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="belum ada kategori">belum ada kategori</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <div className="mt-2">
+                        Kategory belum tersedia? <CreateCategory1 />
+                    </div>
                 </div>
 
                 {/* description */}

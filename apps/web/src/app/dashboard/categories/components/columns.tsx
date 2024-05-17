@@ -5,16 +5,12 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableColumnHeader } from './data-table-column-header';
-import { DataTableRowActions } from './data-table-row-actions';
 import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
+import CategoryAction from './CategoryAction';
 
 export type Users = {
     id: string;
-    user_name: string;
-    email: string;
-    role: string;
-    email_verification: boolean;
-    telephone: string | '';
+    name: string;
     createdAt: string;
 };
 
@@ -45,28 +41,16 @@ export const columns: ColumnDef<Users>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: 'user_name',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Username" />,
+        accessorKey: 'name',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
         cell: ({ row }) => {
             return (
                 <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate font-medium">{row.getValue('user_name')}</span>
+                    <span className="max-w-[500px] truncate font-medium">{row.getValue('name')}</span>
                 </div>
             );
         },
     },
-    {
-        accessorKey: 'email',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex items-center">
-                    <span>{row.getValue('email')}</span>
-                </div>
-            );
-        },
-    },
-
     {
         accessorKey: 'createdAt',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
@@ -83,9 +67,12 @@ export const columns: ColumnDef<Users>[] = [
     {
         id: 'actions',
         cell: ({ row }) => {
-            const role = row.getValue('role');
-
-            return role == 'Store_Admin' && <DataTableRowActions row={row} />;
+            const category = row.original;
+            return (
+                <div className="flex justify-center">
+                    <CategoryAction id={Number(category.id)} name={category.name} />
+                </div>
+            );
         },
     },
 ];

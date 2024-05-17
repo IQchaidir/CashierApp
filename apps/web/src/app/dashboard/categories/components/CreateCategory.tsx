@@ -48,10 +48,10 @@ export default function CreateCategory() {
     return (
         <Dialog open={isOpen} onOpenChange={(e) => setOpen(e)}>
             <DialogTrigger>
-                <Button className="flex gap-2 bg-blue-500 text-white">
+                <button className="flex gap-2 bg-blue-500 text-white p-2 rounded-sm">
                     <CircleFadingPlus className="w-4 h-4" />
                     Create Category
-                </Button>
+                </button>
             </DialogTrigger>
             <DialogContent className="w-72">
                 <DialogHeader>

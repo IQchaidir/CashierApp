@@ -9,7 +9,7 @@ export default function useCreateShift() {
     const { mutate, isError, isPending } = useMutation({
         mutationFn: async ({ initial_cash }: { initial_cash: number }) => {
             const res = await axios.post(
-                `${process.env.NEXT_PUBLIC_BASE_API_URL}/shift/start`,
+                `${process.env.NEXT_PUBLIC_BASE_API_URL}/shift/`,
                 { initial_cash },
                 {
                     headers: {

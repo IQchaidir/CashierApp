@@ -25,10 +25,10 @@ export class CashierController {
     }
 
     async createCashier(req: Request, res: Response, next: NextFunction) {
-        const { email, password } = req.body;
+        const { email, password, user_name } = req.body;
         const cashierService = new CashierService();
         try {
-            const newCashier = await cashierService.createCashier(email, password);
+            const newCashier = await cashierService.createCashier(email, password, user_name);
             return res.status(newCashier.status).json(newCashier.response);
         } catch (error: any) {
             return next(error);

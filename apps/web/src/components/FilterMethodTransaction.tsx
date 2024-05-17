@@ -28,23 +28,15 @@ export function FilterPayment() {
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectPayment]);
 
-    const handlePaymentChange = (payment: string) => {};
-
     return (
         <Select value={selectPayment} onValueChange={setSelectPayment}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="All Payment" />
             </SelectTrigger>
             <SelectContent>
-                <SelectGroup>
-                    <SelectLabel>payment</SelectLabel>
-                    <SelectItem value="All Payment">All Payment</SelectItem>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
-                </SelectGroup>
+                <SelectItem value="All Payment">Semua Transaksi</SelectItem>
+                <SelectItem value="CASH">CASH</SelectItem>
+                <SelectItem value="DEBIT">DEBIT</SelectItem>
             </SelectContent>
         </Select>
     );

@@ -15,7 +15,8 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
         <div className=" flex flex-col w-1/4 bg-gray-200 ">
             {transaction && (
                 <>
-                    <div className="  flex flex-col p-4 gap-2">
+                    <div className="flex flex-col p-4 gap-2">
+                        <div className="text-5xl text-center mt-4 mb-8 font-medium">Rp. {transaction.amount}</div>
                         <div className="flex gap-1 text-sm">
                             <ReceiptText className="w-5 h-5" /> {transaction.invoice}
                         </div>
@@ -25,7 +26,7 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
                         </div>
                         <div className="flex gap-1 text-sm">
                             <User className="w-5 h-5" />
-                            {transaction.user.email}
+                            {transaction.user.user_name}
                         </div>
                         <div className="flex gap-1 text-sm">
                             <DollarSign className="w-5 h-5" />
@@ -41,7 +42,7 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
                         <div>
                             <div className="flex flex-col gap-3">
                                 {transaction.Transaction_Product.map((item: any) => (
-                                    <div className="flex">
+                                    <div key={item.id} className="flex">
                                         <div className="flex-1  py-2 px-4">{item.product.name}</div>
                                         <div className="flex-1 py-2 px-4">
                                             {item.quantity} x {item.price}
@@ -55,9 +56,6 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
                             </div>
 
                             <div className="py-2 px-4 mt-5">Jumlah item: {totalQuantity}</div>
-                        </div>
-                        <div className="fixed bottom-0 border-t-2 border-blue-500 w-full text-2xl py-2 font-semibold text-blue-500 pl-36 ">
-                            <p>Rp. {transaction.amount}</p>
                         </div>
                     </div>
                 </>

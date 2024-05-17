@@ -59,4 +59,22 @@ export class TransactionController {
             return next(error);
         }
     }
+
+    async getShiftTransaction(req: Request, res: Response, next: NextFunction) {
+        const id = req.dataUser.id;
+        const { payment, search: invoice, page } = req.query;
+        const pageNumber = parseInt(page as string, 10) || 1;
+        const transactionService = new TransactionService();
+        try {
+            const transaction = await transactionService.getShiftTransaction(
+                id,
+                pageNumber,
+                payment as string,
+                invoice as string,
+            );
+            return res.status(transaction.status).json(transaction.response);
+        } catch (error) {
+            return next(error);
+        }
+    }
 }

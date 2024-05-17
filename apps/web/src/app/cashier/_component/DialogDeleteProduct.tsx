@@ -20,13 +20,13 @@ export const DialogDeleteProduct = ({ cartItem }: { cartItem: CartItem }) => {
                     <hr className="bg-black"></hr>
                 </DialogHeader>
                 <Trash2Icon className=" mx-auto w-8 h-8 text-red-500 mt-10" />
-                <p className="text-center text-lg">Anda yakin ingin menghapus data?</p>
+                <p className="text-center text-lg">Anda yakin ingin menghapus pesanan?</p>
                 <div className="flex justify-end gap-5 mt-10">
                     <DialogClose asChild>
-                        <button className="border-blue-500 border w-20 rounded-sm">Tidak</button>
+                        <button className="border-[#04C99E] border w-20 rounded-sm">Tidak</button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <button className="border w-20 rounded-sm bg-blue-500 text-white" onClick={handleDelete}>
+                        <button className="border w-20 rounded-sm bg-[#04C99E] text-white" onClick={handleDelete}>
                             Ya
                         </button>
                     </DialogClose>

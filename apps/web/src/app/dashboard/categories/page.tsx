@@ -9,20 +9,12 @@ export default function CategoriesDashboard() {
     const users = [
         {
             id: '1',
-            user_name: 'john_doe',
-            email: 'john@example.com',
-            role: 'admin',
-            email_verification: true,
-            telephone: '123456789',
+            name: 'makanan',
             createdAt: '2024-05-17T10:00:00Z',
         },
         {
             id: '2',
-            user_name: 'jane_smith',
-            email: 'jane@example.com',
-            role: 'user',
-            email_verification: false,
-            telephone: '',
+            name: 'minuman',
             createdAt: '2024-05-16T15:30:00Z',
         },
     ];

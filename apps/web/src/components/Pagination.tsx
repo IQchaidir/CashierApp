@@ -1,22 +1,34 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 const Pagination = ({
     currentPage,
     totalPages,
-    onPageChange,
+    setCurrentPage,
 }: {
-    currentPage: any;
-    totalPages: any;
-    onPageChange: any;
+    currentPage: number;
+    totalPages: number;
+    setCurrentPage: (page: number) => void;
 }) => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
     const handleClick = (page: number) => {
         if (page >= 1 && page <= totalPages) {
-            onPageChange(page);
+            const params = new URLSearchParams(searchParams);
+            if (page > 1) {
+                params.set('page', page.toString());
+            } else {
+                params.delete('page');
+            }
+            router.replace(`${pathname}?${params.toString()}`);
+            setCurrentPage(page);
         }
     };
 
     return (
-        <div className="flex  mt-4 text-white font-semibold">
+        <div className="flex mt-4 text-black font-semibold">
             <nav>
                 <ul className="pagination flex gap-4">
                     <li className="page-item">
@@ -29,7 +41,7 @@ const Pagination = ({
                         </button>
                     </li>
                     <div className="flex items-center w-20 gap-2">
-                        <span className="border rounded px-2 w-8 text-center">{currentPage}</span>
+                        <span className="border border-black rounded px-2 w-8 text-center">{currentPage}</span>
                         <span>of</span>
                         {totalPages}
                     </div>

@@ -1,13 +1,6 @@
 'use client';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import useCategory from '@/hooks/category/useGetCategory';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -15,6 +8,7 @@ export function SelectCategory() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const { data, isLoading } = useCategory();
     const [selectCategory, setSelectCategory] = useState(searchParams.get('category') || 'All Product');
 
     useEffect(() => {
@@ -28,23 +22,26 @@ export function SelectCategory() {
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectCategory]);
 
-    const handleCategoryChange = (category: string) => {};
+    const handleCategoryChange = (category: string) => {
+        setSelectCategory(category);
+    };
 
     return (
-        <Select value={selectCategory} onValueChange={setSelectCategory}>
+        <Select value={selectCategory} onValueChange={handleCategoryChange}>
             <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Product" />
+                {isLoading ? (
+                    <SelectValue placeholder="Fetching Categories" />
+                ) : (
+                    <SelectValue placeholder="Choose a Category" />
+                )}
             </SelectTrigger>
             <SelectContent>
-                <SelectGroup>
-                    <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="All Product">All Product</SelectItem>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
-                </SelectGroup>
+                <SelectItem value="All Product">All Product</SelectItem>
+                {data?.map((category: { id: number; name: string }) => (
+                    <SelectItem key={category.id} value={category.name}>
+                        {category.name}
+                    </SelectItem>
+                ))}
             </SelectContent>
         </Select>
     );

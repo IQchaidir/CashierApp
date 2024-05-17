@@ -1,25 +1,11 @@
 import prisma from '@/prisma';
 import { resBadRequest, resNotFound, resSuccess } from '@/utils/responses';
-import { PrismaClient } from '@prisma/client';
 
 export class StockService {
-    async getStockLogProduct(id: number) {
-        const logStock = await prisma.stockLog.findMany({
-            where: { product_id: id },
-        });
-        if (logStock.length > 0) {
-            return resSuccess(logStock);
-        }
-        return resNotFound('Logstock not found');
-    }
-
     async reduceStockTransaction(id: number, quantity: number, tx: any) {
         await tx.product.update({
             where: { id },
             data: { stock: { decrement: quantity } },
-        });
-        await tx.stockLog.create({
-            data: { product_id: id, quantityChange: quantity, type: 'Reduction' },
         });
         return;
     }
@@ -43,9 +29,7 @@ export class StockService {
         if (!updateStock) {
             return resNotFound('Product not found');
         }
-        await prisma.stockLog.create({
-            data: { product_id: id, quantityChange: quantity, type: 'Addition' },
-        });
+
         return resSuccess(updateStock);
     }
 
@@ -65,10 +49,6 @@ export class StockService {
         const updateStock = await prisma.product.update({
             where: { id },
             data: { stock: { decrement: quantity } },
-        });
-
-        await prisma.stockLog.create({
-            data: { product_id: id, quantityChange: quantity, type: 'Reduction' },
         });
 
         return resSuccess(updateStock);

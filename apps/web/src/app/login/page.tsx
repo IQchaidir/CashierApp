@@ -27,6 +27,7 @@ const LoginPage = () => {
                         id: data.id,
                         email: data.email,
                         role: data.role,
+                        username: data.user_name,
                         token: data.token,
                     });
                     if (loginType === 'admin') {

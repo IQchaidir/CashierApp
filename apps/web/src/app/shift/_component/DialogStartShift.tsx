@@ -1,12 +1,11 @@
 'use client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
-import useCreateShift from '@/hooks/useCreateShit';
+import useCreateShift from '@/hooks/shift/useCreateShit';
+import { formatToRupiah } from '@/utils/formatToRupiah';
 import { Check, Clock } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 export const DialogStartShift = ({ initial_cash }: { initial_cash: number }) => {
-    const router = useRouter();
     const { mutate, isPending } = useCreateShift();
     const handleStart = () => {
         mutate(
@@ -30,12 +29,11 @@ export const DialogStartShift = ({ initial_cash }: { initial_cash: number }) => 
     };
 
     const now = new Date();
-    const formattedDate = now.toLocaleString();
-
+    const formattedDate = now.toLocaleString().replace(/:\d{2} /, ' ');
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className="flex justify-center gap-2 bg-green-700 w-full py-2 rounded-sm mt-5 text-xl font-medium text-white">
+                <button className="flex justify-center gap-2 bg-[#04C99E] w-full py-2 rounded-sm mt-5 text-xl font-medium text-white">
                     <Check />
                     Mulai Shift
                 </button>
@@ -48,16 +46,16 @@ export const DialogStartShift = ({ initial_cash }: { initial_cash: number }) => 
                     <hr className="bg-black"></hr>
                 </DialogHeader>
                 <div className="text-xl space-y-5 font-medium">
-                    <p>Kas Awal: Rp {Number(initial_cash)}</p>
+                    <p>Kas Awal: {formatToRupiah(initial_cash)}</p>
                     <p>Mulai: {formattedDate}</p>
                 </div>
                 <div className="flex justify-end gap-5 mt-5">
                     <DialogClose asChild>
-                        <button className="border-blue-500 border w-20 rounded-sm">Tidak</button>
+                        <button className="border-[#04C99E] border w-20 rounded-sm">Tidak</button>
                     </DialogClose>
                     <DialogClose asChild>
                         <button
-                            className="border w-20 rounded-sm bg-blue-500 text-white"
+                            className="border w-20 rounded-sm bg-[#04C99E] text-white"
                             onClick={handleStart}
                             disabled={isPending}
                         >

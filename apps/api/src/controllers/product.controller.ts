@@ -5,7 +5,6 @@ export class ProductController {
     async createProduct(req: Request, res: Response, next: NextFunction) {
         const { name, description, price, stock, category } = req.body;
         const file: string | undefined = req.file?.filename;
-        // const productService = new ProductService();
         try {
             const createProduct = await productService.createProduct(
                 file,

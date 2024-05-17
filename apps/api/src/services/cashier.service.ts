@@ -4,9 +4,9 @@ import { resBadRequest, resCreated, resNotFound, resSuccess } from '@/utils/resp
 import { User } from '@prisma/client';
 
 export class CashierService {
-    async createCashier(email: string, password: string) {
-        const existingEmail = await prisma.user.findUnique({
-            where: { email },
+    async createCashier(email: string, password: string, user_name: string) {
+        const existingEmail = await prisma.user.findFirst({
+            where: { email, archive: false },
         });
 
         if (existingEmail) {
@@ -16,7 +16,7 @@ export class CashierService {
         const hashed = await hashPassword(password);
 
         const newCashier = await prisma.user.create({
-            data: { email, password: hashed, role: 'CASHIER' },
+            data: { email, password: hashed, role: 'CASHIER', user_name },
         });
         return resCreated(newCashier);
     }
@@ -52,8 +52,8 @@ export class CashierService {
         let newData: { email?: string; password?: string } = {};
 
         if (email) {
-            const existingEmail = await prisma.user.findUnique({
-                where: { email },
+            const existingEmail = await prisma.user.findFirst({
+                where: { email, archive: false },
             });
             if (existingEmail) {
                 return resBadRequest('email already use');

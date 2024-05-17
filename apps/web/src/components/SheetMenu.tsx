@@ -4,54 +4,64 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import { Menu, ReceiptText } from 'lucide-react';
 import Link from 'next/link';
 import { useCookies } from 'next-client-cookies';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import LogoutDialog from './LogoutDialog';
+import { Separator } from './ui/separator';
+import React from 'react';
 
 export function SheetMenu() {
+    const pathname = usePathname();
     const cookies = useCookies();
     const session: any = cookies.get('session');
-    let email;
+    let username;
     if (session) {
-        email = JSON.parse(session).email;
+        username = JSON.parse(session).username;
     }
-    const router = useRouter();
     const menuItems = [
-        { icon: <Calculator />, text: 'Aplikasi Kasir', link: '/cashier' },
+        { icon: <Calculator />, text: 'Kasir', link: '/cashier' },
         { icon: <ReceiptText />, text: 'Transaksi', link: '/transaction' },
         { icon: <CalendarClock />, text: 'Shift', link: '/shift' },
     ];
 
-    const handleLogout = () => {
-        cookies.remove('session');
-        router.push('/login');
+    const isActiveLink = (link: string) => {
+        return pathname === link;
     };
 
     return (
         <Sheet key={'left'}>
             <SheetTrigger asChild>
-                <Menu />
+                <Menu className="w-[36px] h-[36px]" />
             </SheetTrigger>
-            <SheetContent onOpenAutoFocus={(e) => e.preventDefault()} side={'left'} className="bg-gray-50 w-[250px]">
-                <SheetHeader className="mt-10">
-                    <SheetTitle className="flex justify-center text-lg">{email}</SheetTitle>
+            <SheetContent
+                onOpenAutoFocus={(e) => e.preventDefault()}
+                side={'left'}
+                className=" bg-gray-50 p-2 w-[300px] "
+            >
+                <SheetHeader className="mt-3 p-2">
+                    <SheetTitle className="flex justify-start text-2xl">{username}</SheetTitle>
                 </SheetHeader>
-                <div className="grid mt-3 py-4 text-lg">
+                <Separator className="mt-3" />
+                <div className="grid mt-3 text-2xl">
                     {menuItems.map((item, index) => (
                         <SheetClose asChild key={index}>
                             <Link href={item.link}>
-                                <div className="flex py-2 px-1 rounded-sm justify-start items-center space-x-3 cursor-pointer hover:bg-gray-200">
-                                    {item.icon}
-                                    <span className="font-semibold">{item.text}</span>
+                                <div className="flex py-2 px-1  rounded-sm justify-start items-center space-x-3 cursor-pointer hover:bg-gray-200">
+                                    {React.cloneElement(item.icon, {
+                                        className: `w-[36px] h-[36px] ${
+                                            isActiveLink(item.link) ? 'text-[#04C99E]' : ''
+                                        }`,
+                                    })}
+                                    <span
+                                        className={`font-semibold ${isActiveLink(item.link) ? 'text-[#04C99E]' : ''}`}
+                                    >
+                                        {item.text}
+                                    </span>
                                 </div>
                             </Link>
                         </SheetClose>
                     ))}
-                    <div
-                        onClick={handleLogout}
-                        className="fixed bottom-10 flex py-2 px-1 rounded-sm justify-start items-center space-x-3 cursor-pointer"
-                    >
-                        <LogOut />
-                        <span className="font-semibold">Keluar</span>
-                    </div>
+
+                    <LogoutDialog />
                 </div>
             </SheetContent>
         </Sheet>

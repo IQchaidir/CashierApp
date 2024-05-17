@@ -8,21 +8,17 @@ export default function TransactionDashboard() {
     const users = [
         {
             id: '1',
-            user_name: 'john_doe',
-            email: 'john@example.com',
-            role: 'admin',
-            email_verification: true,
-            telephone: '123456789',
+            invoice: 'INV-12313123-01',
+            method: 'CASH',
+            amount: 8000,
             createdAt: '2024-05-17T10:00:00Z',
         },
         {
             id: '2',
-            user_name: 'jane_smith',
-            email: 'jane@example.com',
-            role: 'user',
-            email_verification: false,
-            telephone: '',
-            createdAt: '2024-05-16T15:30:00Z',
+            invoice: 'INV-12313123-02',
+            method: 'DEBIT',
+            amount: 9000,
+            createdAt: '2024-05-17T10:00:00Z',
         },
     ];
 
@@ -33,16 +29,9 @@ export default function TransactionDashboard() {
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
                             <Users />
-                            Cashier List
+                            Transaction List
                         </h2>
-                        <p className="text-muted-foreground">list of all cashier</p>
-                        <Link
-                            href={`/dashboard/users/create`}
-                            className="border bg-blue-500 p-2 cursor-pointer font-medium flex gap-2 items-center rounded-md text-white"
-                        >
-                            <UserPlus className="w-4 h-4 text-" />
-                            Create Cashier
-                        </Link>
+                        <p className="text-muted-foreground">list of all transaction</p>
                     </div>
                 </div>
                 {!!users?.length && <DataTable data={users} columns={columns} />}

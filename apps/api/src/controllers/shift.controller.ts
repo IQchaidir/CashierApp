@@ -46,12 +46,13 @@ export class ShiftController {
     }
 
     async endShift(req: Request, res: Response, next: NextFunction) {
+        const userId = req.dataUser.id;
         const { id } = req.params;
         const { final_cash } = req.body;
         const shiftService = new ShiftService();
 
         try {
-            const endShift = await shiftService.endShift(Number(id), final_cash);
+            const endShift = await shiftService.endShift(userId, Number(id), final_cash);
             return res.status(endShift.status).json(endShift.response);
         } catch (error) {
             next(error);
@@ -65,9 +66,11 @@ export class ShiftController {
         try {
             const checkShift = await shiftService.checkShift(id);
             if (checkShift.activeShift) {
-                return res.status(400).json('there is still an ongoing shift');
+                return res
+                    .status(400)
+                    .json({ message: 'Masih ada shift orang lain yang aktif!', data: checkShift.activeShift });
             } else if (!checkShift.currentShift) {
-                return res.status(400).json('Create a new shift first');
+                return res.status(400).json({ message: 'Mulai shift terlebih dahulu' });
             }
             return res.status(200).json(checkShift.currentShift);
         } catch (error) {

@@ -17,7 +17,7 @@ export class ShiftRouter {
         this.router.get('/', this.shiftController.getShift);
         this.router.post('/check', verifyToken, this.shiftController.checkShift);
         this.router.get('/:id', this.shiftController.getShiftById);
-        this.router.post('/start', verifyToken, this.shiftController.startShift);
+        this.router.post('/', verifyToken, this.shiftController.startShift);
         this.router.patch('/end/:id', verifyToken, this.shiftController.endShift);
     }
 
