@@ -2,6 +2,8 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { CartContextType, CartItem } from '@/types/cart';
 import { Product } from '@/types/product';
+import { useCookies } from 'next-client-cookies';
+import { toast } from '@/components/ui/use-toast';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -21,10 +23,11 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
+    const cookies = useCookies();
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedCart = localStorage.getItem('cart');
+            const savedCart = cookies.get('cart');
             if (savedCart) {
                 setCartItems(JSON.parse(savedCart));
             }
@@ -34,7 +37,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
     useEffect(() => {
         if (isMounted) {
-            localStorage.setItem('cart', JSON.stringify(cartItems));
+            cookies.set('cart', JSON.stringify(cartItems), { expires: 0.02083 });
             const total = cartItems.reduce((acc, cart) => acc + cart.price * cart.quantity, 0);
             setTotalPrice(total);
         }
@@ -44,7 +47,10 @@ export const CartProvider = ({ children }: CartProviderProps) => {
         const existingItem = cartItems.find((item) => item.product.id === product.id);
 
         if (existingItem && existingItem.quantity === existingItem.product.stock) {
-            alert('Stock terbatas');
+            toast({
+                variant: 'destructive',
+                title: 'Stock Terbatas!',
+            });
         } else {
             const updatedCartItems = existingItem
                 ? cartItems.map((item) =>

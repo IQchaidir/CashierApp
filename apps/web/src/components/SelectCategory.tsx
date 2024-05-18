@@ -4,7 +4,7 @@ import useCategory from '@/hooks/category/useGetCategory';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function SelectCategory() {
+export function SelectCategory({ setCurrentPage }: { setCurrentPage: any }) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -16,6 +16,7 @@ export function SelectCategory() {
         if (selectCategory && selectCategory !== 'All Product') {
             params.set('category', selectCategory);
             params.delete('page');
+            setCurrentPage(1);
         } else {
             params.delete('category');
         }

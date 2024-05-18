@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function FilterPayment() {
+export function FilterPayment({ setCurrentPage }: { setCurrentPage: any }) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -22,6 +22,7 @@ export function FilterPayment() {
         if (selectPayment && selectPayment !== 'All Payment') {
             params.set('payment', selectPayment);
             params.delete('page');
+            setCurrentPage(1);
         } else {
             params.delete('payment');
         }

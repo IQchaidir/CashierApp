@@ -21,12 +21,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={inter.className}>
                 <QueryProvider>
                     <CookiesProvider>
-                        <ApplicationWrapper>
-                            <CartProvider>
+                        <CartProvider>
+                            <ApplicationWrapper>
                                 {children}
                                 <Toaster />
-                            </CartProvider>
-                        </ApplicationWrapper>
+                            </ApplicationWrapper>
+                        </CartProvider>
                     </CookiesProvider>
                 </QueryProvider>
             </body>

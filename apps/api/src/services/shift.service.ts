@@ -77,6 +77,10 @@ export class ShiftService {
                 start_time: { lte: new Date() },
                 end_time: null,
             },
+            include: {
+                Transaction: true,
+                user: true,
+            },
         });
 
         let currentShift;
@@ -88,6 +92,7 @@ export class ShiftService {
             },
             include: {
                 Transaction: true,
+                user: true,
             },
         });
         if (currentShift) {

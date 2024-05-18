@@ -29,8 +29,8 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
     return (
         <div className="w-2/3 bg-gray-100 ">
             <div className="flex justify-between bg-emerald-300 p-2">
-                <SearchInput initialSearch={search} onSearchChange={handleSearch} />
-                <SelectCategory />
+                <SearchInput initialSearch={search} onSearchChange={handleSearch} setCurrentPage={setCurrentPage} />
+                <SelectCategory setCurrentPage={setCurrentPage} />
             </div>
             {isLoading && <LoadingComponent />}
             {data && (

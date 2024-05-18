@@ -7,9 +7,10 @@ import { useState, useEffect } from 'react';
 interface SearchInputProps {
     initialSearch: string;
     onSearchChange: (term: string) => void;
+    setCurrentPage: any;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ initialSearch, onSearchChange }) => {
+const SearchInput: React.FC<SearchInputProps> = ({ initialSearch, onSearchChange, setCurrentPage }) => {
     const [input, setInput] = useState(initialSearch);
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -21,6 +22,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ initialSearch, onSearchChange
         if (term) {
             params.set('search', term);
             params.delete('page');
+            setCurrentPage(1);
         } else {
             params.delete('search');
         }

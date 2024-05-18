@@ -54,7 +54,6 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
                                     </div>
                                 ))}
                             </div>
-
                             <div className="py-2 px-4 mt-5">Jumlah item: {totalQuantity}</div>
                         </div>
                     </div>

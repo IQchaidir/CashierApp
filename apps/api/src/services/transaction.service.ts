@@ -66,10 +66,10 @@ export class TransactionService {
         let amount: number = 0;
 
         const getShift = await shiftService.checkShift(userId);
-        if (!getShift.activeShift) {
+        if (getShift.activeShift) {
             return resBadRequest('Masih ada shift yang berjalan!');
         }
-        if (getShift) {
+        if (getShift.currentShift) {
             shiftId = getShift.currentShift?.id;
         }
 

@@ -16,8 +16,11 @@ const OrderSummary = () => {
     const router = useRouter();
     const { mutate } = useCheckShift();
     const cookies = useCookies();
-    const session: any = cookies.get('session');
-    const { username } = JSON.parse(session);
+    let session = cookies.get('session');
+    let username = null;
+    if (session) {
+        username = JSON.parse(session).username_name;
+    }
     const totalPrice = calculateTotalPrice(cartItems);
     const totalItem = calculateTotalItems(cartItems);
 

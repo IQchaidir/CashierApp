@@ -18,7 +18,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
                     className="h-8 w-[150px] lg:w-[250px]"
                 />
             </div>
-            <SelectCategory />
+            <SelectCategory setCurrentPage={table.setPageIndex} />
         </div>
     );
 }

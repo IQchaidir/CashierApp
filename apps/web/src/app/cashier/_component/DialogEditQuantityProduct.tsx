@@ -1,4 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { toast } from '@/components/ui/use-toast';
 import { useCart } from '@/providers/CartContext';
 import { CartItem } from '@/types/cart';
 import { DialogClose } from '@radix-ui/react-dialog';
@@ -17,7 +18,10 @@ export const DialogEditProduct = ({ cartItem }: { cartItem: CartItem }) => {
         if (quantity < cartItem.product.stock) {
             setQuantity(quantity + 1);
         } else {
-            alert(`Stok terbatas: ${cartItem.product.stock}`);
+            toast({
+                variant: 'destructive',
+                title: `Stok terbatas: hanya tersisa ${cartItem.product.stock}`,
+            });
         }
     };
 
