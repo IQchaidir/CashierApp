@@ -34,7 +34,7 @@ model Product {
   description         String                @db.Text
   category_id         Int
   price               Decimal
-  stock               Int 
+  stock               Int?                  @default(0)
   image               String
   archive             Boolean               @default(false)
   createdAt           DateTime              @default(now())

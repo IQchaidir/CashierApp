@@ -1,13 +1,13 @@
 'use client';
-import { SelectCategory } from '../../../components/SelectCategory';
 import CardProduct from './CardProduct';
 import Pagination from '../../../components/Pagination';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import useProduct from '@/hooks/useProduct';
 import SearchInput from '@/components/SearchInput';
 import LoadingComponent from '@/components/LoadingComponent';
 import { Product } from '@/types/product';
+import useProductCashier from '@/hooks/useProductCashier';
+import { FilterCategoryProduct } from '@/components/FilterCategoryProduct';
 
 const ListProduct = ({ page, search, category }: { page: number; search: string; category: string }) => {
     const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
         return page ? parseInt(page, 10) : 1;
     });
     const [input, setInput] = useState(search);
-    const { data, isLoading } = useProduct({
+    const { data, isLoading } = useProductCashier({
         page,
         search,
         category,
@@ -30,7 +30,7 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
         <div className="w-2/3 bg-gray-100 ">
             <div className="flex justify-between bg-emerald-300 p-2">
                 <SearchInput initialSearch={search} onSearchChange={handleSearch} setCurrentPage={setCurrentPage} />
-                <SelectCategory setCurrentPage={setCurrentPage} />
+                <FilterCategoryProduct setCurrentPage={setCurrentPage} />
             </div>
             {isLoading && <LoadingComponent />}
             {data && (

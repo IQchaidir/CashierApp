@@ -15,7 +15,7 @@ export class StockService {
             where: { id: productId },
         });
 
-        if (!productStock || productStock.stock < quantity) {
+        if (!productStock || productStock.stock === null || productStock.stock < quantity) {
             return false;
         }
         return true;
@@ -42,7 +42,7 @@ export class StockService {
             return resNotFound('Product not found');
         }
 
-        if (quantity > existingProduct.stock) {
+        if (existingProduct.stock === null || quantity > existingProduct.stock) {
             return resBadRequest('Qty must be less than or equals to stock');
         }
 

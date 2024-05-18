@@ -8,19 +8,7 @@ import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
 import Link from 'next/link';
-
-export type Product = {
-    no: number;
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    weight: number;
-    stock: number;
-    category: string;
-    updatedAt: Date;
-    createdAt: Date;
-};
+import { Product } from '@/types/product';
 
 export const columns: ColumnDef<Product>[] = [
     {

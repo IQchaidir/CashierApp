@@ -15,10 +15,11 @@ export class ProductRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.get('/', this.productController.getProduct);
+        this.router.get('/', this.productController.getProductAdmin);
+        this.router.get('/cashier', this.productController.getProductCashier);
         this.router.get('/:id', this.productController.getProductById);
         this.router.post(
-            '/create',
+            '/',
             verifyToken,
             verifyAdmin,
             uploader('IMG', '/images').single('file'),

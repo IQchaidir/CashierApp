@@ -1,7 +1,7 @@
 // import CreateAdmin from '@/components/dashboard/CreateAdmin';
 import { ArrowLeftToLine } from 'lucide-react';
 import Link from 'next/link';
-import CreateAdmin from './_component/CreateAdmin';
+import CreateCashier from './_component/CreateCashier';
 
 export default function CreateAdminPage() {
     return (
@@ -10,7 +10,7 @@ export default function CreateAdminPage() {
                 <ArrowLeftToLine className="w-4 h-4 cursor-pointer" />
             </Link>
             <div className="text-3xl font-extrabold">Create New Cashier</div>
-            <CreateAdmin />
+            <CreateCashier />
         </div>
     );
 }

@@ -1,24 +1,10 @@
 'use client';
-
 import { ColumnDef } from '@tanstack/react-table';
-
-import { Checkbox } from '@/components/ui/checkbox';
-
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
+import { User } from '@/types/user';
 
-export type Users = {
-    id: string;
-    user_name: string;
-    email: string;
-    role: string;
-    email_verification: boolean;
-    telephone: string | '';
-    createdAt: string;
-};
-
-export const columns: ColumnDef<Users>[] = [
+export const columns: ColumnDef<User>[] = [
     {
         accessorKey: 'id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,

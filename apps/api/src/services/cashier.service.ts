@@ -13,6 +13,14 @@ export class CashierService {
             return resBadRequest('Email already use');
         }
 
+        const existingUsername = await prisma.user.findFirst({
+            where: { user_name, archive: false },
+        });
+
+        if (existingUsername) {
+            return resBadRequest('Username already use');
+        }
+
         const hashed = await hashPassword(password);
 
         const newCashier = await prisma.user.create({
@@ -21,17 +29,27 @@ export class CashierService {
         return resCreated(newCashier);
     }
 
-    async getCashier(pageNumber: number) {
+    async getCashier(pageNumber: number, email?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
+        const whereClause: any = { role: 'CASHIER', archive: false };
+
+        if (email) {
+            whereClause.email = email ? { contains: email } : undefined;
+        }
+        const totalCount = await prisma.user.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
         const getCashier = await prisma.user.findMany({
-            where: { role: 'CASHIER', archive: false },
+            where: whereClause,
             skip: skipAmount,
+            take: pageSize,
             orderBy: { id: 'asc' },
         });
 
         if (getCashier.length > 0) {
-            return resSuccess(getCashier);
+            const data = { getCashier, totalPages };
+            return resSuccess(data);
         }
         return resNotFound('cashier not found');
     }
@@ -48,32 +66,51 @@ export class CashierService {
         return resSuccess(cashier);
     }
 
-    async updateCashier(id: number, email?: string, password?: string) {
-        let newData: { email?: string; password?: string } = {};
+    async updateCashier(id: number, user_name?: string, email?: string, password?: string) {
+        let newData: { email?: string; password?: string; user_name?: string } = {};
 
-        if (email) {
-            const existingEmail = await prisma.user.findFirst({
-                where: { email, archive: false },
+        const checkUniqueField = async (field: 'user_name' | 'email', value: string, errorMessage: string) => {
+            const existingUser = await prisma.user.findFirst({
+                where: {
+                    [field]: value,
+                    archive: false,
+                    NOT: { id },
+                },
             });
-            if (existingEmail) {
-                return resBadRequest('email already use');
+            if (existingUser) {
+                throw new Error(errorMessage);
             }
-            newData.email = email;
-        }
+        };
 
-        if (password) {
-            const hashedPassword = await hashPassword(password);
-            newData.password = hashedPassword;
-        }
-        const cashier = await prisma.user.update({
-            where: { id },
-            data: newData,
-        });
-        if (!cashier) {
-            return resNotFound('Cashier not found');
-        }
+        try {
+            if (user_name) {
+                await checkUniqueField('user_name', user_name, 'Username already in use');
+                newData.user_name = user_name;
+            }
 
-        return resSuccess(cashier);
+            if (email) {
+                await checkUniqueField('email', email, 'Email already in use');
+                newData.email = email;
+            }
+
+            if (password) {
+                const hashedPassword = await hashPassword(password);
+                newData.password = hashedPassword;
+            }
+
+            const cashier = await prisma.user.update({
+                where: { id },
+                data: newData,
+            });
+
+            if (!cashier) {
+                return resNotFound('Cashier not found');
+            }
+
+            return resSuccess(cashier);
+        } catch (error: any) {
+            return resBadRequest(error.message);
+        }
     }
 
     async deleteCashiser(id: number) {

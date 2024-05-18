@@ -10,6 +10,4 @@ export type User = {
     createdAt: Date;
     updatedAt: Date;
     archive: boolean;
-    Shift: Shift[];
-    Transaction: Transaction[];
 };

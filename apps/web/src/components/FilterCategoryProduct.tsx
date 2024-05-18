@@ -4,7 +4,7 @@ import useCategory from '@/hooks/category/useGetCategory';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export function SelectCategory({ setCurrentPage }: { setCurrentPage: any }) {
+export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any }) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();

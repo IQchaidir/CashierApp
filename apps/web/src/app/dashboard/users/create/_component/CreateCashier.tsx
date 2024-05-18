@@ -2,11 +2,14 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import useCreateCashier from '@/hooks/useCreateCashier';
+import { validateNewCashier } from '@/lib/validation';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 
-export default function CreateAdmin() {
+export default function CreateCashier() {
     const router = useRouter();
+    const { mutate } = useCreateCashier();
 
     const formik: any = useFormik({
         initialValues: {
@@ -15,7 +18,7 @@ export default function CreateAdmin() {
             password: '',
             confirmPassword: '',
         },
-        // validationSchema: validateNewAdmin,
+        validationSchema: validateNewCashier,
         onSubmit: ({ user_name, email, password, confirmPassword }) => {
             if (password !== confirmPassword) {
                 toast({
@@ -24,36 +27,35 @@ export default function CreateAdmin() {
                 });
                 return;
             }
-            // mutate(
-            //   {
-            //     user_name,
-            //     email,
-            //     password,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       toast({
-            //         variant: 'success',
-            //         title: 'Admin created successfully !',
-            //       });
-            //       router.push('/dashboard/users');
-            //     },
-            //     onError: (res: any) => {
-            //       toast({
-            //         variant: 'destructive',
-            //         title: 'Failed to create admin !',
-            //         description: res?.response?.data?.message,
-            //       });
-            //     },
-            //   },
-            // );
+            mutate(
+                {
+                    user_name,
+                    email,
+                    password,
+                },
+                {
+                    onSuccess: () => {
+                        toast({
+                            variant: 'success',
+                            title: 'Cashier created successfully !',
+                        });
+                        router.push('/dashboard/users');
+                    },
+                    onError: (res: any) => {
+                        toast({
+                            variant: 'destructive',
+                            title: 'Failed to create cashier !',
+                            description: res?.response?.data,
+                        });
+                    },
+                },
+            );
         },
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="space-y-4">
-                {/* username */}
                 <div>
                     <div className="mb-2 font-semibold">Username</div>
                     <Input
@@ -67,7 +69,6 @@ export default function CreateAdmin() {
                     ) : null}
                 </div>
 
-                {/* email */}
                 <div>
                     <div className="mb-2 font-semibold">Email</div>
                     <Input name="email" type="email" className="border-slate-300" {...formik.getFieldProps('email')} />
@@ -76,7 +77,6 @@ export default function CreateAdmin() {
                     ) : null}
                 </div>
 
-                {/* password */}
                 <div>
                     <div className="mb-2 font-semibold">Password</div>
                     <Input
@@ -90,7 +90,6 @@ export default function CreateAdmin() {
                     ) : null}
                 </div>
 
-                {/* confirm password */}
                 <div>
                     <div className="mb-2 font-semibold">Confirm Password</div>
                     <Input

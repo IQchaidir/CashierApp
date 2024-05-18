@@ -6,9 +6,14 @@ import { ChevronsUpDown } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible';
+import useCashierById from '@/hooks/useCashierById';
+import { useEffect } from 'react';
+import useEditCashier from '@/hooks/useEditCashier';
 
-export default function EditUser({ id }: { id: string }) {
+export default function EditUser({ id }: { id: number }) {
     const router = useRouter();
+    const { data, isLoading } = useCashierById({ id });
+    const { mutate } = useEditCashier();
 
     const formik: any = useFormik({
         initialValues: {
@@ -26,39 +31,39 @@ export default function EditUser({ id }: { id: string }) {
                 });
                 return;
             }
-            // mutate(
-            //   {
-            //     id,
-            //     user_name,
-            //     email,
-            //     password,
-            //   },
-            //   {
-            //     onSuccess: () => {
-            //       toast({
-            //         variant: 'success',
-            //         title: 'Admin edited successfully !',
-            //       });
-            //       router.push('/dashboard/users');
-            //     },
-            //     onError: (res: any) => {
-            //       toast({
-            //         variant: 'destructive',
-            //         title: 'Failed to edit users !',
-            //         description: res?.response?.data?.message,
-            //       });
-            //     },
-            //   },
-            // );
+            mutate(
+                {
+                    id,
+                    user_name,
+                    email,
+                    password,
+                },
+                {
+                    onSuccess: () => {
+                        toast({
+                            variant: 'success',
+                            title: 'Admin edited successfully !',
+                        });
+                        router.push('/dashboard/users');
+                    },
+                    onError: (res: any) => {
+                        toast({
+                            variant: 'destructive',
+                            title: 'Failed to edit users !',
+                            description: res?.response?.data?.message,
+                        });
+                    },
+                },
+            );
         },
     });
 
-    // useEffect(() => {
-    //   if (!isLoading && data?.results) {
-    //     formik.setFieldValue('user_name', data?.results?.user_name);
-    //     formik.setFieldValue('email', data?.results?.email);
-    //   }
-    // }, [data, isLoading]);
+    useEffect(() => {
+        if (!isLoading && data) {
+            formik.setFieldValue('user_name', data?.user_name);
+            formik.setFieldValue('email', data?.email);
+        }
+    }, [data, isLoading]);
 
     return (
         <form onSubmit={formik.handleSubmit}>

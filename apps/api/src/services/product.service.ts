@@ -19,8 +19,7 @@ class ProductService {
         name: string,
         description: string,
         price: number,
-        stock: number,
-        category_id: number,
+        categoryId: number,
     ) {
         if (!file) {
             return resBadRequest('No image uploaded');
@@ -39,16 +38,51 @@ class ProductService {
                 name,
                 description,
                 price,
-                stock,
-                category_id,
                 image: process.env.BASE_URL + 'images/' + file,
+                category_id: categoryId,
             },
         });
 
         return resSuccess(newProduct);
     }
 
-    async getProduct(pageNumber: number, category?: string, name?: string) {
+    async getProductAdmin(pageNumber: number, category?: string, name?: string) {
+        const pageSize = 10;
+        const skipAmount = (pageNumber - 1) * pageSize;
+        const whereClause: Prisma.ProductWhereInput = { archive: false };
+
+        if (category) {
+            whereClause.category = { name: category };
+        }
+
+        if (name) {
+            whereClause.name = name ? { contains: name } : undefined;
+        }
+
+        const totalCount = await prisma.product.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        const products = await prisma.product.findMany({
+            where: whereClause,
+            skip: skipAmount,
+            take: pageSize,
+            orderBy: { id: 'asc' },
+            include: { category: { select: { name: true } } },
+        });
+
+        const formattedProducts = products.map((product) => ({
+            ...product,
+            category: product.category.name,
+        }));
+
+        if (formattedProducts.length > 0) {
+            const data = { products: formattedProducts, totalPages };
+            return resSuccess(data);
+        }
+        return resNotFound('Product not found');
+    }
+
+    async getProductCashier(pageNumber: number, category?: string, name?: string) {
         const pageSize = 14;
         const skipAmount = (pageNumber - 1) * pageSize;
         const whereClause: Prisma.ProductWhereInput = { archive: false, stock: { gt: 0 } };
@@ -69,22 +103,28 @@ class ProductService {
             skip: skipAmount,
             take: pageSize,
             orderBy: { id: 'asc' },
+            include: { category: { select: { name: true } } },
         });
 
         if (products.length > 0) {
             const data = { products, totalPages };
             return resSuccess(data);
         }
-        return resNotFound('product not found');
+        return resNotFound('Product not found');
     }
 
     async getProductById(id: number) {
-        const product = await prisma.product.findUnique({
+        const getProduct = await prisma.product.findUnique({
             where: { id },
+            include: { category: { select: { name: true } } },
         });
-        if (!product) {
-            return resNotFound('product not found');
+        if (!getProduct) {
+            return resNotFound('Product not found');
         }
+        const product = {
+            ...getProduct,
+            category: getProduct.category ? getProduct.category.name : null,
+        };
         return resSuccess(product);
     }
 
@@ -93,7 +133,7 @@ class ProductService {
         name?: string,
         description?: string,
         price?: number,
-        category?: string,
+        category?: number,
         file?: string,
     ) {
         const existingProduct = await prisma.product.findUnique({
@@ -111,10 +151,6 @@ class ProductService {
         }
 
         const updateData: any = { name, price, description };
-
-        if (category) {
-            updateData.category = { connect: { name: category } };
-        }
 
         const imageUrl = file ? process.env.BASE_URL + 'images/' + file : undefined;
         if (imageUrl) {

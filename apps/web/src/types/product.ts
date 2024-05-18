@@ -1,3 +1,4 @@
+import { Category } from './category';
 import { Transaction_Product } from './transaction';
 
 export type Product = {
@@ -11,6 +12,6 @@ export type Product = {
     archive: boolean;
     createdAt: Date;
     updatedAt: Date;
-    category: string;
+    category: Category[];
     Transaction_Product: Transaction_Product[];
 };

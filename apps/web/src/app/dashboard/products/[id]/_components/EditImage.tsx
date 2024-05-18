@@ -1,19 +1,16 @@
-'use client';
-
 import { Input } from '@/components/ui/input';
 import { ImagePlus, X } from 'lucide-react';
 import { useState } from 'react';
 
 type Props = {
     id: string;
-    files: File[];
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-    setRemovedFiles: React.Dispatch<React.SetStateAction<string[]>>;
-    imageId: string;
+    file: File | null;
+    setFile: React.Dispatch<React.SetStateAction<File | null>>;
+    setRemovedFile: (arg: string) => void;
     imageUrl?: string;
 };
 
-export default function EditImage({ id, files: fs, setFiles, setRemovedFiles, imageId, imageUrl = '' }: Props) {
+export default function EditImage({ id, file, setFile, setRemovedFile, imageUrl = '' }: Props) {
     const [image, setImage] = useState(imageUrl);
     const [fileName, setFileName] = useState(imageUrl ? '' : 'No selected file');
     const [error, setError] = useState('');
@@ -24,15 +21,10 @@ export default function EditImage({ id, files: fs, setFiles, setRemovedFiles, im
                 <X
                     className="absolute right-0 top-0 text-cyan-200 z-10 cursor-pointer"
                     onClick={() => {
-                        const file: any = document.getElementById(id);
                         setImage('');
                         setFileName('No selected file');
                         setError('');
-                        setRemovedFiles((prev) => [...prev, imageId]);
-                        setFiles((prev: File[]) => {
-                            return prev.filter((f: File) => f.name != file?.files[0]?.name);
-                        });
-                        file.value = '';
+                        setRemovedFile('');
                     }}
                 />
                 <div
@@ -46,16 +38,10 @@ export default function EditImage({ id, files: fs, setFiles, setRemovedFiles, im
                         className="hidden"
                         onChange={async ({ target: { files } }) => {
                             try {
-                                if (files) {
-                                    const isDup = fs.find((file: File) => file.name == files[0].name);
-                                    if (!isDup) {
-                                        files && files[0] && setFileName(files[0]?.name);
-                                        setImage(URL.createObjectURL(files[0]));
-                                        setFiles((prev: File[]) => [...prev, files[0]]);
-                                    } else {
-                                        const file: any = document.getElementById(id);
-                                        file.value = '';
-                                    }
+                                if (files && files[0]) {
+                                    setFileName(files[0]?.name);
+                                    setImage(URL.createObjectURL(files[0]));
+                                    setFile(files[0]);
                                 }
                             } catch (error: any) {
                                 setError(error.message);

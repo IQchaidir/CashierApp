@@ -19,7 +19,7 @@ const OrderSummary = () => {
     let session = cookies.get('session');
     let username = null;
     if (session) {
-        username = JSON.parse(session).username_name;
+        username = JSON.parse(session).username;
     }
     const totalPrice = calculateTotalPrice(cartItems);
     const totalItem = calculateTotalItems(cartItems);

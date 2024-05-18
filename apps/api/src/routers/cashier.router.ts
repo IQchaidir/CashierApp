@@ -17,15 +17,15 @@ export class CashierRouter {
     private initializeRoutes(): void {
         this.router.get('/', verifyToken, verifyAdmin, this.cashierController.getCashier);
         this.router.get('/:id', verifyToken, this.cashierController.getCashierById);
-        this.router.post('/create', verifyToken, verifyAdmin, cashierValidator, this.cashierController.createCashier);
+        this.router.post('/', verifyToken, verifyAdmin, cashierValidator, this.cashierController.createCashier);
         this.router.patch(
-            '/update/:id',
+            '/:id',
             verifyToken,
             verifyAdmin,
             updateCashierValidator,
             this.cashierController.updateCashier,
         );
-        this.router.delete('/delete/:id', verifyToken, verifyAdmin, this.cashierController.deleteCashier);
+        this.router.delete('/:id', verifyToken, verifyAdmin, this.cashierController.deleteCashier);
     }
 
     getRouter(): Router {

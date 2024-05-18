@@ -1,7 +1,7 @@
 'use client';
 import { Table } from '@tanstack/react-table';
 import { Input } from '@/components/ui/input';
-import { SelectCategory } from '@/components/SelectCategory';
+import { SelectCategory } from '@/components/FilterCategoryProduct';
 
 interface DataTableToolbarProps<TData> {
     table: Table<TData>;

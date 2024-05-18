@@ -14,6 +14,7 @@ import {
 
 import { DeleteIcon, History, SquarePen, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import DeleteCashier from '../[id]/_components/DeleteUser';
 // import DeleteUser from '@/components/dashboard/DeleteUser';
 
 interface DataTableRowActionsProps<TData> {
@@ -26,7 +27,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex text-black h-8 w-8 p-0 data-[state=open]:bg-muted">
+                <Button variant="ghostedit" className="flex text-black h-1 w-8 p-0 data-[state=open]:bg-muted">
                     <DotsHorizontalIcon className="h-4 w-4" />
                     <span className="sr-only">Open menu</span>
                 </Button>
@@ -40,7 +41,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
                 </DropdownMenuItem>
                 <div className="flex flex-col items-start p-2 gap-2"></div>
                 <DropdownMenuSeparator />
-                {/* <DeleteUser id={user?.id} /> */}
+                <DeleteCashier id={user?.id} />
             </DropdownMenuContent>
         </DropdownMenu>
     );

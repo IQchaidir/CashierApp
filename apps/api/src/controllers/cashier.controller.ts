@@ -4,9 +4,10 @@ import { NextFunction, Request, Response } from 'express';
 export class CashierController {
     async getCashier(req: Request, res: Response, next: NextFunction) {
         const pageNumber = parseInt((req.query.page as string) || '1');
+        const { search: email } = req.query;
         const cashierService = new CashierService();
         try {
-            const cashier = await cashierService.getCashier(pageNumber);
+            const cashier = await cashierService.getCashier(pageNumber, email as string);
             return res.status(cashier.status).json(cashier.response);
         } catch (error) {
             next(error);
@@ -37,10 +38,10 @@ export class CashierController {
 
     async updateCashier(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        const { email, password } = req.body;
+        const { user_name, email, password } = req.body;
         const cashierService = new CashierService();
         try {
-            const updateCashier = await cashierService.updateCashier(Number(id), email, password);
+            const updateCashier = await cashierService.updateCashier(Number(id), user_name, email, password);
             return res.status(updateCashier.status).json(updateCashier.response);
         } catch (error) {
             next(error);

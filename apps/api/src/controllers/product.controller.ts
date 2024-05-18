@@ -3,29 +3,34 @@ import { NextFunction, Request, Response } from 'express';
 
 export class ProductController {
     async createProduct(req: Request, res: Response, next: NextFunction) {
-        const { name, description, price, stock, category } = req.body;
+        const { name, description, price, category } = req.body;
         const file: string | undefined = req.file?.filename;
         try {
-            const createProduct = await productService.createProduct(
-                file,
-                name,
-                description,
-                price,
-                Number(stock),
-                category,
-            );
+            const createProduct = await productService.createProduct(file, name, description, price, Number(category));
             return res.status(createProduct.status).json(createProduct.response);
         } catch (error) {
             next(error);
         }
     }
 
-    async getProduct(req: Request, res: Response, next: NextFunction) {
+    async getProductAdmin(req: Request, res: Response, next: NextFunction) {
         const { search: name, category, page } = req.query;
         const pageNumber = parseInt(page as string, 10) || 1;
 
         try {
-            const product = await productService.getProduct(pageNumber, category as string, name as string);
+            const product = await productService.getProductAdmin(pageNumber, category as string, name as string);
+            return res.status(product.status).json(product.response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getProductCashier(req: Request, res: Response, next: NextFunction) {
+        const { search: name, category, page } = req.query;
+        const pageNumber = parseInt(page as string, 10) || 1;
+
+        try {
+            const product = await productService.getProductCashier(pageNumber, category as string, name as string);
             return res.status(product.status).json(product.response);
         } catch (error) {
             next(error);
@@ -47,7 +52,6 @@ export class ProductController {
         const { id } = req.params;
         const { name, description, price, category } = req.body;
         const file: string | undefined = req.file?.filename;
-        // const productService = new ProductService();
 
         try {
             const updateProduct = await productService.updateProduct(

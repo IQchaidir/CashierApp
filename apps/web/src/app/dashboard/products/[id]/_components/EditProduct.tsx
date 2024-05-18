@@ -1,189 +1,190 @@
 'use client';
 
-import useProduct from '@/hooks/useProduct';
-
 import { useFormik } from 'formik';
-
 import { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
+import { validateNewProduct } from '@/lib/validation';
+import { SelectCategory } from '../../create/_component/SelectCategory';
+import useProductById from '@/hooks/useProductById';
+import useEditProduct from '@/hooks/useEditProduct';
 import EditImage from './EditImage';
+
+// Fungsi untuk mengonversi URL gambar menjadi objek File
+async function urlToFile(url: string, filename: any, mimeType: any) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: mimeType });
+}
 
 export default function EditProduct({ id }: { id: string }) {
     const router = useRouter();
-    const { data: productData, isLoading: productLoading, refetch } = useProduct({ id });
+    const [removedFiles, setRemovedFiles] = useState<string>('');
+    const [files, setFiles] = useState<File | null>(null);
+    const { data: productData, isLoading: productLoading, refetch } = useProductById({ id });
+    const { mutate } = useEditProduct();
 
-    const [removedFiles, setRemovedFiles] = useState<string[]>([]);
-    const [files, setFiles] = useState<File[]>([]);
-    const [category, setCategory] = useState(productData?.results?.category?.name);
-
-    const formik: any = useFormik({
+    const formik = useFormik({
         initialValues: {
             name: '',
             price: 0,
             weight: 0,
             category: '',
             description: '',
+            file: null as File | null,
+        },
+        validationSchema: validateNewProduct,
+        onSubmit: async (values) => {
+            if (values.file && values.price && values.weight) {
+                mutate(
+                    {
+                        id: Number(id),
+                        name: values.name,
+                        price: Number(values.price),
+                        weight: Number(values.weight),
+                        category: Number(values.category),
+                        description: values.description,
+                        file: values.file,
+                    },
+                    {
+                        onSuccess: () => {
+                            toast({
+                                variant: 'success',
+                                title: 'Success Edit Product !',
+                            });
+                            router.push('/dashboard/products');
+                        },
+                        onError: (res: any) => {
+                            toast({
+                                variant: 'destructive',
+                                title: 'Failed to update product !',
+                                description: res?.response?.data,
+                            });
+                        },
+                    },
+                );
+            }
         },
         enableReinitialize: true,
-
-        onSubmit: ({ name, price, weight, description }) => {
-            // mutate(
-            //   { id, name, price, weight, category, description },
-            //   {
-            //     onSuccess: () => {
-            //       toast({
-            //         variant: 'success',
-            //         title: 'Product updated successfully !',
-            //       });
-            //       refetch();
-            //       router.push('/dashboard/products');
-            //     },
-            //     onError: (res: any) => {
-            //       toast({
-            //         variant: 'destructive',
-            //         title: 'Failed to update product !',
-            //         description: res?.response?.data?.message,
-            //       });
-            //     },
-            //   },
-            // );
-            // if (files) {
-            //   files?.forEach((file: File, i: number) => {
-            //     editImage(
-            //       { imageId: removedFiles[i], productId: id, file },
-            //       {
-            //         onSuccess: () => {
-            //           console.log('sucess update image');
-            //         },
-            //         onError: (res: any) => {
-            //           toast({
-            //             variant: 'destructive',
-            //             title: 'Failed to update image !',
-            //             description: res?.response?.data?.message,
-            //           });
-            //         },
-            //       },
-            //     );
-            //   });
-            // }
-        },
     });
 
     useEffect(() => {
-        if (!productLoading) {
-            formik.setFieldValue('name', productData?.results?.name);
-            formik.setFieldValue('price', productData?.results?.price);
-            formik.setFieldValue('weight', productData?.results?.weight);
-            formik.setFieldValue('category', productData?.results?.category?.name);
-            formik.setFieldValue('description', productData?.results?.description);
-            setCategory(productData?.results?.category?.name);
+        if (files) {
+            formik.setFieldValue('file', files);
         }
+    }, [files]);
+
+    useEffect(() => {
+        const initializeForm = async () => {
+            if (!productLoading && productData) {
+                let file = null;
+                if (productData.image) {
+                    file = await urlToFile(productData.image, 'productImage.jpg', 'image/jpeg');
+                }
+                formik.setValues({
+                    name: productData.name,
+                    price: productData.price,
+                    weight: productData.weight,
+                    category: productData.category_id,
+                    description: productData.description,
+                    file: file,
+                });
+                setFiles(file);
+            }
+        };
+
+        initializeForm();
     }, [productData, productLoading]);
 
     if (productLoading) return <div>Loading...</div>;
 
-    const product = productData?.results;
-
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="space-y-4">
-                {/* image section */}
                 <div>
                     <div className="mb-2 font-semibold">Image</div>
                     <div className="flex gap-2">
                         <EditImage
                             id="image-1"
-                            files={files}
-                            setFiles={setFiles}
-                            setRemovedFiles={setRemovedFiles}
-                            imageId={'1'}
-                            imageUrl={'asdasda'}
+                            file={files}
+                            setFile={setFiles}
+                            setRemovedFile={setRemovedFiles}
+                            imageUrl={productData.image}
                         />
                     </div>
+                    {formik.errors.file && <div className="text-xs text-red-500">{formik.errors.file}</div>}
                 </div>
-                {/* name */}
+
                 <div>
-                    <div className="mb-2 font-semibold">Product Title</div>
+                    <div className="mb-2 font-semibold">Product Name</div>
                     <Input
                         name="name"
                         type="text"
                         className="border-slate-300"
-                        // defaultValue={name}
-                        {...formik.getFieldProps('name')}
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
                     />
                     {formik.touched.name && formik.errors.name ? (
                         <div className="text-xs text-red-500">{formik.errors.name}</div>
                     ) : null}
                 </div>
 
-                {/* price */}
-                <div>
-                    <div className="mb-2 font-semibold">Price</div>
-                    <Input
-                        name="price"
-                        type="number"
-                        placeholder="Rp."
-                        className="border-slate-300"
-                        // defaultValue={price}
-                        {...formik.getFieldProps('price')}
-                    />
-                    {formik.touched.price && formik.errors.price ? (
-                        <div className="text-xs text-red-500">{formik.errors.price}</div>
-                    ) : null}
+                <div className="flex gap-2 w-full">
+                    <div className="w-1/2">
+                        <div className="mb-2 font-semibold">Price</div>
+                        <Input
+                            name="price"
+                            type="number"
+                            placeholder="Rp."
+                            value={formik.values.price}
+                            onChange={formik.handleChange}
+                            className="border-slate-300"
+                        />
+                        {formik.touched.price && formik.errors.price ? (
+                            <div className="text-xs text-red-500">{formik.errors.price}</div>
+                        ) : null}
+                    </div>
+
+                    <div className="w-1/2">
+                        <div className="mb-2 font-semibold">Weight</div>
+                        <Input
+                            name="weight"
+                            type="number"
+                            placeholder="grams."
+                            value={formik.values.weight}
+                            onChange={formik.handleChange}
+                            className="border-slate-300"
+                        />
+                        {formik.touched.weight && formik.errors.weight ? (
+                            <div className="text-xs text-red-500">{formik.errors.weight}</div>
+                        ) : null}
+                    </div>
                 </div>
 
-                {/* weight */}
-                <div>
-                    <div className="mb-2 font-semibold">Weight</div>
-                    <Input
-                        name="weight"
-                        type="number"
-                        placeholder="grams."
-                        className="border-slate-300"
-                        // defaultValue={weight}
-                        {...formik.getFieldProps('weight')}
-                    />
-                    {formik.touched.weight && formik.errors.weight ? (
-                        <div className="text-xs text-red-500">{formik.errors.weight}</div>
-                    ) : null}
-                </div>
-
-                {/* category */}
                 <div>
                     <div className="mb-2 font-semibold">Category</div>
-                    <Select
-                        onValueChange={(value) => {
-                            formik.setFieldValue('category', value);
-                        }}
-                        value={category}
-                        defaultValue={category}
-                    >
-                        <SelectTrigger className="text-slate-800 border-slate-300"></SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all category">all category</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <SelectCategory
+                        value={formik.values.category}
+                        onChange={(value) => formik.setFieldValue('category', value)}
+                    />
+                    {formik.touched.category && formik.errors.category ? (
+                        <div className="text-xs text-red-500">{formik.errors.category}</div>
+                    ) : null}
                 </div>
 
-                {/* description */}
                 <div>
                     <div className="mb-2 font-semibold">Description</div>
-                    <Textarea
-                        name="description"
-                        className="border-slate-300"
-                        // defaultValue={description}
-                        {...formik.getFieldProps('description')}
-                    />
+                    <Textarea className="border-slate-300" {...formik.getFieldProps('description')} />
                     {formik.touched.description && formik.errors.description ? (
                         <div className="text-xs text-red-500">{formik.errors.description}</div>
                     ) : null}
                 </div>
-                <Button type="submit">Update !</Button>
+                <Button type="submit" className="bg-blue-500 text-white">
+                    Submit !
+                </Button>
             </div>
         </form>
     );
