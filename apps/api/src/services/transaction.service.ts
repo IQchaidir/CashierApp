@@ -122,7 +122,7 @@ export class TransactionService {
         return resSuccess(newTransaction);
     }
 
-    async getTransaction(pageNumber: number, startDate?: string, endDate?: string) {
+    async getTransaction(pageNumber: number, startDate?: string, endDate?: string, invoice?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
         let whereClause: Prisma.TransactionWhereInput = {};
@@ -137,13 +137,18 @@ export class TransactionService {
             };
         }
 
-        const getShift = await prisma.transaction.findMany({
+        if (invoice) {
+            whereClause.invoice = invoice ? { contains: invoice } : undefined;
+        }
+
+        const totalCount = await prisma.transaction.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        const transaction = await prisma.transaction.findMany({
             where: whereClause,
             skip: skipAmount,
             take: pageSize,
-            orderBy: {
-                id: 'asc',
-            },
+            orderBy: { id: 'asc' },
             include: {
                 Transaction_Product: {
                     include: { product: true },
@@ -151,10 +156,11 @@ export class TransactionService {
                 user: true,
             },
         });
-        if (getShift.length > 0) {
-            return resSuccess(getShift);
+        if (transaction.length > 0) {
+            const data = { transaction, totalPages };
+            return resSuccess(data);
         }
-        return resNotFound('Shift not found');
+        return resNotFound('Transaction not found');
     }
 
     async getTransactionById(id: number) {

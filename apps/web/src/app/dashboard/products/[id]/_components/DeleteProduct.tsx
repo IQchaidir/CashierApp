@@ -12,33 +12,35 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
+import useDeleteProduct from '@/hooks/useDeleteProduct';
 import { cn } from '@/lib/utils';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function DeleteProduct({ id }: { id: string }) {
     const router = useRouter();
+    const { mutate } = useDeleteProduct();
 
     const handleDeleteProduct = () => {
-        // mutate(
-        //   { id },
-        //   {
-        //     onSuccess: () => {
-        //       toast({
-        //         variant: 'success',
-        //         title: 'Product deleted successfully !',
-        //       });
-        //       router.push('/dashabord/products');
-        //     },
-        //     onError: (res: any) => {
-        //       toast({
-        //         variant: 'destructive',
-        //         title: 'Failed to delete Product !',
-        //         description: res?.response?.data?.message,
-        //       });
-        //     },
-        //   },
-        // );
+        mutate(
+            { id },
+            {
+                onSuccess: () => {
+                    toast({
+                        variant: 'success',
+                        title: 'Product deleted successfully !',
+                    });
+                    router.push('/dashboard/products');
+                },
+                onError: (res: any) => {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Failed to delete Product !',
+                        description: res?.response?.data?.message,
+                    });
+                },
+            },
+        );
     };
 
     return (
@@ -50,11 +52,11 @@ export default function DeleteProduct({ id }: { id: string }) {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Delete Product</DialogTitle>
-                    <DialogDescription>Product cannot deleted, if some store assign this product !</DialogDescription>
+                    <DialogDescription>Yakin hapus produk ini?</DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button onClick={handleDeleteProduct}>Yes !</Button>
+                        <Button onClick={handleDeleteProduct}>Ya</Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

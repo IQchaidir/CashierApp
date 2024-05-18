@@ -15,38 +15,49 @@ import { Minus, Plus } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import useReduceStock from '@/hooks/useReduceStock';
+import useProduct from '@/hooks/useProduct';
 
 type Props = {
-    storeId: string;
     productId: string;
-    quantity: number;
+    stock: number;
 };
 
-export default function ReduceStock({ storeId, productId, quantity }: Props) {
+export default function ReduceStock({ productId, stock }: Props) {
     const [qty, setQty] = useState(0);
     const [isOpen, setOpen] = useState(false);
+    const { mutate, isPending } = useReduceStock();
 
     const handleAddStock = () => {
-        // mutate(
-        //   { storeId, productId, qty },
-        //   {
-        //     onSuccess: () => {
-        //       toast({
-        //         variant: 'success',
-        //         title: 'Stock updated successfully !',
-        //       });
-        //       refetch();
-        //       setOpen(false);
-        //     },
-        //     onError: (res: any) => {
-        //       toast({
-        //         variant: 'destructive',
-        //         title: 'Failed to update stock !',
-        //         description: res?.response?.data?.message,
-        //       });
-        //     },
-        //   },
-        // );
+        if (qty === 0) {
+            return setOpen(false);
+        }
+        if (qty < 0) {
+            return toast({
+                variant: 'destructive',
+                title: 'Failed to update stock !',
+                description: 'Tidak boleh memasukan angka minus!',
+            });
+        }
+        mutate(
+            { productId, quantity: qty },
+            {
+                onSuccess: () => {
+                    toast({
+                        variant: 'success',
+                        title: 'Stock updated successfully !',
+                    });
+                    setOpen(false);
+                },
+                onError: (res: any) => {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Failed to update stock !',
+                        description: res?.response?.data,
+                    });
+                },
+            },
+        );
     };
 
     return (
@@ -60,15 +71,14 @@ export default function ReduceStock({ storeId, productId, quantity }: Props) {
             <DialogContent className="w-64">
                 <DialogHeader>
                     <DialogTitle>Reduce Stock Product !</DialogTitle>
-                    <DialogDescription>Stock now: {quantity}</DialogDescription>
-                    {!!qty && <DialogDescription>Stock after: {quantity - qty}</DialogDescription>}
+                    <DialogDescription>Stock now: {stock}</DialogDescription>
                 </DialogHeader>
                 <div className="grid flex-1 gap-2">
                     <Input type="number" min={1} onChange={(e) => setQty(Number(e.target.value))} />
                 </div>
 
                 <DialogFooter>
-                    <Button type="submit" onClick={handleAddStock}>
+                    <Button type="submit" disabled={isPending} onClick={handleAddStock}>
                         Confirm !
                     </Button>
                 </DialogFooter>

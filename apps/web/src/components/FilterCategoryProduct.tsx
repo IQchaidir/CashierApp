@@ -38,7 +38,7 @@ export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any 
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="All Product">All Product</SelectItem>
-                {data?.map((category: { id: number; name: string }) => (
+                {data?.category.categories.map((category: { id: number; name: string }) => (
                     <SelectItem key={category.id} value={category.name}>
                         {category.name}
                     </SelectItem>

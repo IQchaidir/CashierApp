@@ -16,7 +16,8 @@ export class CategoryRouter {
     private initializeRoutes(): void {
         this.router.get('/', this.categoryController.getCategory);
         this.router.post('/', verifyToken, verifyAdmin, this.categoryController.createCategory);
-        this.router.delete('/delete/:id', verifyToken, verifyAdmin, this.categoryController.deleteCategory);
+        this.router.delete('/:id', verifyToken, verifyAdmin, this.categoryController.deleteCategory);
+        this.router.patch('/:id', verifyToken, verifyAdmin, this.categoryController.updateCategory);
     }
 
     getRouter(): Router {

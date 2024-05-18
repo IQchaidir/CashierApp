@@ -7,38 +7,34 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-
 import { useState } from 'react';
-import { Pencil } from 'lucide-react';
+import { CircleFadingPlus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import useEditCategory from '@/hooks/category/useEditCategory';
+import useCreateCategory from '@/hooks/category/useCreateCategory';
 import { toast } from '@/components/ui/use-toast';
 
-type Props = {
-    name: string;
-    id: string;
-};
-const EditCategory = ({ name, id }: Props) => {
-    const [categoryName, setCategoryName] = useState(name);
+export default function CreateNewCategory() {
+    const [categoryName, setCategoryName] = useState('');
     const [isOpen, setOpen] = useState(false);
-    const { mutate } = useEditCategory();
+    const { mutate, isPending } = useCreateCategory();
 
-    const handleEdit = async () => {
+    const handleCreateCategory = () => {
         mutate(
-            { id: Number(id), name: categoryName },
+            { name: categoryName },
             {
                 onSuccess: () => {
                     toast({
                         variant: 'success',
-                        title: 'Category name updated !',
+                        title: 'Category created successfully !',
                     });
                     setOpen(false);
+                    setCategoryName('');
                 },
-                onError: () => {
+                onError: (res: any) => {
                     toast({
                         variant: 'destructive',
-                        title: 'Category name failed to update',
+                        title: 'Failed to create new category!',
+                        description: `${res?.response?.data}`,
                     });
                 },
             },
@@ -47,26 +43,23 @@ const EditCategory = ({ name, id }: Props) => {
 
     return (
         <Dialog open={isOpen} onOpenChange={(e) => setOpen(e)}>
-            <DialogTrigger className="flex items-center gap-2">
-                <Pencil className="w-4 h-4" />
-                Edit
+            <DialogTrigger asChild>
+                <div className="text-emerald-500 cursor-pointer">Buat Kategori</div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="w-72">
                 <DialogHeader>
-                    <DialogTitle>Edit Category Name</DialogTitle>
-                    <DialogDescription>Product with category &quot;{name}&quot; will be changed ! </DialogDescription>
+                    <DialogTitle>Create New Category !</DialogTitle>
                 </DialogHeader>
                 <div className="grid flex-1 gap-2">
                     <Input id="link" defaultValue={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
                 </div>
 
                 <DialogFooter>
-                    <Button type="submit" onClick={handleEdit}>
-                        Save changes
-                    </Button>
+                    <button className="bg-blue-500 text-white" type="submit" onClick={handleCreateCategory}>
+                        Create
+                    </button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
-};
-export default EditCategory;
+}

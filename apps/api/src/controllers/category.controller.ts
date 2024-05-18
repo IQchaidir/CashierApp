@@ -14,12 +14,26 @@ export class CategoryController {
         }
     }
 
-    async getCategory(req: Request, res: Response, next: NextFunction) {
-        const pageNumber = parseInt((req.query.page as string) || '1');
+    async updateCategory(req: Request, res: Response, next: NextFunction) {
+        const { name } = req.body;
+        const { id } = req.params;
         const categoryService = new CategoryService();
 
         try {
-            const categories = await categoryService.getCategory(pageNumber);
+            const updateCategory = await categoryService.updateCategory(Number(id), name);
+            return res.status(updateCategory.status).json(updateCategory.response);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getCategory(req: Request, res: Response, next: NextFunction) {
+        const pageNumber = parseInt((req.query.page as string) || '1');
+        const { search: name } = req.query;
+        const categoryService = new CategoryService();
+
+        try {
+            const categories = await categoryService.getCategory(pageNumber, name as string);
             return res.status(categories.status).json(categories.response);
         } catch (error) {
             next();

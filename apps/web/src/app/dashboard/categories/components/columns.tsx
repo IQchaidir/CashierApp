@@ -7,32 +7,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
 import CategoryAction from './CategoryAction';
+import { Category } from '@/types/category';
 
-export type Users = {
-    id: string;
-    name: string;
-    createdAt: string;
-};
-
-export const roles = [
-    {
-        value: 'Customer',
-        label: 'Customer',
-        icon: CircleHelp,
-    },
-    {
-        value: 'Store_Admin',
-        label: 'Store Admin',
-        icon: CircleIcon,
-    },
-    {
-        value: 'Super_Admin',
-        label: 'Super Admin',
-        icon: ArrowDownIcon,
-    },
-];
-
-export const columns: ColumnDef<Users>[] = [
+export const columns: ColumnDef<Category>[] = [
     {
         accessorKey: 'id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,

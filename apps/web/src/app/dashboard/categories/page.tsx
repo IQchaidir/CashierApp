@@ -4,25 +4,49 @@ import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
 import Link from 'next/link';
 import CreateCategory from './components/CreateCategory';
+import useGetCategoryAdmin from '@/hooks/category/useGetCategoryAdmin';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { Category } from '@/types/category';
+import SearchInput from '@/components/SearchInput';
+import Pagination from '@/components/Pagination';
 
-export default function CategoriesDashboard() {
-    const users = [
-        {
-            id: '1',
-            name: 'makanan',
-            createdAt: '2024-05-17T10:00:00Z',
-        },
-        {
-            id: '2',
-            name: 'minuman',
-            createdAt: '2024-05-16T15:30:00Z',
-        },
-    ];
+export default function CategoriesDashboard({
+    searchParams,
+}: {
+    searchParams?: {
+        search?: string;
+        page?: string;
+    };
+}) {
+    const search = searchParams?.search || '';
+    const params = useSearchParams();
+    const [currentPage, setCurrentPage] = useState<number>(() => {
+        const page = params.get('page');
+        return page ? parseInt(page, 10) : 1;
+    });
+    const [input, setInput] = useState(search);
+    const { data, refetch } = useGetCategoryAdmin({
+        page: currentPage,
+        search: input,
+    });
+    const [category, setCategory] = useState<Category[]>(data);
+
+    const handleSearch = (term: string) => {
+        setInput(term);
+    };
+
+    useEffect(() => {
+        if (data) {
+            setCategory(data.category.categories);
+            refetch();
+        }
+    }, [data, input, currentPage]);
 
     return (
         <>
             <div className="hidden w-1/2 h-full flex-1 flex-col space-y-2 p-8 md:flex">
-                <div className="flex items-center justify-between space-y-2">
+                <div className="flex items-end justify-between space-y-2">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
                             <ScrollText />
@@ -31,8 +55,22 @@ export default function CategoriesDashboard() {
                         <p className="text-muted-foreground">list of all category</p>
                         <CreateCategory />
                     </div>
+                    <div className="border rounded-sm border-black">
+                        <SearchInput
+                            initialSearch={search}
+                            onSearchChange={handleSearch}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </div>
                 </div>
-                {!!users?.length && <DataTable data={users} columns={columns} />}
+                {!!category?.length && <DataTable data={category} columns={columns} />}
+                <div className="flex justify-end ">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={data?.totalPages ?? 1}
+                        setCurrentPage={setCurrentPage}
+                    />
+                </div>
             </div>
         </>
     );

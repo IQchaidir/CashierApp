@@ -8,14 +8,8 @@ import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { ArrowDownIcon, CircleIcon, CircleHelp } from 'lucide-react';
 import { DetailTransactionSheet } from './DetailTransactionSheet';
-
-export type Transaction = {
-    id: string;
-    invoice: string;
-    method: string;
-    amount: number;
-    createdAt: string;
-};
+import { Transaction } from '@/types/transaction';
+import { formatToRupiah } from '@/utils/formatToRupiah';
 
 export const columns: ColumnDef<Transaction>[] = [
     {
@@ -56,7 +50,7 @@ export const columns: ColumnDef<Transaction>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex items-center">
-                    <span>{row.getValue('amount')}</span>
+                    <span>{formatToRupiah(row.getValue('amount'))}</span>
                 </div>
             );
         },

@@ -32,8 +32,8 @@ export default function CategoryAction({ id, name }: Props) {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <div className="flex flex-col items-start p-2 gap-2">
-                    <EditCategory id={Number(id)} name={name} />
-                    <DeleteCategory id={Number(id)} name={name} />
+                    <EditCategory id={String(id)} name={name} />
+                    <DeleteCategory id={String(id)} name={name} />
                 </div>
             </DropdownMenuContent>
         </DropdownMenu>

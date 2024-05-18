@@ -32,7 +32,7 @@ export class ProductRouter {
             uploader('IMG', '/images').single('file'),
             this.productController.updateProduct,
         );
-        this.router.delete('/delete/:id', verifyToken, verifyAdmin, this.productController.deleteProduct);
+        this.router.delete('/:id', verifyToken, verifyAdmin, this.productController.deleteProduct);
     }
 
     getRouter(): Router {

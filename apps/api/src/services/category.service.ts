@@ -15,18 +15,39 @@ export class CategoryService {
         return resCreated(category);
     }
 
-    async getCategory(pageNumber: number) {
+    async getCategory(pageNumber: number, name?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
+        const whereClause: any = { archive: false };
+
+        if (name) {
+            whereClause.name = name ? { contains: name } : undefined;
+        }
+
+        const totalCount = await prisma.product.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
         const categories = await prisma.category.findMany({
-            where: { archive: false },
+            where: whereClause,
             skip: skipAmount,
+            take: pageSize,
             orderBy: { id: 'asc' },
         });
         if (categories.length > 0) {
-            return resSuccess(categories);
+            return resSuccess({ category: { categories, totalPages } });
         }
         return resNotFound('Category not Found ');
+    }
+
+    async updateCategory(id: number, name: string) {
+        const updateCategory = await prisma.category.update({
+            where: { id },
+            data: { name },
+        });
+        if (!updateCategory) {
+            resBadRequest('gagal mengupdate kategori');
+        }
+        return resSuccess(updateCategory);
     }
 
     async deleteCategory(id: number) {

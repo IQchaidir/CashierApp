@@ -41,7 +41,6 @@ const TransactionPage = ({
                 search={search}
                 handleChange={handleChange}
                 data={dataTransaction}
-                isLoading={isLoading}
                 totalPages={totalPages}
             />
             <DetailTransaction transaction={transaction} />

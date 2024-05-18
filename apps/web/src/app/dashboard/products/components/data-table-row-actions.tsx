@@ -34,24 +34,9 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <div className="flex flex-col items-start p-2 gap-2">
-                    <AddStock
-                        productId={products?.productId}
-                        storeId={products?.storeId}
-                        quantity={products?.quantity}
-                    />
-                    <ReduceStock
-                        productId={products?.productId}
-                        storeId={products?.storeId}
-                        quantity={products?.quantity}
-                    />
+                    <AddStock productId={products?.id} stock={products?.stock} />
+                    <ReduceStock productId={products?.id} stock={products?.stock} />
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <span className="text-red-500 flex items-center gap-2">
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                    </span>
-                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

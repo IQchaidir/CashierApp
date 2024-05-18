@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import CreateCategory1 from './CreateCategory1';
 import useCreateProduct from '@/hooks/useCreateProduct';
 import { toast } from '@/components/ui/use-toast';
 import { validateNewProduct } from '@/lib/validation';
 import { SelectCategory } from './SelectCategory';
+import CreateNewCategory from './CreateNewCategory';
 
 export default function CreateProduct() {
     const [files, setFiles] = useState<File | null>(null);
@@ -129,7 +129,7 @@ export default function CreateProduct() {
                         onChange={(value) => formik.setFieldValue('category', value)}
                     />
                     <div className="mt-2">
-                        Kategory belum tersedia? <CreateCategory1 />
+                        Kategory belum tersedia? <CreateNewCategory />
                     </div>
                     {formik.touched.category && formik.errors.category ? (
                         <div className="text-xs text-red-500">{formik.errors.category}</div>

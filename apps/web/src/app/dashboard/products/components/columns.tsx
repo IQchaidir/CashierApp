@@ -44,17 +44,6 @@ export const columns: ColumnDef<Product>[] = [
         },
     },
     {
-        accessorKey: 'weight',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="weight" />,
-        cell: ({ row }) => {
-            return (
-                <div className="flex space-x-2">
-                    <span className="max-w-[500px] truncate text-sm">{row.getValue('weight')}</span>
-                </div>
-            );
-        },
-    },
-    {
         accessorKey: 'category',
         header: ({ column }) => <DataTableColumnHeader column={column} title="category" />,
         cell: ({ row }) => {

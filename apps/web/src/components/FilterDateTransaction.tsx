@@ -9,7 +9,15 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-export function FilterDateOrder({ className }: React.HTMLAttributes<HTMLDivElement>) {
+export function FilterDateOrder({
+    className,
+    handlefilterDate,
+    setCurrentPage,
+}: {
+    className?: string;
+    handlefilterDate: Function;
+    setCurrentPage: any;
+}) {
     const [date, setDate] = React.useState<DateRange | undefined>();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -23,9 +31,12 @@ export function FilterDateOrder({ className }: React.HTMLAttributes<HTMLDivEleme
             params.set('start_date', formattedStartDate);
             params.set('end_date', formattedToDate);
             params.delete('page');
+            setCurrentPage(1);
+            handlefilterDate(formattedStartDate, formattedToDate);
         } else {
             params.delete('start_date');
             params.delete('end_date');
+            handlefilterDate(undefined, undefined);
         }
         router.replace(`${pathname}?${params.toString()}`);
     }, [date, pathname, router, searchParams]);

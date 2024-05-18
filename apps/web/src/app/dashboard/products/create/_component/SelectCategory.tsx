@@ -14,8 +14,8 @@ export function SelectCategory({ value, onChange }: SelectCategoryProps) {
     useEffect(() => {
         if (value) {
             setSelectedCategory(value);
-        } else if (!selectedCategory && data?.length) {
-            setSelectedCategory(data[0].id.toString());
+        } else if (!selectedCategory && data?.category.categories.length) {
+            setSelectedCategory(data.category.categories[0].id.toString());
         }
     }, [value, data]);
 
@@ -30,7 +30,7 @@ export function SelectCategory({ value, onChange }: SelectCategoryProps) {
                 <SelectValue placeholder={isLoading ? 'Fetching Categories' : 'Choose a Category'} />
             </SelectTrigger>
             <SelectContent>
-                {data?.map((category: { id: number; name: string }) => (
+                {data?.category.categories.map((category: { id: number; name: string }) => (
                     <SelectItem key={category.id} value={category.id.toString()}>
                         {category.name}
                     </SelectItem>

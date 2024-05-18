@@ -22,15 +22,16 @@ export class TransactionController {
     }
 
     async getTransaction(req: Request, res: Response, next: NextFunction) {
-        const { startDate, endDate, page } = req.query;
+        const { start_date, end_date, page, search: invoice } = req.query;
         const pageNumber = parseInt((page as string) || '1');
         const transactionService = new TransactionService();
 
         try {
             const transaction = await transactionService.getTransaction(
                 pageNumber,
-                startDate as string,
-                endDate as string,
+                start_date as string,
+                end_date as string,
+                invoice as string,
             );
             return res.status(transaction.status).json(transaction.response);
         } catch (error) {
