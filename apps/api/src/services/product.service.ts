@@ -133,7 +133,7 @@ class ProductService {
         name?: string,
         description?: string,
         price?: number,
-        category?: number,
+        category_id?: number,
         file?: string,
     ) {
         const existingProduct = await prisma.product.findUnique({
@@ -150,7 +150,7 @@ class ProductService {
             return resBadRequest('Product already exist');
         }
 
-        const updateData: any = { name, price, description };
+        const updateData: any = { name, price, description, category_id };
 
         const imageUrl = file ? process.env.BASE_URL + 'images/' + file : undefined;
         if (imageUrl) {

@@ -6,16 +6,7 @@ import SideNavbar from './SideNavbar';
 export default function ApplicationWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
-    if (
-        [
-            '/dashboard/reports',
-            '/dashboard/users',
-            '/dashboard/products',
-            '/dashboard/categories',
-            '/dashboard/transactions',
-            '/dashboard/shifts',
-        ].includes(pathname)
-    ) {
+    if (pathname.includes(`/dashboard`)) {
         return (
             <div className="min-h-screen w-full bg-white text-black flex">
                 <SideNavbar />

@@ -59,7 +59,7 @@ export class ProductController {
                 name,
                 description,
                 Number(price),
-                category,
+                Number(category),
                 file,
             );
             return res.status(updateProduct.status).json(updateProduct.response);
