@@ -29,6 +29,7 @@ export function FilterDateOrder({
         to: end_date,
     };
     const [date, setDate] = React.useState<DateRange | undefined>(initialDate);
+    const [isFirstChange, setIsFirstChange] = React.useState(true);
 
     React.useEffect(() => {
         const params = new URLSearchParams(searchParams);
@@ -38,18 +39,31 @@ export function FilterDateOrder({
             params.set('start_date', formattedStartDate);
             params.set('end_date', formattedEndDate);
             params.delete('page');
-            setCurrentPage(1);
+
+            if (isFirstChange) {
+                setCurrentPage(1);
+                setIsFirstChange(false);
+            }
+
             handlefilterDate(formattedStartDate, formattedEndDate);
         } else {
             params.delete('start_date');
             params.delete('end_date');
+            handlefilterDate(undefined, undefined);
         }
         router.replace(`${pathname}?${params.toString()}`);
-    }, [date, pathname, router, searchParams]);
+    }, [date]);
 
-    const handleReset = async () => {
+    React.useEffect(() => {
+        if (start_date && end_date) {
+            setIsFirstChange(false);
+        }
+    }, [start_date, end_date]);
+
+    const handleReset = () => {
         setDate(undefined);
         handlefilterDate(undefined, undefined);
+        setCurrentPage(1);
     };
 
     return (
