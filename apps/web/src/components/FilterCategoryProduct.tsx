@@ -19,6 +19,7 @@ export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any 
             setCurrentPage(1);
         } else {
             params.delete('category');
+            setCurrentPage(1);
         }
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectCategory]);

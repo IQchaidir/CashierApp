@@ -25,6 +25,7 @@ export function FilterPayment({ setCurrentPage }: { setCurrentPage: any }) {
             setCurrentPage(1);
         } else {
             params.delete('payment');
+            setCurrentPage(1);
         }
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectPayment]);
