@@ -45,11 +45,6 @@ export default function TransactionDashboard({
         setInput(term);
     };
 
-    const handlefilterDate = (startDate: any, endDate: any) => {
-        setStartDate(startDate);
-        setendDate(endDate);
-    };
-
     useEffect(() => {
         if (data) {
             setTransaction(data.transaction);
@@ -75,12 +70,7 @@ export default function TransactionDashboard({
                             />
                         </div>
                     </div>
-                    <FilterDateTransaction
-                        handlefilterDate={handlefilterDate}
-                        setCurrentPage={setCurrentPage}
-                        start_date={startDate}
-                        end_date={endDate}
-                    />
+                    <FilterDateTransaction setCurrentPage={setCurrentPage} start_date={startDate} end_date={endDate} />
                 </div>
                 {!!transaction && transaction.length > 0 ? (
                     <DataTable data={transaction} columns={columns} />

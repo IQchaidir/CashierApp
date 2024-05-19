@@ -10,13 +10,11 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 export function FilterDateTransaction({
     className,
-    handlefilterDate,
     setCurrentPage,
     start_date,
     end_date,
 }: {
     className?: string;
-    handlefilterDate: Function;
     setCurrentPage: any;
     start_date: any;
     end_date: any;
@@ -39,12 +37,10 @@ export function FilterDateTransaction({
                 params.set('start_date', formattedStartDate);
                 params.set('end_date', formattedEndDate);
                 params.delete('page');
-                handlefilterDate(formattedStartDate, formattedEndDate);
                 setCurrentPage(1);
             } else {
                 params.delete('start_date');
                 params.delete('end_date');
-                handlefilterDate(undefined, undefined);
             }
             router.replace(`${pathname}?${params.toString()}`);
         }
@@ -56,7 +52,6 @@ export function FilterDateTransaction({
         setDate(undefined);
         params.delete('start_date');
         params.delete('end_date');
-        handlefilterDate(undefined, undefined);
         setCurrentPage(1);
         router.replace(`${pathname}?${params.toString()}`);
     };

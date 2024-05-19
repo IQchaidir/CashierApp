@@ -43,11 +43,6 @@ export default function ShiftDashboard({
         setInput(term);
     };
 
-    const handlefilterDate = (startDate: any, endDate: any) => {
-        setStartDate(startDate);
-        return setendDate(endDate);
-    };
-
     useEffect(() => {
         if (data) {
             setShift(data.shift);
@@ -73,12 +68,7 @@ export default function ShiftDashboard({
                             />
                         </div>
                     </div>
-                    <FilterDateTransaction
-                        handlefilterDate={handlefilterDate}
-                        setCurrentPage={setCurrentPage}
-                        start_date={startDate}
-                        end_date={endDate}
-                    />
+                    <FilterDateTransaction setCurrentPage={setCurrentPage} start_date={startDate} end_date={endDate} />
                 </div>
                 {!!shift && shift.length > 0 ? (
                     <DataTable data={shift} columns={columns} />
