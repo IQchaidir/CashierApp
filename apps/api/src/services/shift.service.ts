@@ -1,6 +1,5 @@
 import prisma from '@/prisma';
 import { calculateTotalAmount } from '@/utils/calculateTotalAmount';
-import { filterDate } from '@/utils/filterDate';
 import { formattedUtcDate } from '@/utils/formatUtcDate';
 import { resBadRequest, resNotFound, resSuccess, resUnauthorized } from '@/utils/responses';
 import { Prisma } from '@prisma/client';

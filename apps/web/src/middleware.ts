@@ -46,7 +46,7 @@ export default async function middleware(req: NextRequest) {
             return NextResponse.redirect(new URL('/dashboard/report', req.nextUrl.origin));
         }
         if (protectedDashboard.includes(req.nextUrl.pathname) && role === 'ADMIN') {
-            return NextResponse.redirect(new URL('/dashboard/report', req.nextUrl.origin));
+            return NextResponse.redirect(new URL('/dashboard/reports', req.nextUrl.origin));
         }
     }
 }

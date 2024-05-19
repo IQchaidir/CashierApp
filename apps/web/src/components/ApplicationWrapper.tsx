@@ -8,7 +8,7 @@ export default function ApplicationWrapper({ children }: { children: React.React
 
     if (
         [
-            '/dashboard/report',
+            '/dashboard/reports',
             '/dashboard/users',
             '/dashboard/products',
             '/dashboard/categories',

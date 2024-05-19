@@ -8,6 +8,7 @@ import { CategoryRouter } from './routers/category.router';
 import { ShiftRouter } from './routers/shift.router';
 import { StockRouter } from './routers/stock.router';
 import { TransactionRouter } from './routers/transaction.router';
+import { ReportRouter } from './routers/report.router';
 
 export default class App {
     private app: Express;
@@ -52,6 +53,7 @@ export default class App {
         const shiftRouter = new ShiftRouter();
         const stockRouter = new StockRouter();
         const transactionRouter = new TransactionRouter();
+        const reportRouter = new ReportRouter();
 
         this.app.use(express.static('public'));
         this.app.use('/api/auth', authRouter.getRouter());
@@ -61,6 +63,7 @@ export default class App {
         this.app.use('/api/shift', shiftRouter.getRouter());
         this.app.use('/api/stock', stockRouter.getRouter());
         this.app.use('/api/transaction', transactionRouter.getRouter());
+        this.app.use('/api/report', reportRouter.getRouter());
     }
 
     public start(): void {
