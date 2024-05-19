@@ -7,11 +7,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-
 import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import useEditCategory from '@/hooks/category/useEditCategory';
 import { toast } from '@/components/ui/use-toast';
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import useSession from './useSession';
+import useSession from '../auth/useSession';
 import axios from 'axios';
 
 export default function useDeleteCashier() {

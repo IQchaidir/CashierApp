@@ -3,9 +3,8 @@ import CardProduct from './CardProduct';
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchInput from '@/components/SearchInput';
-import LoadingComponent from '@/components/LoadingComponent';
 import { Product } from '@/types/product';
-import useProductCashier from '@/hooks/useProductCashier';
+import useProductCashier from '@/hooks/product/useProductCashier';
 import { FilterCategoryProduct } from '@/components/FilterCategoryProduct';
 import Pagination from '@/components/Pagination';
 
@@ -32,8 +31,7 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
                 <SearchInput initialSearch={search} onSearchChange={handleSearch} setCurrentPage={setCurrentPage} />
                 <FilterCategoryProduct setCurrentPage={setCurrentPage} />
             </div>
-            {isLoading && <LoadingComponent />}
-            {data && (
+            {data && data.products.length > 0 ? (
                 <>
                     <div className="grid grid-cols-7 mt-3 ml-2">
                         {data.products.map((product: Product) => (
@@ -48,6 +46,8 @@ const ListProduct = ({ page, search, category }: { page: number; search: string;
                         />
                     </div>
                 </>
+            ) : (
+                <div className="text-center mt-3">Produk tidak ditemukan</div>
             )}
         </div>
     );

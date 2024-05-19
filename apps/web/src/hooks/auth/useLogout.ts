@@ -14,7 +14,6 @@ export default function useLogout() {
         queryKey: [],
         queryFn: async () => {
             if (!token) {
-                // Handle jika tidak ada token
                 return { message: 'Tidak ada sesi yang aktif' };
             }
 

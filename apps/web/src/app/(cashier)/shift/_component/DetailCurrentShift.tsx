@@ -1,6 +1,5 @@
 import { Separator } from '@/components/ui/separator';
 import { formatToRupiah } from '@/utils/formatToRupiah';
-import React from 'react';
 
 const DetailCurrentShift = ({ data }: { data: any }) => {
     let cashDifference;

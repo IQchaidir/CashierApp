@@ -13,7 +13,7 @@ import { Plus } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import useAddedStock from '@/hooks/useAddedStock';
+import useAddedStock from '@/hooks/stock/useAddedStock';
 
 type Props = {
     productId: string;

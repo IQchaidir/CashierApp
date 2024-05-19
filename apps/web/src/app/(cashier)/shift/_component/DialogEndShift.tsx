@@ -57,7 +57,7 @@ export const DialogEndShift = ({ id }: { id: number }) => {
     };
 
     const now = new Date();
-    const formattedDate = now.toLocaleString().replace(/:\d{2} /, ' ');
+    const formattedCurrentDate = now.toLocaleString().replace(/:\d{2} /, ' ');
 
     return (
         <Dialog>
@@ -97,7 +97,7 @@ export const DialogEndShift = ({ id }: { id: number }) => {
                             </>
                         )}
                     </div>
-                    <p>Waktu Akhir: {formattedDate}</p>
+                    <p>Waktu Akhir: {formattedCurrentDate}</p>
                 </div>
                 <div className="flex justify-end gap-5 mt-5">
                     {confirmationMode ? (

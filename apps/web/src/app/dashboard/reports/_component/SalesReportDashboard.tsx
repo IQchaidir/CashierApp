@@ -3,8 +3,8 @@ import { Banknote, Barcode, Package } from 'lucide-react';
 import { FilterDateReport } from './FilterDateReport';
 import TransactionReport from './TransactionReport';
 import ProductReport from './ProductReport';
-import useReportSales from '@/hooks/useReportsSales';
-import useReportProduct from '@/hooks/useReportsProduct';
+import useReportSales from '@/hooks/report/useReportsSales';
+import useReportProduct from '@/hooks/report/useReportsProduct';
 import { useEffect } from 'react';
 import { formatToRupiah } from '@/utils/formatToRupiah';
 

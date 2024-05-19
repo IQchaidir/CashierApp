@@ -1,6 +1,5 @@
 'use client';
-
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '@/components/ui/sheet';
 import { format } from 'date-fns';
 import { Clock, DollarSign, ReceiptText, User } from 'lucide-react';
 

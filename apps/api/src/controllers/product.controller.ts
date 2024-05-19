@@ -78,7 +78,6 @@ export class ProductController {
 
     async deleteProduct(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        // const productService = new ProductService();
 
         try {
             const deleteProduct = await productService.archiveProduct(Number(id));

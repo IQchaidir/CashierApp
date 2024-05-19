@@ -5,7 +5,7 @@ import { columns } from './_components/columns';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import useTransaction from '@/hooks/useTransaction';
+import useTransaction from '@/hooks/transaction/useTransaction';
 import { Transaction } from '@/types/transaction';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';

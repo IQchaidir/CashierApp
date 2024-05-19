@@ -6,9 +6,9 @@ import { ChevronsUpDown } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible';
-import useCashierById from '@/hooks/useCashierById';
+import useCashierById from '@/hooks/cashier/useCashierById';
 import { useEffect } from 'react';
-import useEditCashier from '@/hooks/useEditCashier';
+import useEditCashier from '@/hooks/cashier/useEditCashier';
 
 export default function EditUser({ id }: { id: number }) {
     const router = useRouter();

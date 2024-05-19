@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
-import useCreateCashier from '@/hooks/useCreateCashier';
+import useCreateCashier from '@/hooks/cashier/useCreateCashier';
 import { validateNewCashier } from '@/lib/validation';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';

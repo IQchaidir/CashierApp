@@ -1,6 +1,5 @@
 'use client';
-import { useEffect } from 'react';
-import { startOfWeek, endOfWeek, format, addDays } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import SalesReportDashboard from './_component/SalesReportDashboard';
 
 const ReportDashboard = ({

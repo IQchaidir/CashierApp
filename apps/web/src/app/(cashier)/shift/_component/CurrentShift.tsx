@@ -1,6 +1,5 @@
 import { formatDate } from '@/utils/formatDate';
 import { formatToRupiah } from '@/utils/formatToRupiah';
-import React from 'react';
 import { DialogEndShift } from './DialogEndShift';
 import DetailCurrentShift from './DetailCurrentShift';
 

@@ -1,12 +1,11 @@
 'use client';
-
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { formatToRupiah } from '@/utils/formatToRupiah';
 export function DetailShiftSheet({ shift, start_time }: { shift: any; start_time: string }) {
     let cashDifference;
     if (shift) {
-        cashDifference = shift.totalCash - shift.final_cash;
+        cashDifference = Number(shift.initial_cash) + shift.totalCash - shift.final_cash;
         if (cashDifference < 0) cashDifference = 0;
     }
     return (

@@ -14,7 +14,7 @@ import { Minus, Plus } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import useReduceStock from '@/hooks/useReduceStock';
+import useReduceStock from '@/hooks/stock/useReduceStock';
 
 type Props = {
     productId: string;

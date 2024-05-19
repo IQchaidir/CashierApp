@@ -3,7 +3,7 @@ import { UserPlus, Users } from 'lucide-react';
 import { DataTable } from './_components/data-table';
 import { columns } from './_components/columns';
 import Link from 'next/link';
-import useCashier from '@/hooks/useCashier';
+import useCashier from '@/hooks/cashier/useCashier';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/user';
 import { useSearchParams } from 'next/navigation';

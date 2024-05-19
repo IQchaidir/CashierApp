@@ -37,7 +37,7 @@ const ListTransaction = ({
     };
 
     return (
-        <div className="   w-3/4 bg-white h-[665px]">
+        <div className="   w-3/4 bg-white h-[650px]">
             <div className="flex justify-between bg-emerald-300 p-3">
                 <SearchInput initialSearch={input} onSearchChange={handleSearch} setCurrentPage={setCurrentPage} />
                 <FilterPayment setCurrentPage={setCurrentPage} />
@@ -70,12 +70,14 @@ const ListTransaction = ({
                             <p className="font-semibold text-xs">
                                 {format(new Date(transaction.createdAt), 'dd/MM/yyyy HH:mm:ss')}
                             </p>
-                            <div className="fixed bottom-5 flex right-[410px]">
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    setCurrentPage={setCurrentPage}
-                                />
+                            <div className="fixed bottom-5 flex right-[410px] ">
+                                {totalPages > 1 && (
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        setCurrentPage={setCurrentPage}
+                                    />
+                                )}
                             </div>
                         </div>
                     ))

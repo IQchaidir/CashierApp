@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import useSession from './useSession';
+import useSession from '../auth/useSession';
 
 type Props = {
     id: number;

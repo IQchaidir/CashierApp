@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ListTransaction from './_component/ListTransaction';
 import DetailTransaction from './_component/DetailTransaction';
-import useTransactionShift from '@/hooks/useTransactionShift';
+import useTransactionShift from '@/hooks/transaction/useTransactionShift';
 
 const TransactionPage = ({
     searchParams,

@@ -7,8 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/use-toast';
 import { validateNewProduct } from '@/lib/validation';
 import { SelectCategory } from '../../create/_component/SelectCategory';
-import useProductById from '@/hooks/useProductById';
-import useEditProduct from '@/hooks/useEditProduct';
+import useProductById from '@/hooks/product/useProductById';
+import useEditProduct from '@/hooks/product/useEditProduct';
 import EditImage from './EditImage';
 import { urlToFile } from '@/utils/urlToFile';
 

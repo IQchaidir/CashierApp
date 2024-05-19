@@ -1,12 +1,8 @@
 'use client';
-
 import { useState } from 'react';
 import { Nav } from './ui/nav';
-
-import { UsersRound, ScrollText, Tag, Menu, LayoutDashboardIcon, LogOut, Package, CalendarClock } from 'lucide-react';
-import useSession from '@/hooks/useSession';
+import { UsersRound, ScrollText, Tag, Menu, LayoutDashboardIcon, Package, CalendarClock } from 'lucide-react';
 import { Badge } from './ui/badge';
-import { useRouter } from 'next/navigation';
 import LogoutDialogAdmin from '@/app/dashboard/_components/LogoutDialogAdmin';
 import Image from 'next/image';
 

@@ -10,12 +10,10 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 export function FilterDateReport({
     className,
-    // handlefilterDate
     start_date,
     end_date,
 }: {
     className?: string;
-    // handlefilterDate: Function;
     start_date: any;
     end_date: any;
 }) {

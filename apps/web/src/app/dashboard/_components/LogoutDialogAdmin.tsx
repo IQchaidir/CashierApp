@@ -2,9 +2,8 @@
 
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
-import useSession from '@/hooks/useSession';
+import useSession from '@/hooks/auth/useSession';
 import { LogOut } from 'lucide-react';
-import useLogout from '@/hooks/useLogout';
 import { useCart } from '@/providers/CartContext';
 import { buttonVariants } from '@/components/ui/button';
 import {

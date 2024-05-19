@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import useSession from '../useSession';
+import useSession from '../auth/useSession';
 
 export default function useShiftById({ id }: { id: number }) {
     const { session } = useSession();

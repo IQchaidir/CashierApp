@@ -1,5 +1,4 @@
 'use client';
-
 import { buttonVariants } from '@/components/ui/button';
 import {
     Dialog,
@@ -12,7 +11,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { toast } from '@/components/ui/use-toast';
-import useDeleteProduct from '@/hooks/useDeleteProduct';
+import useDeleteProduct from '@/hooks/product/useDeleteProduct';
 import { cn } from '@/lib/utils';
 import { Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';

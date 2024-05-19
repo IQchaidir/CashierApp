@@ -5,7 +5,7 @@ import { columns } from './_components/columns';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import useProduct from '@/hooks/useProduct';
+import useProduct from '@/hooks/product/useProduct';
 import { Product } from '@/types/product';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';

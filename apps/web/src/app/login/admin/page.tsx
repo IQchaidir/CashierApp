@@ -2,8 +2,8 @@
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/components/ui/use-toast';
 
-import useSession from '@/hooks/useSession';
-import useSignin from '@/hooks/useSignIn';
+import useSession from '@/hooks/auth/useSession';
+import useSignin from '@/hooks/auth/useSignIn';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -38,7 +38,7 @@ const LoginAdminPage = () => {
                         username: data.user_name,
                         token: data.token,
                     });
-                    router.push('/dashboard/reports');
+                    router.push('/dashboard/users');
                 },
                 onError: (res: any) => {
                     toast({

@@ -10,8 +10,8 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import useCashier from '@/hooks/useCashier';
-import useDeleteCashier from '@/hooks/useDeleteCashier';
+import useCashier from '@/hooks/cashier/useCashier';
+import useDeleteCashier from '@/hooks/cashier/useDeleteCashier';
 
 import { Trash2 } from 'lucide-react';
 

@@ -15,9 +15,9 @@ export class TransactionService {
     }
 
     async getShiftTransaction(id: number, pageNumber: number, payment?: string, invoice?: string) {
-        const pageSize = 10;
+        const pageSize = 8;
         const skipAmount = (pageNumber - 1) * pageSize;
-        const whereClause: any = { shift: { user_id: id, end_time: null } };
+        const whereClause: any = { shift: { end_time: null } };
 
         if (payment) {
             whereClause.method = payment;

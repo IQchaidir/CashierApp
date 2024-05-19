@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import useCreateProduct from '@/hooks/useCreateProduct';
+import useCreateProduct from '@/hooks/product/useCreateProduct';
 import { toast } from '@/components/ui/use-toast';
 import { validateNewProduct } from '@/lib/validation';
 import { SelectCategory } from './SelectCategory';

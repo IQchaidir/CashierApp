@@ -2,7 +2,6 @@
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -11,11 +10,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-import { DeleteIcon, History, SquarePen, Trash2 } from 'lucide-react';
+import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
 import DeleteCashier from '../[id]/_components/DeleteUser';
-// import DeleteUser from '@/components/dashboard/DeleteUser';
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
