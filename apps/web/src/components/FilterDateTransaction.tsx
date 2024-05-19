@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -13,36 +12,44 @@ export function FilterDateOrder({
     className,
     handlefilterDate,
     setCurrentPage,
+    start_date,
+    end_date,
 }: {
     className?: string;
     handlefilterDate: Function;
     setCurrentPage: any;
+    start_date: any;
+    end_date: any;
 }) {
-    const [date, setDate] = React.useState<DateRange | undefined>();
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+    const initialDate: DateRange = {
+        from: start_date,
+        to: end_date,
+    };
+    const [date, setDate] = React.useState<DateRange | undefined>(initialDate);
 
     React.useEffect(() => {
         const params = new URLSearchParams(searchParams);
         if (date && date.from && date.to) {
             const formattedStartDate = format(date.from, 'yyyy-MM-dd');
-            const formattedToDate = format(date.to, 'yyyy-MM-dd');
+            const formattedEndDate = format(date.to, 'yyyy-MM-dd');
             params.set('start_date', formattedStartDate);
-            params.set('end_date', formattedToDate);
+            params.set('end_date', formattedEndDate);
             params.delete('page');
-            setCurrentPage(1);
-            handlefilterDate(formattedStartDate, formattedToDate);
+            handlefilterDate(formattedStartDate, formattedEndDate);
         } else {
             params.delete('start_date');
             params.delete('end_date');
-            handlefilterDate(undefined, undefined);
         }
         router.replace(`${pathname}?${params.toString()}`);
+        setCurrentPage(1);
     }, [date, pathname, router, searchParams]);
 
-    const handleReset = () => {
+    const handleReset = async () => {
         setDate(undefined);
+        handlefilterDate(undefined, undefined);
     };
 
     return (

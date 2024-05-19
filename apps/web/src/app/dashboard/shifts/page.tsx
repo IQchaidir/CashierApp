@@ -1,8 +1,7 @@
 'use client';
-import { UserPlus, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { DataTable } from './components/data-table';
 import { columns } from './components/columns';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useTransaction from '@/hooks/useTransaction';
@@ -10,8 +9,10 @@ import { Transaction } from '@/types/transaction';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';
 import { FilterDateOrder } from '@/components/FilterDateTransaction';
+import useShift from '@/hooks/shift/useShift';
+import { Shift } from '@/types/shift';
 
-export default function TransactionDashboard({
+export default function ShiftDashboard({
     searchParams,
 }: {
     searchParams?: {
@@ -32,14 +33,13 @@ export default function TransactionDashboard({
     const [input, setInput] = useState(search);
     const [startDate, setStartDate] = useState(start_date);
     const [endDate, setendDate] = useState(end_date);
-
-    const { data, refetch } = useTransaction({
+    const { data, refetch } = useShift({
         page: currentPage,
         search: input,
         start_date: start_date,
         end_date: end_date,
     });
-    const [transaction, setTransaction] = useState<Transaction[]>();
+    const [shift, setShift] = useState<Shift[]>();
 
     const handleSearch = (term: string) => {
         setInput(term);
@@ -47,14 +47,14 @@ export default function TransactionDashboard({
 
     const handlefilterDate = (startDate: any, endDate: any) => {
         setStartDate(startDate);
-        setendDate(endDate);
+        return setendDate(endDate);
     };
 
     useEffect(() => {
         if (data) {
-            setTransaction(data.transaction);
+            setShift(data.shift);
             refetch();
-        } else return setTransaction([]);
+        } else return setShift([]);
     }, [data, input, currentPage, startDate, endDate]);
 
     return (
@@ -64,9 +64,9 @@ export default function TransactionDashboard({
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
                             <Users />
-                            Transaction List
+                            Shift List
                         </h2>
-                        <p className="text-muted-foreground">list of all transaction</p>
+                        <p className="text-muted-foreground">list of all shift</p>
                         <div className="border rounded-sm border-black">
                             <SearchInput
                                 initialSearch={search}
@@ -82,8 +82,8 @@ export default function TransactionDashboard({
                         end_date={endDate}
                     />
                 </div>
-                {!!transaction && transaction.length > 0 ? (
-                    <DataTable data={transaction} columns={columns} />
+                {!!shift && shift.length > 0 ? (
+                    <DataTable data={shift} columns={columns} />
                 ) : (
                     <DataTable data={[]} columns={columns} />
                 )}

@@ -6,38 +6,64 @@ import { resBadRequest, resNotFound, resSuccess, resUnauthorized } from '@/utils
 import { Prisma } from '@prisma/client';
 
 export class ShiftService {
-    async getShift(pageNumber: number, dateFilter?: string, startDate?: string, endDate?: string) {
+    async getShift(pageNumber: number, startDate?: string, endDate?: string, cashier?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
         let whereClause: Prisma.ShiftWhereInput = { final_cash: { not: null }, end_time: { not: null } };
 
-        // if (dateFilter) {
-        //     let result;
-        //     if (startDate && endDate) {
-        //         result = filterDate(dateFilter, startDate, endDate);
-        //     } else {
-        //         result = filterDate(dateFilter);
-        //     }
+        if (startDate && endDate) {
+            const startUtcDate = formattedUtcDate(startDate);
+            const endUtcDate = formattedUtcDate(endDate, true);
 
-        //     if (typeof result === 'object' && result !== null) {
-        //         const { filterStartDate, filterEndDate } = result;
-        //         whereClause.createdAt = {
-        //             gte: filterStartDate,
-        //             lte: filterEndDate,
-        //         };
-        //     }
-        // }
+            whereClause.createdAt = {
+                gte: startUtcDate,
+                lte: endUtcDate,
+            };
+        }
 
-        const getShift = await prisma.shift.findMany({
+        if (cashier) {
+            whereClause.user = {
+                user_name: {
+                    contains: cashier,
+                },
+            };
+        }
+
+        const totalCount = await prisma.shift.count({ where: whereClause });
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        const shifts = await prisma.shift.findMany({
             where: whereClause,
             skip: skipAmount,
             take: pageSize,
-            orderBy: {
-                start_time: 'asc',
+            orderBy: { id: 'asc' },
+            include: {
+                user: true,
+                Transaction: true,
             },
         });
-        if (getShift.length > 0) {
-            return resSuccess(getShift);
+
+        const data = shifts.map((shift) => {
+            const totalTransactions = shift.Transaction.length;
+            const cashTransactions = shift.Transaction.filter((transaction) => transaction.method === 'CASH');
+            const debitTransactions = shift.Transaction.filter((transaction) => transaction.method === 'DEBIT');
+
+            const totalCash = calculateTotalAmount(cashTransactions);
+            const totalDebit = calculateTotalAmount(debitTransactions);
+            const totalAmount = totalCash + totalDebit;
+
+            return {
+                ...shift,
+                user_name: shift.user.user_name,
+                totalTransactions,
+                totalCash,
+                totalDebit,
+                totalAmount,
+            };
+        });
+
+        if (data.length > 0) {
+            return resSuccess({ shift: data, totalPages });
         }
         return resNotFound('Shift not found');
     }
@@ -45,7 +71,7 @@ export class ShiftService {
     async getShiftById(id: number) {
         const shift = await prisma.shift.findUnique({
             where: { id },
-            include: { Transaction: true },
+            include: { user: true, Transaction: true },
         });
 
         if (!shift) {

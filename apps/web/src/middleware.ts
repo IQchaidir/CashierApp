@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCookies } from 'next-client-cookies/server';
 
 const protectedHome = ['/'];
+const protectedDashboard = ['/dashboard'];
 
 const protectedRoutes = [
     '/',
@@ -42,7 +43,10 @@ export default async function middleware(req: NextRequest) {
         if (protectedHome.includes(req.nextUrl.pathname) && role === 'CASHIER') {
             return NextResponse.redirect(new URL('/cashier', req.nextUrl.origin));
         } else if (protectedHome.includes(req.nextUrl.pathname) && role === 'ADMIN') {
-            return NextResponse.redirect(new URL('/dashboard', req.nextUrl.origin));
+            return NextResponse.redirect(new URL('/dashboard/report', req.nextUrl.origin));
+        }
+        if (protectedDashboard.includes(req.nextUrl.pathname) && role === 'ADMIN') {
+            return NextResponse.redirect(new URL('/dashboard/report', req.nextUrl.origin));
         }
     }
 }

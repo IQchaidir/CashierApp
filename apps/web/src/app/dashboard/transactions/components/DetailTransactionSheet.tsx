@@ -17,7 +17,7 @@ export function DetailTransactionSheet({ transaction, invoice }: { transaction: 
             <SheetContent
                 onOpenAutoFocus={(e) => e.preventDefault()}
                 side={'right'}
-                className=" w-[450px] flex flex-col bg-gray-200"
+                className=" w-[450px] flex flex-col bg-white"
             >
                 {transaction && (
                     <>
@@ -39,7 +39,7 @@ export function DetailTransactionSheet({ transaction, invoice }: { transaction: 
                                 {transaction.method}
                             </div>
                         </div>
-                        <div className="w-full border overflow-auto text-sm ">
+                        <div className="w-full overflow-auto text-sm ">
                             <div className="flex bg-gray-700 text-white">
                                 <div className="flex-1 py-2 px-4">Item</div>
                                 <div className="flex-1 py-2 px-4">Quantity</div>

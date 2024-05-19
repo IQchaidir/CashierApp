@@ -3,34 +3,14 @@
 import { useState } from 'react';
 import { Nav } from './ui/nav';
 
-import {
-    ChevronRight,
-    LayoutDashboard,
-    UsersRound,
-    ScrollText,
-    NotebookPen,
-    Store,
-    BarChart3,
-    LineChart,
-    Tag,
-    SquareMenu,
-    Menu,
-    LayoutDashboardIcon,
-    LogOut,
-    Package,
-    CalendarClock,
-} from 'lucide-react';
-import { Button } from './ui/button';
+import { UsersRound, ScrollText, Tag, Menu, LayoutDashboardIcon, LogOut, Package, CalendarClock } from 'lucide-react';
 import useSession from '@/hooks/useSession';
 import { Badge } from './ui/badge';
 import { useRouter } from 'next/navigation';
-// import LogoutDialog from './LogoutDialog';
+import LogoutDialogAdmin from '@/app/dashboard/_components/LogoutDialogAdmin';
 
 type Props = {};
 const SideNavbar = (props: Props) => {
-    const { session, removeSessionCookie } = useSession();
-    const router = useRouter();
-
     const [isCollapsed, setIsCollapsed] = useState(false);
 
     const toogleSidebar = () => {
@@ -74,12 +54,6 @@ const SideNavbar = (props: Props) => {
             icon: CalendarClock,
             variant: 'ghost',
         },
-        {
-            title: 'Logout',
-            href: '/dashboard/sales-report',
-            icon: LogOut,
-            variant: 'ghost',
-        },
     ];
 
     return (
@@ -94,7 +68,7 @@ const SideNavbar = (props: Props) => {
                 <Badge className="flex bg-white text-black items-center justify-center w-full p-2 mb-4">ADMIN</Badge>
             )}
             <Nav isCollapsed={isCollapsed} links={links} />
-            {/* <LogoutDialog /> */}
+            <LogoutDialogAdmin isCollapsed={isCollapsed} />
         </div>
     );
 };

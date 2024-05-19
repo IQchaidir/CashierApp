@@ -3,16 +3,16 @@ import { NextFunction, Request, Response, response } from 'express';
 
 export class ShiftController {
     async getShift(req: Request, res: Response, next: NextFunction) {
-        const { dateFilter, startDate, endDate, page } = req.query;
+        const { start_date, end_date, page, search: cashier } = req.query;
         const pageNumber = parseInt((page as string) || '1');
         const shiftService = new ShiftService();
 
         try {
             const shift = await shiftService.getShift(
                 pageNumber,
-                dateFilter as string,
-                startDate as string,
-                endDate as string,
+                start_date as string,
+                end_date as string,
+                cashier as string,
             );
             return res.status(shift.status).json(shift.response);
         } catch (error) {
