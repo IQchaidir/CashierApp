@@ -38,13 +38,13 @@ export function FilterDateOrder({
             params.set('start_date', formattedStartDate);
             params.set('end_date', formattedEndDate);
             params.delete('page');
+            setCurrentPage(1);
             handlefilterDate(formattedStartDate, formattedEndDate);
         } else {
             params.delete('start_date');
             params.delete('end_date');
         }
         router.replace(`${pathname}?${params.toString()}`);
-        setCurrentPage(1);
     }, [date, pathname, router, searchParams]);
 
     const handleReset = async () => {
