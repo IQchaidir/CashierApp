@@ -23,6 +23,16 @@ export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any 
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectCategory]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams);
+        const page = params.get('page');
+        if (page && page !== '1') {
+            params.set('category', selectCategory);
+            setCurrentPage(page);
+            router.replace(`${pathname}?${params.toString()}`);
+        }
+    }, []);
+
     const handleCategoryChange = (category: string) => {
         setSelectCategory(category);
     };

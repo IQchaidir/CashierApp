@@ -29,6 +29,16 @@ export function FilterPayment({ setCurrentPage }: { setCurrentPage: any }) {
         router.replace(`${pathname}?${params.toString()}`);
     }, [selectPayment]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams);
+        const page = params.get('page');
+        if (page && page !== '1') {
+            params.set('payment', selectPayment);
+            setCurrentPage(page);
+            router.replace(`${pathname}?${params.toString()}`);
+        }
+    }, []);
+
     return (
         <Select value={selectPayment} onValueChange={setSelectPayment}>
             <SelectTrigger className="w-[180px]">
