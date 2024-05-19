@@ -31,16 +31,4 @@ export class AuthController {
             next(error);
         }
     }
-
-    async createAdmin(req: Request, res: Response, next: NextFunction) {
-        const { email, password, user_name } = req.body;
-        const authService = new AuthService();
-
-        try {
-            const newAdmin = await authService.createAdmin(email, password, user_name);
-            return res.status(newAdmin.status).json(newAdmin.response);
-        } catch (error) {
-            next(error);
-        }
-    }
 }

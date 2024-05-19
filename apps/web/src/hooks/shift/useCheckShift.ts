@@ -5,7 +5,7 @@ import { useCookies } from 'next-client-cookies';
 export default function useCheckShift() {
     const cookies = useCookies();
     let session = cookies.get('session');
-    let token = null;
+    let token: any = null;
     if (session) {
         token = JSON.parse(session).token;
     }

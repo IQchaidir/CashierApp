@@ -31,18 +31,4 @@ export class AuthService {
             token: token,
         });
     }
-
-    async createAdmin(email: string, password: string, user_name: string) {
-        const existingEmail = await prisma.user.findFirst({
-            where: { email, archive: false },
-        });
-        if (existingEmail) {
-            return resBadRequest('Email already use');
-        }
-        const hashed = await hashPassword(password);
-        const newAdmin = await prisma.user.create({
-            data: { email, password: hashed, role: 'ADMIN', user_name },
-        });
-        return resCreated(newAdmin);
-    }
 }
