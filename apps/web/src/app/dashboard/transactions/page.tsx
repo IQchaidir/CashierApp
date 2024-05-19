@@ -9,7 +9,7 @@ import useTransaction from '@/hooks/transaction/useTransaction';
 import { Transaction } from '@/types/transaction';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';
-import { FilterDateOrder } from '@/components/FilterDateTransaction';
+import { FilterDateTransaction } from '@/components/FilterDateTransaction';
 
 export default function TransactionDashboard({
     searchParams,
@@ -75,7 +75,7 @@ export default function TransactionDashboard({
                             />
                         </div>
                     </div>
-                    <FilterDateOrder
+                    <FilterDateTransaction
                         handlefilterDate={handlefilterDate}
                         setCurrentPage={setCurrentPage}
                         start_date={startDate}

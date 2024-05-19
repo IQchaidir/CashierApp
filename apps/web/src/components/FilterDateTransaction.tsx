@@ -8,7 +8,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
-export function FilterDateOrder({
+export function FilterDateTransaction({
     className,
     handlefilterDate,
     setCurrentPage,
@@ -29,41 +29,36 @@ export function FilterDateOrder({
         to: end_date,
     };
     const [date, setDate] = React.useState<DateRange | undefined>(initialDate);
-    const [isFirstChange, setIsFirstChange] = React.useState(true);
 
-    React.useEffect(() => {
-        const params = new URLSearchParams(searchParams);
-        if (date && date.from && date.to) {
-            const formattedStartDate = format(date.from, 'yyyy-MM-dd');
-            const formattedEndDate = format(date.to, 'yyyy-MM-dd');
-            params.set('start_date', formattedStartDate);
-            params.set('end_date', formattedEndDate);
-            params.delete('page');
-
-            if (isFirstChange) {
+    const handleChangeDate = (selectedDate: DateRange | undefined) => {
+        if (selectedDate) {
+            const formattedStartDate = selectedDate.from ? format(selectedDate.from, 'yyyy-MM-dd') : undefined;
+            const formattedEndDate = selectedDate.to ? format(selectedDate.to, 'yyyy-MM-dd') : undefined;
+            const params = new URLSearchParams(searchParams);
+            if (formattedStartDate && formattedEndDate) {
+                params.set('start_date', formattedStartDate);
+                params.set('end_date', formattedEndDate);
+                params.delete('page');
+                handlefilterDate(formattedStartDate, formattedEndDate);
                 setCurrentPage(1);
-                setIsFirstChange(false);
+            } else {
+                params.delete('start_date');
+                params.delete('end_date');
+                handlefilterDate(undefined, undefined);
             }
-
-            handlefilterDate(formattedStartDate, formattedEndDate);
-        } else {
-            params.delete('start_date');
-            params.delete('end_date');
-            handlefilterDate(undefined, undefined);
+            router.replace(`${pathname}?${params.toString()}`);
         }
-        router.replace(`${pathname}?${params.toString()}`);
-    }, [date]);
-
-    React.useEffect(() => {
-        if (start_date && end_date) {
-            setIsFirstChange(false);
-        }
-    }, [start_date, end_date]);
+        setDate(selectedDate);
+    };
 
     const handleReset = () => {
+        const params = new URLSearchParams(searchParams);
         setDate(undefined);
+        params.delete('start_date');
+        params.delete('end_date');
         handlefilterDate(undefined, undefined);
         setCurrentPage(1);
+        router.replace(`${pathname}?${params.toString()}`);
     };
 
     return (
@@ -99,7 +94,7 @@ export function FilterDateOrder({
                             mode="range"
                             defaultMonth={date?.from}
                             selected={date}
-                            onSelect={setDate}
+                            onSelect={handleChangeDate}
                             numberOfMonths={2}
                         />
                         <div className="flex justify-end">

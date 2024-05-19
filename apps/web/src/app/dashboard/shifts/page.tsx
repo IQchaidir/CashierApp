@@ -6,9 +6,9 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';
-import { FilterDateOrder } from '@/components/FilterDateTransaction';
 import useShift from '@/hooks/shift/useShift';
 import { Shift } from '@/types/shift';
+import { FilterDateTransaction } from '@/components/FilterDateTransaction';
 
 export default function ShiftDashboard({
     searchParams,
@@ -73,7 +73,7 @@ export default function ShiftDashboard({
                             />
                         </div>
                     </div>
-                    <FilterDateOrder
+                    <FilterDateTransaction
                         handlefilterDate={handlefilterDate}
                         setCurrentPage={setCurrentPage}
                         start_date={startDate}
