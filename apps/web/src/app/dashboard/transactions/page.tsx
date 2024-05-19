@@ -10,6 +10,7 @@ import { Transaction } from '@/types/transaction';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';
 import { FilterDateTransaction } from '@/components/FilterDateTransaction';
+import { FilterPayment } from '@/components/FilterMethodTransaction';
 
 export default function TransactionDashboard({
     searchParams,
@@ -19,9 +20,11 @@ export default function TransactionDashboard({
         page?: string;
         start_date?: string;
         end_date?: string;
+        payment?: string;
     };
 }) {
     const search = searchParams?.search || '';
+    const payment = searchParams?.payment || '';
     const start_date = searchParams?.start_date || '';
     const end_date = searchParams?.end_date || '';
     const params = useSearchParams();
@@ -38,6 +41,7 @@ export default function TransactionDashboard({
         search: input,
         start_date: start_date,
         end_date: end_date,
+        payment,
     });
     const [transaction, setTransaction] = useState<Transaction[]>();
 
@@ -50,7 +54,7 @@ export default function TransactionDashboard({
             setTransaction(data.transaction);
             refetch();
         } else return setTransaction([]);
-    }, [data, input, currentPage, startDate, endDate]);
+    }, [data, input, currentPage, startDate, endDate, payment]);
 
     return (
         <>
@@ -70,7 +74,14 @@ export default function TransactionDashboard({
                             />
                         </div>
                     </div>
-                    <FilterDateTransaction setCurrentPage={setCurrentPage} start_date={startDate} end_date={endDate} />
+                    <div className="flex gap-1">
+                        <FilterPayment setCurrentPage={setCurrentPage} />
+                        <FilterDateTransaction
+                            setCurrentPage={setCurrentPage}
+                            start_date={startDate}
+                            end_date={endDate}
+                        />
+                    </div>
                 </div>
                 {!!transaction && transaction.length > 0 ? (
                     <DataTable data={transaction} columns={columns} />

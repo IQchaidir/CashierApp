@@ -122,10 +122,10 @@ export class TransactionService {
         return resSuccess(newTransaction);
     }
 
-    async getTransaction(pageNumber: number, startDate?: string, endDate?: string, invoice?: string) {
+    async getTransaction(pageNumber: number, startDate?: string, endDate?: string, invoice?: string, payment?: string) {
         const pageSize = 10;
         const skipAmount = (pageNumber - 1) * pageSize;
-        let whereClause: Prisma.TransactionWhereInput = {};
+        let whereClause: any = {};
 
         if (startDate && endDate) {
             const startUtcDate = formattedUtcDate(startDate);
@@ -135,6 +135,10 @@ export class TransactionService {
                 gte: startUtcDate,
                 lte: endUtcDate,
             };
+        }
+
+        if (payment) {
+            whereClause.method = payment;
         }
 
         if (invoice) {
