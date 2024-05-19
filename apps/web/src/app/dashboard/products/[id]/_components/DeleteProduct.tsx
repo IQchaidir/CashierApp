@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -30,6 +30,9 @@ export default function DeleteProduct({ id }: { id: string }) {
                         variant: 'success',
                         title: 'Product deleted successfully !',
                     });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 100);
                     router.push('/dashboard/products');
                 },
                 onError: (res: any) => {
@@ -56,7 +59,9 @@ export default function DeleteProduct({ id }: { id: string }) {
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button onClick={handleDeleteProduct}>Ya</Button>
+                        <button className="bg-[#04C99E] rounded-sm px-3 text-white" onClick={handleDeleteProduct}>
+                            Yes
+                        </button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

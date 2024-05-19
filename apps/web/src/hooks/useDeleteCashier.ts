@@ -1,10 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useSession from './useSession';
 import axios from 'axios';
 
 export default function useDeleteCashier() {
     const { session } = useSession();
-
+    const queryClient = useQueryClient();
     const { mutate, isPending, isError } = useMutation({
         mutationFn: async ({ id }: { id: number }) => {
             if (!session?.token) return null;
@@ -13,6 +13,7 @@ export default function useDeleteCashier() {
                     Authorization: `Bearer ${session?.token}`,
                 },
             });
+            queryClient.invalidateQueries({ queryKey: ['cashier'] });
             return await res.data;
         },
     });

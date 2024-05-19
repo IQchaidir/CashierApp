@@ -1,7 +1,7 @@
 'use client';
 import { UserPlus, Users } from 'lucide-react';
-import { DataTable } from './components/data-table';
-import { columns } from './components/columns';
+import { DataTable } from './_components/data-table';
+import { columns } from './_components/columns';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';

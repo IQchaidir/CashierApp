@@ -1,9 +1,8 @@
 'use client';
-import { Plus, ScrollText, UserPlus, Users } from 'lucide-react';
-import { DataTable } from './components/data-table';
-import { columns } from './components/columns';
-import Link from 'next/link';
-import CreateCategory from './components/CreateCategory';
+import { ScrollText } from 'lucide-react';
+import { DataTable } from './_components/data-table';
+import { columns } from './_components/columns';
+import CreateCategory from './_components/CreateCategory';
 import useGetCategoryAdmin from '@/hooks/category/useGetCategoryAdmin';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -40,7 +39,7 @@ export default function CategoriesDashboard({
         if (data) {
             setCategory(data.category.categories);
             refetch();
-        }
+        } else return setCategory([]);
     }, [data, input, currentPage]);
 
     return (
@@ -63,7 +62,11 @@ export default function CategoriesDashboard({
                         />
                     </div>
                 </div>
-                {!!category?.length && <DataTable data={category} columns={columns} />}
+                {!!category && category.length > 0 ? (
+                    <DataTable data={category} columns={columns} />
+                ) : (
+                    <DataTable data={[]} columns={columns} />
+                )}
                 <div className="flex justify-end ">
                     <Pagination
                         currentPage={currentPage}

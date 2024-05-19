@@ -2,11 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import QueryProvider from '@/providers/QueryProvider';
-import Navbar from '@/components/Navbar';
 import { CookiesProvider } from 'next-client-cookies/server';
 import { CartProvider } from '@/providers/CartContext';
 import { Toaster } from '@/components/ui/toaster';
-import ApplicationWrapper from '@/components/ApplicationWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,10 +20,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <QueryProvider>
                     <CookiesProvider>
                         <CartProvider>
-                            <ApplicationWrapper>
-                                {children}
-                                <Toaster />
-                            </ApplicationWrapper>
+                            {children}
+                            <Toaster />
                         </CartProvider>
                     </CookiesProvider>
                 </QueryProvider>

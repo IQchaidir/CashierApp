@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import useSession from './useSession';
 
@@ -13,6 +13,7 @@ type Props = {
 
 export default function useCreateProduct() {
     const { session } = useSession();
+    const queryClient = useQueryClient();
     const { mutate, isPending, isError } = useMutation({
         mutationFn: async ({ file, name, price, weight, category, description }: Props) => {
             if (!session?.token) return null;
@@ -33,7 +34,7 @@ export default function useCreateProduct() {
             };
 
             const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/product`, formData, config);
-
+            queryClient.invalidateQueries({ queryKey: ['products'] });
             return await res.data;
         },
     });

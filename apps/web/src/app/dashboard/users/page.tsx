@@ -1,7 +1,7 @@
 'use client';
 import { UserPlus, Users } from 'lucide-react';
-import { DataTable } from './components/data-table';
-import { columns } from './components/columns';
+import { DataTable } from './_components/data-table';
+import { columns } from './_components/columns';
 import Link from 'next/link';
 import useCashier from '@/hooks/useCashier';
 import { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ export default function UserDashboard({
         if (data) {
             setUsers(data.getCashier);
             refetch();
-        }
+        } else setUsers([]);
     }, [data, input, currentPage]);
 
     return (
@@ -54,7 +54,7 @@ export default function UserDashboard({
                         <p className="text-muted-foreground">list of all cashier</p>
                         <Link
                             href={`/dashboard/users/create`}
-                            className="border  bg-blue-500 p-2 cursor-pointer font-medium flex gap-2 items-center rounded-md text-white"
+                            className="border  bg-[#04C99E] p-2 cursor-pointer font-medium flex gap-2 items-center rounded-md text-white"
                         >
                             <UserPlus className="w-4 h-4 text-" />
                             Create Cashier
@@ -69,7 +69,11 @@ export default function UserDashboard({
                     </div>
                 </div>
 
-                {!!users?.length && <DataTable data={users} columns={columns} />}
+                {!!users && users.length > 0 ? (
+                    <DataTable data={users} columns={columns} />
+                ) : (
+                    <DataTable data={[]} columns={columns} />
+                )}
                 <div className="flex justify-end ">
                     <Pagination
                         currentPage={currentPage}

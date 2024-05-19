@@ -16,6 +16,8 @@ const protectedRoutes = [
     '/dashboard/products/create',
     '/dashboard/categories',
     '/dashboard/transactions',
+    '/dashboard/reports',
+    '/dashboard/shifts',
 ];
 const adminOnly = [
     '/dashboard',
@@ -25,11 +27,13 @@ const adminOnly = [
     '/dashboard/products/create',
     '/dashboard/categories',
     '/dashboard/transactions',
+    '/dashboard/reports',
+    '/dashboard/shifts',
 ];
 
 export default async function middleware(req: NextRequest) {
     if (protectedRoutes.includes(req.nextUrl.pathname)) {
-        const absoluteURL = new URL('/login', req.nextUrl.origin);
+        const absoluteURL = new URL('/login/cashier', req.nextUrl.origin);
         const cookies = getCookies();
         const session: any = cookies.get('session');
 

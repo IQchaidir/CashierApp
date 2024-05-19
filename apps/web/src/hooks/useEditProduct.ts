@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import useSession from './useSession';
 
@@ -14,6 +14,7 @@ type Props = {
 
 export default function useEditProduct() {
     const { session } = useSession();
+    const queryClient = useQueryClient();
     const { mutate, isPending, isError } = useMutation({
         mutationFn: async ({ id, file, name, price, weight, category, description }: Props) => {
             if (!session?.token) return null;
@@ -38,7 +39,7 @@ export default function useEditProduct() {
                 formData,
                 config,
             );
-
+            queryClient.invalidateQueries({ queryKey: ['products'] });
             return await res.data;
         },
     });

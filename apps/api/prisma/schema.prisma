@@ -35,6 +35,7 @@ model Product {
   category_id         Int
   price               Decimal
   stock               Int?                  @default(0)
+  weight              Int
   image               String
   archive             Boolean               @default(false)
   createdAt           DateTime              @default(now())

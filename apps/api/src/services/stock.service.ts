@@ -22,6 +22,9 @@ export class StockService {
     }
 
     async addStock(id: number, quantity: number) {
+        if (quantity < 0) {
+            return resBadRequest('Must not enter negative numbers!');
+        }
         const updateStock = await prisma.product.update({
             where: { id },
             data: { stock: { increment: quantity } },
@@ -34,6 +37,9 @@ export class StockService {
     }
 
     async reduceStock(id: number, quantity: number) {
+        if (quantity < 0) {
+            return resBadRequest('Must not enter negative numbers!');
+        }
         const existingProduct = await prisma.product.findUnique({
             where: { id },
         });

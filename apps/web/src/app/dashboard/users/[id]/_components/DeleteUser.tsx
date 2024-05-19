@@ -21,7 +21,7 @@ type Props = {
 
 export default function DeleteCashier({ id }: Props) {
     const { mutate, isPending } = useDeleteCashier();
-    const { refetch } = useCashier();
+    const { refetch } = useCashier({});
     const { toast } = useToast();
 
     const handleDelete = () => {
@@ -59,14 +59,15 @@ export default function DeleteCashier({ id }: Props) {
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
-                        <Button
+                        <button
+                            className="bg-[#04C99E] text-white p-2 rounded-sm"
                             disabled={isPending}
                             onClick={() => {
                                 handleDelete();
                             }}
                         >
                             Yes !
-                        </Button>
+                        </button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

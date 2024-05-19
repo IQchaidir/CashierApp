@@ -3,10 +3,17 @@ import { NextFunction, Request, Response } from 'express';
 
 export class ProductController {
     async createProduct(req: Request, res: Response, next: NextFunction) {
-        const { name, description, price, category } = req.body;
+        const { name, description, price, category, weight } = req.body;
         const file: string | undefined = req.file?.filename;
         try {
-            const createProduct = await productService.createProduct(file, name, description, price, Number(category));
+            const createProduct = await productService.createProduct(
+                file,
+                name,
+                description,
+                price,
+                Number(category),
+                Number(weight),
+            );
             return res.status(createProduct.status).json(createProduct.response);
         } catch (error) {
             next(error);
@@ -50,7 +57,7 @@ export class ProductController {
 
     async updateProduct(req: Request, res: Response, next: NextFunction) {
         const { id } = req.params;
-        const { name, description, price, category } = req.body;
+        const { name, description, price, category, weight } = req.body;
         const file: string | undefined = req.file?.filename;
 
         try {
@@ -61,6 +68,7 @@ export class ProductController {
                 Number(price),
                 Number(category),
                 file,
+                Number(weight),
             );
             return res.status(updateProduct.status).json(updateProduct.response);
         } catch (error) {

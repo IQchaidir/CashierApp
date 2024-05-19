@@ -8,6 +8,7 @@ import useSession from '@/hooks/useSession';
 import { Badge } from './ui/badge';
 import { useRouter } from 'next/navigation';
 import LogoutDialogAdmin from '@/app/dashboard/_components/LogoutDialogAdmin';
+import Image from 'next/image';
 
 type Props = {};
 const SideNavbar = (props: Props) => {
@@ -57,9 +58,15 @@ const SideNavbar = (props: Props) => {
     ];
 
     return (
-        <div className="relative min-w-[80px] border-r px-3 pb-10 pt-8 bg-blue-500 shadow-md">
+        <div className="relative min-w-[80px] border-r px-3 pb-10 pt-8 bg-[#04C99E] shadow-md">
             <div className={`mb-4 w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
-                <p className={`text-white ${isCollapsed ? 'hidden' : ''}`}>SMART KASIR</p>
+                <Image
+                    src="/textwhite.png"
+                    alt="logo"
+                    width={200}
+                    height={200}
+                    className={` ${isCollapsed ? 'hidden' : ''}`}
+                />
                 <button onClick={toogleSidebar}>
                     <Menu className="w-10 h-10 text-white" />
                 </button>

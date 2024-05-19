@@ -61,7 +61,7 @@ export default function LogoutDialog() {
                                 onClick={() => {
                                     removeSessionCookie();
                                     clearCart();
-                                    router.push('/login');
+                                    router.push('/login/cashier');
                                 }}
                             >
                                 Ya

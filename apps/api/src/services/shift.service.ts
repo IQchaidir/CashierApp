@@ -96,7 +96,8 @@ export class ShiftService {
     }
 
     async checkShift(id: number) {
-        const activeShift = await prisma.shift.findFirst({
+        let activeShift;
+        activeShift = await prisma.shift.findFirst({
             where: {
                 user_id: { not: id },
                 start_time: { lte: new Date() },
@@ -107,6 +108,17 @@ export class ShiftService {
                 user: true,
             },
         });
+
+        if (activeShift) {
+            const cashTransaction = activeShift.Transaction.filter((transaction) => transaction.method === 'CASH');
+            const debitTransaction = activeShift.Transaction.filter((transaction) => transaction.method === 'DEBIT');
+
+            const totalCash = calculateTotalAmount(cashTransaction);
+            const totalDebit = calculateTotalAmount(debitTransaction);
+            const totalAmount = totalCash + totalDebit;
+
+            activeShift = { ...activeShift, totalAmount, totalCash, totalDebit };
+        }
 
         let currentShift;
 

@@ -20,6 +20,7 @@ class ProductService {
         description: string,
         price: number,
         categoryId: number,
+        weight: number,
     ) {
         if (!file) {
             return resBadRequest('No image uploaded');
@@ -40,6 +41,7 @@ class ProductService {
                 price,
                 image: process.env.BASE_URL + 'images/' + file,
                 category_id: categoryId,
+                weight,
             },
         });
 
@@ -115,7 +117,7 @@ class ProductService {
 
     async getProductById(id: number) {
         const getProduct = await prisma.product.findUnique({
-            where: { id },
+            where: { id, archive: false },
             include: { category: { select: { name: true } } },
         });
         if (!getProduct) {
@@ -135,6 +137,7 @@ class ProductService {
         price?: number,
         category_id?: number,
         file?: string,
+        weight?: number,
     ) {
         const existingProduct = await prisma.product.findUnique({
             where: { id, archive: false },

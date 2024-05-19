@@ -45,6 +45,9 @@ export default function EditUser({ id }: { id: number }) {
                             title: 'Admin edited successfully !',
                         });
                         router.push('/dashboard/users');
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 150);
                     },
                     onError: (res: any) => {
                         toast({
@@ -123,7 +126,7 @@ export default function EditUser({ id }: { id: number }) {
                     </Collapsible>
                 </div>
 
-                <button className="border bg-blue-500 text-white p-2 rounded-md font-medium ">Submit !</button>
+                <button className="border bg-[#04C99E] text-white p-2 rounded-md font-medium ">Submit !</button>
             </div>
         </form>
     );

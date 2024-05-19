@@ -102,7 +102,7 @@ export default function CreateCashier() {
                         <div className="text-xs text-red-500">{formik.errors.confirmPassword}</div>
                     ) : null}
                 </div>
-                <button className="border bg-blue-500 text-white p-2 rounded-md font-medium ">Submit !</button>
+                <button className="border bg-[#04C99E] text-white p-2 rounded-md font-medium ">Submit !</button>
             </div>
         </form>
     );

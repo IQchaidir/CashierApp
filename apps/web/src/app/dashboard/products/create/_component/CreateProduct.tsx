@@ -129,7 +129,7 @@ export default function CreateProduct() {
                         onChange={(value) => formik.setFieldValue('category', value)}
                     />
                     <div className="mt-2">
-                        Kategory belum tersedia? <CreateNewCategory />
+                        Are categories not available? <CreateNewCategory />
                     </div>
                     {formik.touched.category && formik.errors.category ? (
                         <div className="text-xs text-red-500">{formik.errors.category}</div>
@@ -143,9 +143,9 @@ export default function CreateProduct() {
                         <div className="text-xs text-red-500">{formik.errors.description}</div>
                     ) : null}
                 </div>
-                <Button type="submit" className="bg-blue-500 text-white">
+                <button type="submit" className="bg-[#04C99E]  text-white p-2 rounded-sm">
                     Submit !
-                </Button>
+                </button>
             </div>
         </form>
     );

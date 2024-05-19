@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { SheetMenu } from './SheetMenu';
 
 const Navbar = () => {
@@ -6,7 +7,7 @@ const Navbar = () => {
             <div className=" cursor-pointer">
                 <SheetMenu />
             </div>
-            <div className="">SmartKasir</div>
+            <Image src="/textwhite.png" alt="logonav" width={300} height={300} />
         </nav>
     );
 };

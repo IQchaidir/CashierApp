@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import LogoutDialog from './LogoutDialog';
 import { Separator } from './ui/separator';
 import React from 'react';
+import Image from 'next/image';
 
 export function SheetMenu() {
     const pathname = usePathname();
@@ -37,8 +38,9 @@ export function SheetMenu() {
                 side={'left'}
                 className=" bg-gray-50 p-2 w-[300px] "
             >
-                <SheetHeader className="mt-3 p-2">
-                    <SheetTitle className="flex justify-start text-2xl">{username}</SheetTitle>
+                <SheetHeader className="mt-3 p-2 flex items-center">
+                    <Image src="/logogreen.png" alt="logosheet" width={50} height={50} />
+                    <SheetTitle className="flex justify-start text-3xl">{username}</SheetTitle>
                 </SheetHeader>
                 <Separator className="mt-3" />
                 <div className="grid mt-3 text-2xl">

@@ -46,7 +46,7 @@ export default function LogoutDialogAdmin({ isCollapsed }: { isCollapsed: any })
             <DialogContent className="w-[300px]">
                 <DialogHeader>
                     <DialogTitle>Logout !</DialogTitle>
-                    <DialogDescription>Akan diarahakan ke halaman login</DialogDescription>
+                    <DialogDescription>Will redirect to login page</DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
@@ -56,7 +56,7 @@ export default function LogoutDialogAdmin({ isCollapsed }: { isCollapsed: any })
                                 onClick={() => {
                                     removeSessionCookie();
                                     clearCart();
-                                    router.push('/login');
+                                    router.push('/login/admin');
                                 }}
                             >
                                 Ya

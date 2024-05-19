@@ -1,23 +1,16 @@
 'use client';
-
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { validateNewProduct } from '@/lib/validation';
 import { SelectCategory } from '../../create/_component/SelectCategory';
 import useProductById from '@/hooks/useProductById';
 import useEditProduct from '@/hooks/useEditProduct';
 import EditImage from './EditImage';
-
-async function urlToFile(url: string, filename: any, mimeType: any) {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], filename, { type: mimeType });
-}
+import { urlToFile } from '@/utils/urlToFile';
 
 export default function EditProduct({ id }: { id: string }) {
     const router = useRouter();
@@ -54,6 +47,9 @@ export default function EditProduct({ id }: { id: string }) {
                                 variant: 'success',
                                 title: 'Success Edit Product !',
                             });
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 150);
                             router.push('/dashboard/products');
                         },
                         onError: (res: any) => {
@@ -181,9 +177,9 @@ export default function EditProduct({ id }: { id: string }) {
                         <div className="text-xs text-red-500">{formik.errors.description}</div>
                     ) : null}
                 </div>
-                <Button type="submit" className="bg-blue-500 text-white">
+                <button type="submit" className="bg-[#04C99E] rounded-sm p-3 text-white">
                     Submit !
-                </Button>
+                </button>
             </div>
         </form>
     );

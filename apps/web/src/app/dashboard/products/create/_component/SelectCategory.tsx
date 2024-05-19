@@ -8,7 +8,7 @@ interface SelectCategoryProps {
 }
 
 export function SelectCategory({ value, onChange }: SelectCategoryProps) {
-    const { data, isLoading } = useCategory();
+    const { data, isLoading, isError } = useCategory();
     const [selectedCategory, setSelectedCategory] = useState<string>('');
 
     useEffect(() => {
@@ -27,7 +27,11 @@ export function SelectCategory({ value, onChange }: SelectCategoryProps) {
     return (
         <Select value={selectedCategory} onValueChange={handleValueChange}>
             <SelectTrigger className="w-1/2">
-                <SelectValue placeholder={isLoading ? 'Fetching Categories' : 'Choose a Category'} />
+                <SelectValue
+                    placeholder={
+                        isLoading ? 'Fetching Categories' : isError ? 'No categories available' : 'Choose a Category'
+                    }
+                />
             </SelectTrigger>
             <SelectContent>
                 {data?.category.categories.map((category: { id: number; name: string }) => (

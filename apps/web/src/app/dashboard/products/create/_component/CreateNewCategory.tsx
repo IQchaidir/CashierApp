@@ -44,7 +44,7 @@ export default function CreateNewCategory() {
     return (
         <Dialog open={isOpen} onOpenChange={(e) => setOpen(e)}>
             <DialogTrigger asChild>
-                <div className="text-emerald-500 cursor-pointer">Buat Kategori</div>
+                <button className="text-emerald-500 font-medium cursor-pointer">Create New Category</button>
             </DialogTrigger>
             <DialogContent className="w-72">
                 <DialogHeader>
@@ -53,9 +53,12 @@ export default function CreateNewCategory() {
                 <div className="grid flex-1 gap-2">
                     <Input id="link" defaultValue={categoryName} onChange={(e) => setCategoryName(e.target.value)} />
                 </div>
-
                 <DialogFooter>
-                    <button className="bg-blue-500 text-white" type="submit" onClick={handleCreateCategory}>
+                    <button
+                        className="bg-[#04C99E] rounded-sm p-1 text-white"
+                        type="submit"
+                        onClick={handleCreateCategory}
+                    >
                         Create
                     </button>
                 </DialogFooter>
