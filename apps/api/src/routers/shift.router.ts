@@ -1,4 +1,5 @@
 import { ShiftController } from '@/controllers/shift.controller';
+import { createShiftValidator, endShiftValidator } from '@/middleware/validator';
 import { verifyAdmin } from '@/middleware/verifyAdmin';
 import { verifyToken } from '@/middleware/verifyJwt';
 import { Router } from 'express';
@@ -17,8 +18,8 @@ export class ShiftRouter {
         this.router.get('/', this.shiftController.getShift);
         this.router.post('/check', verifyToken, this.shiftController.checkShift);
         this.router.get('/:id', this.shiftController.getShiftById);
-        this.router.post('/', verifyToken, this.shiftController.startShift);
-        this.router.patch('/:id', verifyToken, this.shiftController.endShift);
+        this.router.post('/', verifyToken, createShiftValidator, this.shiftController.startShift);
+        this.router.patch('/:id', verifyToken, endShiftValidator, this.shiftController.endShift);
     }
 
     getRouter(): Router {

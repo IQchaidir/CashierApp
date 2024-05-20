@@ -1,4 +1,5 @@
 import { TransactionController } from '@/controllers/transaction.controller';
+import { transactionValidator } from '@/middleware/validator';
 import { verifyAdmin } from '@/middleware/verifyAdmin';
 import { verifyToken } from '@/middleware/verifyJwt';
 import { Router } from 'express';
@@ -18,7 +19,7 @@ export class TransactionRouter {
         this.router.get('/latest', this.transactionController.getLatestTransaction);
         this.router.get('/shift', verifyToken, this.transactionController.getShiftTransaction);
         this.router.get('/:id', this.transactionController.getTransactionById);
-        this.router.post('/create', verifyToken, this.transactionController.createTransaction);
+        this.router.post('/create', verifyToken, transactionValidator, this.transactionController.createTransaction);
     }
 
     getRouter(): Router {

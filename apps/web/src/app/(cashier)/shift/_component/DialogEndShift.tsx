@@ -126,7 +126,7 @@ export const DialogEndShift = ({ id }: { id: number }) => {
                                 </button>
                             </DialogClose>
                             <button
-                                className="border w-20 p-1 rounded-sm bg-[#04C99E] text-white"
+                                className="border w-20  rounded-sm bg-[#04C99E] text-white"
                                 onClick={handleEnd}
                                 disabled={isPending}
                             >

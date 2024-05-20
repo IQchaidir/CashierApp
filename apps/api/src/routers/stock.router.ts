@@ -1,4 +1,5 @@
 import { StockController } from '@/controllers/stock.controller';
+import { editStockValidator } from '@/middleware/validator';
 import { verifyAdmin } from '@/middleware/verifyAdmin';
 import { verifyToken } from '@/middleware/verifyJwt';
 import { Router } from 'express';
@@ -14,8 +15,14 @@ export class StockRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.patch('/add/:id', verifyToken, verifyAdmin, this.stockController.addStock);
-        this.router.patch('/reduce/:id', verifyToken, verifyAdmin, this.stockController.reduceStock);
+        this.router.patch('/add/:id', verifyToken, verifyAdmin, editStockValidator, this.stockController.addStock);
+        this.router.patch(
+            '/reduce/:id',
+            verifyToken,
+            verifyAdmin,
+            editStockValidator,
+            this.stockController.reduceStock,
+        );
     }
 
     getRouter(): Router {

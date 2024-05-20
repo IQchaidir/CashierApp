@@ -23,6 +23,9 @@ const EditCategory = ({ name, id }: Props) => {
     const { mutate } = useEditCategory();
 
     const handleEdit = async () => {
+        if (categoryName === '') {
+            return setOpen(false);
+        }
         mutate(
             { id: Number(id), name: categoryName },
             {

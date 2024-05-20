@@ -1,4 +1,3 @@
-import { formatDate } from '@/utils/formatDate';
 import { formatToRupiah } from '@/utils/formatToRupiah';
 import { DialogEndShift } from './DialogEndShift';
 import DetailCurrentShift from './DetailCurrentShift';
@@ -14,7 +13,7 @@ const CurrentShift = (data: any) => {
                         </div>
                         <div className="flex flex-col p-10 gap-7  text-4xl ">
                             <div>KASIR: {data.data.user.user_name}</div>
-                            <div>Waktu mulai: {formatDate(data.data.start_time)}</div>
+                            <div>Waktu mulai: {new Date(data.data.start_time).toLocaleString()}</div>
                             <div>Uang kas diawal: {formatToRupiah(data.data.initial_cash)}</div>
                             <DialogEndShift id={data.data.id} />
                         </div>

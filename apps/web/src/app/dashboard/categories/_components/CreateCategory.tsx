@@ -11,6 +11,9 @@ export default function CreateCategory() {
     const { mutate, isPending } = useCreateCategory();
 
     const handleCreateCategory = () => {
+        if (categoryName === '') {
+            return setOpen(false);
+        }
         mutate(
             { name: categoryName },
             {

@@ -1,5 +1,6 @@
 import { ProductController } from '@/controllers/product.controller';
 import { uploader } from '@/middleware/imageProduct';
+import { productValidator } from '@/middleware/validator';
 import { verifyAdmin } from '@/middleware/verifyAdmin';
 import { verifyToken } from '@/middleware/verifyJwt';
 import { Router } from 'express';
@@ -23,6 +24,7 @@ export class ProductRouter {
             verifyToken,
             verifyAdmin,
             uploader('IMG', '/images').single('file'),
+            productValidator,
             this.productController.createProduct,
         );
         this.router.patch(
