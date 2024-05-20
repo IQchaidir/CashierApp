@@ -14,7 +14,7 @@ export const cashierValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errorValidator = validationResult(req);
         if (!errorValidator.isEmpty()) {
-            return res.status(400).send({ error: errorValidator.array() });
+            return res.status(400).send('all form required');
         }
 
         next();
@@ -31,7 +31,7 @@ export const updateCashierValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errorValidator = validationResult(req);
         if (!errorValidator.isEmpty()) {
-            return res.status(400).send({ error: errorValidator.array() });
+            return res.status(400).send('password required');
         }
         next();
     },
@@ -69,7 +69,7 @@ export const transactionValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json('metode pembayaran harus dipilih');
         }
         next();
     },
@@ -96,7 +96,7 @@ export const createShiftValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json('total uang kas harus diisi');
         }
         next();
     },
@@ -112,7 +112,7 @@ export const endShiftValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json('total uang kas harus diisi');
         }
         next();
     },
@@ -139,7 +139,23 @@ export const productValidator = [
     (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json('semua data harus terisi!');
+        }
+        next();
+    },
+];
+
+export const updateProductValidator = [
+    body('name').optional().isString().withMessage('Name must be a string'),
+    body('description').optional().isString().withMessage('Description must be a string'),
+    body('price').optional().isFloat({ min: 0 }).withMessage('Price must be a non-negative number'),
+    body('category').optional().isInt().withMessage('Category ID must be an integer'),
+    body('weight').optional().isFloat({ min: 0 }).withMessage('Weight must be a non-negative number'),
+
+    (req: Request, res: Response, next: NextFunction) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json('Error Validation');
         }
         next();
     },

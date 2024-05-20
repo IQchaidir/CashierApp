@@ -9,6 +9,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/r
 import useCashierById from '@/hooks/cashier/useCashierById';
 import { useEffect } from 'react';
 import useEditCashier from '@/hooks/cashier/useEditCashier';
+import { validateUpdateCashier } from '@/lib/validation';
 
 export default function EditUser({ id }: { id: number }) {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default function EditUser({ id }: { id: number }) {
             confirmPassword: '',
         },
         enableReinitialize: true,
+        validationSchema: validateUpdateCashier,
         onSubmit: ({ user_name, email, password, confirmPassword }) => {
             if (password !== confirmPassword) {
                 toast({

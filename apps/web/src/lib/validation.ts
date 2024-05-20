@@ -18,6 +18,11 @@ export const validateNewCashier = Yup.object({
         .required('Password is required'),
 });
 
+export const validateUpdateCashier = Yup.object({
+    user_name: Yup.string().max(20, 'Must be 20 letters or less').required('Username is required'),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+});
+
 export const imageSchema = Yup.mixed()
     .required('File gambar harus diunggah')
     .test('fileType', 'Jenis file harus dalam jpeg, jpg atau png', (value: any) => {
