@@ -153,7 +153,7 @@ class ProductService {
             return resBadRequest('Product already exist');
         }
 
-        const updateData: any = { name, price, description, category_id };
+        const updateData: any = { name, price, description, category_id, weight };
 
         const imageUrl = file ? process.env.BASE_URL + 'images/' + file : undefined;
         if (imageUrl) {
