@@ -2,7 +2,7 @@ import { ArrowLeftToLine } from 'lucide-react';
 import Link from 'next/link';
 import CreateCashier from './_component/CreateCashier';
 
-export default function CreateAdminPage() {
+export default function CreateCashierPage() {
     return (
         <div className="hidden w-1/2 h-full flex-1 flex-col space-y-2 p-8 md:flex">
             <Link href={'/dashboard/cashier'}>

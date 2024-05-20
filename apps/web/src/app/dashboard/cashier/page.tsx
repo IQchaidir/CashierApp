@@ -10,7 +10,7 @@ import { useSearchParams } from 'next/navigation';
 import SearchInput from '@/components/SearchInput';
 import Pagination from '@/components/Pagination';
 
-export default function UserDashboard({
+export default function CashierDashboard({
     searchParams,
 }: {
     searchParams?: {

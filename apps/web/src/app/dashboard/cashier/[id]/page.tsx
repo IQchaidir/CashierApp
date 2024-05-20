@@ -2,7 +2,7 @@ import { ArrowLeftToLine } from 'lucide-react';
 import Link from 'next/link';
 import EditCashier from './_components/EditCashier';
 
-export default function AdminEditUser({ params: { id } }: { params: { id: number } }) {
+export default function AdminEditCashier({ params: { id } }: { params: { id: number } }) {
     return (
         <div className="hidden w-1/2 h-full flex-1 flex-col space-y-2 p-8 md:flex">
             <Link href={'/dashboard/cashier'}>
