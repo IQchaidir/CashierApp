@@ -10,8 +10,8 @@ const protectedRoutes = [
     '/shift',
     '/transaction',
     '/dashboard',
-    '/dashboard/users',
-    '/dashboard/users/create',
+    '/dashboard/cashier',
+    '/dashboard/cashier/create',
     '/dashboard/products',
     '/dashboard/products/create',
     '/dashboard/categories',
@@ -21,8 +21,8 @@ const protectedRoutes = [
 ];
 const adminOnly = [
     '/dashboard',
-    '/dashboard/users',
-    '/dashboard/users/create',
+    '/dashboard/cashier',
+    '/dashboard/cashier/create',
     '/dashboard/products',
     '/dashboard/products/create',
     '/dashboard/categories',

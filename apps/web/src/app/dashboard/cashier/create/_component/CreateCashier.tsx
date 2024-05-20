@@ -39,7 +39,7 @@ export default function CreateCashier() {
                             variant: 'success',
                             title: 'Cashier created successfully !',
                         });
-                        router.push('/dashboard/users');
+                        router.push('/dashboard/cashier');
                     },
                     onError: (res: any) => {
                         toast({

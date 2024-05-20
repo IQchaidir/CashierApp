@@ -31,14 +31,14 @@ export default function DeleteCashier({ id }: Props) {
                 onSuccess: () => {
                     toast({
                         variant: 'success',
-                        title: 'User deleted successfully !',
+                        title: 'Cashier deleted successfully !',
                     });
                     refetch();
                 },
                 onError: (res: any) => {
                     toast({
                         variant: 'destructive',
-                        title: 'User Failed to delete !',
+                        title: 'Cashier Failed to delete !',
                         description: res?.response?.data,
                     });
                 },

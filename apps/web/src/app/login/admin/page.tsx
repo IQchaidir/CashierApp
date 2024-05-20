@@ -38,7 +38,7 @@ const LoginAdminPage = () => {
                         username: data.user_name,
                         token: data.token,
                     });
-                    router.push('/dashboard/users');
+                    router.push('/dashboard/cashier');
                 },
                 onError: (res: any) => {
                     toast({

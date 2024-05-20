@@ -22,8 +22,8 @@ const SideNavbar = (props: Props) => {
             variant: 'ghost',
         },
         {
-            title: 'Users',
-            href: '/dashboard/users',
+            title: 'Cashier',
+            href: '/dashboard/cashier',
             icon: UsersRound,
             variant: 'ghost',
         },

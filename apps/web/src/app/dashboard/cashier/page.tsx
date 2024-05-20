@@ -53,7 +53,7 @@ export default function UserDashboard({
                         </h2>
                         <p className="text-muted-foreground">list of all cashier</p>
                         <Link
-                            href={`/dashboard/users/create`}
+                            href={`/dashboard/cashier/create`}
                             className="border  bg-[#04C99E] p-2 cursor-pointer font-medium flex gap-2 items-center rounded-md text-white"
                         >
                             <UserPlus className="w-4 h-4 text-" />

@@ -46,7 +46,7 @@ export default function EditUser({ id }: { id: number }) {
                             variant: 'success',
                             title: 'Admin edited successfully !',
                         });
-                        router.push('/dashboard/users');
+                        router.push('/dashboard/cashier');
                         setTimeout(() => {
                             window.location.reload();
                         }, 150);
@@ -54,7 +54,7 @@ export default function EditUser({ id }: { id: number }) {
                     onError: (res: any) => {
                         toast({
                             variant: 'destructive',
-                            title: 'Failed to edit users !',
+                            title: 'Failed to edit cashier !',
                             description: res?.response?.data?.message,
                         });
                     },

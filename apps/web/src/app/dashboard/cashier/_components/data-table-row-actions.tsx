@@ -1,5 +1,4 @@
 'use client';
-
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
-import DeleteCashier from '../[id]/_components/DeleteUser';
+import DeleteCashier from '../[id]/_components/DeleteCashier';
 
 interface DataTableRowActionsProps<TData> {
     row: Row<TData>;
@@ -31,7 +30,7 @@ export function DataTableRowActions<TData>({ row }: DataTableRowActionsProps<TDa
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem>
-                    <Link href={`/dashboard/users/${user.id}`} className="flex items-center gap-2">
+                    <Link href={`/dashboard/cashier/${user.id}`} className="flex items-center gap-2">
                         <SquarePen className="w-4 h-4" />
                         Edit
                     </Link>
