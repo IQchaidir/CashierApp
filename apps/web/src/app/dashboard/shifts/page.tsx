@@ -1,5 +1,5 @@
 'use client';
-import { Users } from 'lucide-react';
+import { CalendarClock } from 'lucide-react';
 import { DataTable } from './_components/data-table';
 import { columns } from './_components/columns';
 import { useSearchParams } from 'next/navigation';
@@ -56,7 +56,7 @@ export default function ShiftDashboard({
                 <div className="flex items-end justify-between space-y-2">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                            <Users />
+                            <CalendarClock />
                             Shift List
                         </h2>
                         <p className="text-muted-foreground">list of all shift</p>

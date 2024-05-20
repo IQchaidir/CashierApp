@@ -1,5 +1,5 @@
 'use client';
-import { Package, UserPlus } from 'lucide-react';
+import { Package, PackagePlus } from 'lucide-react';
 import { DataTable } from './_components/data-table';
 import { columns } from './_components/columns';
 import Link from 'next/link';
@@ -60,7 +60,7 @@ export default function ProductsDashboard({
                             href={`/dashboard/products/create`}
                             className="border bg-[#04C99E] p-2 cursor-pointer font-medium flex gap-2 items-center rounded-md text-white"
                         >
-                            <UserPlus className="w-4 h-4 text-" />
+                            <PackagePlus className="w-4 h-4 text-" />
                             Create Product
                         </Link>
                     </div>

@@ -1,5 +1,5 @@
 'use client';
-import { UserPlus, Users } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { DataTable } from './_components/data-table';
 import { columns } from './_components/columns';
 import Link from 'next/link';
@@ -62,7 +62,7 @@ export default function TransactionDashboard({
                 <div className="flex items-end justify-between space-y-2">
                     <div>
                         <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-                            <Users />
+                            <Tag />
                             Transaction List
                         </h2>
                         <p className="text-muted-foreground">list of all transaction</p>
