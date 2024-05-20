@@ -148,7 +148,7 @@ export class ShiftService {
 
     async startShift(initial_cash: number, id: number) {
         const user = await prisma.user.findFirst({
-            where: { id },
+            where: { id, archive: false },
         });
 
         if (!user) {
