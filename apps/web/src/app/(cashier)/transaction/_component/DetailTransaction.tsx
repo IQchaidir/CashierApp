@@ -1,5 +1,6 @@
 import { Clock, DollarSign, ReceiptText, User } from 'lucide-react';
 import { format } from 'date-fns';
+import { formatToRupiah } from '@/utils/formatToRupiah';
 
 const DetailTransaction = ({ transaction }: { transaction: any }) => {
     if (!transaction) {
@@ -16,7 +17,9 @@ const DetailTransaction = ({ transaction }: { transaction: any }) => {
             {transaction && (
                 <>
                     <div className="flex flex-col p-4 gap-2">
-                        <div className="text-5xl text-center mt-4 mb-8 font-medium">Rp. {transaction.amount}</div>
+                        <div className="text-5xl text-center mt-4 mb-8 font-medium">
+                            {formatToRupiah(transaction.amount)}
+                        </div>
                         <div className="flex gap-1 text-sm">
                             <ReceiptText className="w-5 h-5" /> {transaction.invoice}
                         </div>
