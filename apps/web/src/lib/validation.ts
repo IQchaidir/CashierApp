@@ -21,6 +21,10 @@ export const validateNewCashier = Yup.object({
 export const validateUpdateCashier = Yup.object({
     user_name: Yup.string().max(20, 'Must be 20 letters or less').required('Username is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
+    password: Yup.string().matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+        'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number.',
+    ),
 });
 
 export const imageSchema = Yup.mixed()
