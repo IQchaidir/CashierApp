@@ -1,6 +1,6 @@
 import { ArrowLeftToLine } from 'lucide-react';
 import Link from 'next/link';
-import EditUser from './_components/EditCashier';
+import EditCashier from './_components/EditCashier';
 
 export default function AdminEditUser({ params: { id } }: { params: { id: number } }) {
     return (
@@ -13,7 +13,7 @@ export default function AdminEditUser({ params: { id } }: { params: { id: number
                     Update Cashier <span className="opacity-50 text-base font-medium"></span>
                 </div>
             </div>
-            <EditUser id={id} />
+            <EditCashier id={id} />
         </div>
     );
 }

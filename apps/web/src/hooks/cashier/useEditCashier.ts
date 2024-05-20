@@ -12,7 +12,7 @@ type Props = {
 export default function useEditCashier() {
     const { session } = useSession();
     const { mutate, isPending, isError } = useMutation({
-        mutationKey: [`/users/edit/${session?.token}`],
+        mutationKey: [`/cashier/edit/${session?.token}`],
         mutationFn: async ({ user_name, email, password, id }: Props) => {
             if (!session?.token) return null;
             const payload: any = {

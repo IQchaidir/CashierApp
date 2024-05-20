@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function useCashierById({ id }: { id: number }) {
     const { session } = useSession();
     const { data, isLoading, isError, refetch } = useQuery({
-        queryKey: [`/users/${id}/${session?.token}`],
+        queryKey: [`/cashier/${id}/${session?.token}`],
         queryFn: async () => {
             if (!session?.token) return null;
             const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/cashier/${id}`, {

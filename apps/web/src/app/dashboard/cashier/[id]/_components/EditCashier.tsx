@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import useEditCashier from '@/hooks/cashier/useEditCashier';
 import { validateUpdateCashier } from '@/lib/validation';
 
-export default function EditUser({ id }: { id: number }) {
+export default function EditCashier({ id }: { id: number }) {
     const router = useRouter();
     const { data, isLoading } = useCashierById({ id });
     const { mutate } = useEditCashier();
