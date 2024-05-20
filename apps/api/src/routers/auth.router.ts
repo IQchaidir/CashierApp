@@ -1,6 +1,4 @@
 import { AuthController } from '@/controllers/auth.controller';
-import { cashierValidator } from '@/middleware/validator';
-import { verifyAdmin } from '@/middleware/verifyAdmin';
 import { verifyToken } from '@/middleware/verifyJwt';
 import { Router } from 'express';
 

@@ -33,10 +33,11 @@ const EditCategory = ({ name, id }: Props) => {
                     });
                     setOpen(false);
                 },
-                onError: () => {
+                onError: (res: any) => {
                     toast({
                         variant: 'destructive',
                         title: 'Category name failed to update',
+                        description: res?.response.data,
                     });
                 },
             },

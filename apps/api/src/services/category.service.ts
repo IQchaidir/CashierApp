@@ -40,6 +40,13 @@ export class CategoryService {
     }
 
     async updateCategory(id: number, name: string) {
+        const checkName = await prisma.category.findFirst({
+            where: { name, archive: false, NOT: { id } },
+        });
+
+        if (checkName) {
+            return resBadRequest('Category already exist');
+        }
         const updateCategory = await prisma.category.update({
             where: { id },
             data: { name },
