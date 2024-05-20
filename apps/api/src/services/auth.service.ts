@@ -7,7 +7,7 @@ import { resBadRequest, resCreated, resNotFound, resSuccess, resUnauthorized } f
 export class AuthService {
     async login(email: string, password: string) {
         const user = await prisma.user.findFirst({
-            where: { email },
+            where: { email, archive: false },
         });
 
         if (!user) {

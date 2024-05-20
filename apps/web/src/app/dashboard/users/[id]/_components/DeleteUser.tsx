@@ -39,7 +39,7 @@ export default function DeleteCashier({ id }: Props) {
                     toast({
                         variant: 'destructive',
                         title: 'User Failed to delete !',
-                        description: res?.response?.data?.message,
+                        description: res?.response?.data,
                     });
                 },
             },

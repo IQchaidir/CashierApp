@@ -2,6 +2,7 @@ import prisma from '@/prisma';
 import { hashPassword } from '@/lib/hashPassword';
 import { resBadRequest, resCreated, resNotFound, resSuccess } from '@/utils/responses';
 import { User } from '@prisma/client';
+import { ShiftService } from './shift.service';
 
 export class CashierService {
     async createCashier(email: string, password: string, user_name: string) {
@@ -114,6 +115,13 @@ export class CashierService {
     }
 
     async deleteCashiser(id: number) {
+        const shiftService = new ShiftService();
+
+        const checkShift = await shiftService.checkShift(id);
+        if (checkShift.currentShift) {
+            return resBadRequest('There is still an active shift from this cashier');
+        }
+
         const cashier = await prisma.user.update({
             where: { id },
             data: { archive: true },
