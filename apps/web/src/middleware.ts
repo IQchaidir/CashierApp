@@ -29,28 +29,48 @@ const adminOnly = [
     '/dashboard/transactions',
     '/dashboard/reports',
     '/dashboard/shifts',
+    /^\/dashboard\/products\/\d+$/,
+    /^\/dashboard\/cashier\/\d+$/,
 ];
 
+const adminOnlyDynamicRoutes = [/^\/dashboard\/products\/\d+$/, /^\/dashboard\/cashier\/\d+$/];
+
 export default async function middleware(req: NextRequest) {
-    if (protectedRoutes.includes(req.nextUrl.pathname)) {
+    // Combine all protected routes and dynamic route patterns
+    const allProtectedRoutes = protectedRoutes.concat(adminOnlyDynamicRoutes.map((pattern) => pattern.source));
+
+    // Check if the route is protected
+    const isProtectedRoute =
+        protectedRoutes.includes(req.nextUrl.pathname) ||
+        adminOnlyDynamicRoutes.some((pattern) => pattern.test(req.nextUrl.pathname));
+
+    if (isProtectedRoute) {
         const absoluteURL = new URL('/login/cashier', req.nextUrl.origin);
         const cookies = getCookies();
         const session: any = cookies.get('session');
 
         if (!session) return NextResponse.redirect(absoluteURL.toString());
-        const { token, role } = await JSON.parse(session);
+        const { token, role } = JSON.parse(session);
         if (!token) return NextResponse.redirect(absoluteURL.toString());
 
         if (adminOnly.includes(req.nextUrl.pathname) && role !== 'ADMIN') {
             return NextResponse.redirect(absoluteURL.toString());
         }
+
+        if (adminOnlyDynamicRoutes.some((pattern) => pattern.test(req.nextUrl.pathname)) && role !== 'ADMIN') {
+            return NextResponse.redirect(absoluteURL.toString());
+        }
+
         if (protectedHome.includes(req.nextUrl.pathname) && role === 'CASHIER') {
             return NextResponse.redirect(new URL('/cashier', req.nextUrl.origin));
         } else if (protectedHome.includes(req.nextUrl.pathname) && role === 'ADMIN') {
-            return NextResponse.redirect(new URL('/dashboard/report', req.nextUrl.origin));
+            return NextResponse.redirect(new URL('/dashboard/reports', req.nextUrl.origin));
         }
+
         if (protectedDashboard.includes(req.nextUrl.pathname) && role === 'ADMIN') {
             return NextResponse.redirect(new URL('/dashboard/reports', req.nextUrl.origin));
         }
     }
+
+    return NextResponse.next();
 }

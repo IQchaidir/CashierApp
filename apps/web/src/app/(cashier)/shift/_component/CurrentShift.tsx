@@ -4,7 +4,7 @@ import DetailCurrentShift from './DetailCurrentShift';
 
 const CurrentShift = (data: any) => {
     return (
-        <div className="w-full flex flex-col h-[660px]">
+        <div className="w-full flex flex-col h-[690px]">
             {data && (
                 <div className="w-full justify-between flex flex-grow">
                     <div className="flex flex-col bg-white w-1/2 font-semibold border-r  h-full">

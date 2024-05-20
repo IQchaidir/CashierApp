@@ -39,8 +39,8 @@ const OrderSummary = () => {
     };
 
     return (
-        <div className="flex-col w-1/3 bg-white h-[655px]">
-            <div className="w-full h-[600px] overflow-auto">
+        <div className="flex-col w-1/3 bg-white h-[685px]">
+            <div className="w-full h-[630px] overflow-auto">
                 <div className="flex bg-gray-700 text-white">
                     <div className="flex-1 py-2 px-4">Item</div>
                     <div className="flex-1 py-2 px-4">Quantity</div>

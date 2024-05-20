@@ -37,7 +37,7 @@ const ListTransaction = ({
     };
 
     return (
-        <div className="   w-3/4 bg-white h-[650px]">
+        <div className="   w-3/4 bg-white h-[685px]">
             <div className="flex justify-between bg-emerald-300 p-3">
                 <SearchInput initialSearch={input} onSearchChange={handleSearch} setCurrentPage={setCurrentPage} />
                 <FilterPayment setCurrentPage={setCurrentPage} />

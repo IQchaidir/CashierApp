@@ -37,7 +37,7 @@ const ShiftPage = () => {
         return <CurrentShift data={shift} />;
     } else
         return (
-            <div className="flex justify-center pt-24 h-[665px]">
+            <div className="flex justify-center pt-24 h-[680px]">
                 <div className="flex flex-col items-center">
                     <Image src={'/cashier.png'} alt="cashier" width={200} height={200} />
                     <input

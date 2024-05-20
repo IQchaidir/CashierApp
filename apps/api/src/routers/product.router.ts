@@ -16,8 +16,8 @@ export class ProductRouter {
     }
 
     private initializeRoutes(): void {
-        this.router.get('/', this.productController.getProductAdmin);
-        this.router.get('/cashier', this.productController.getProductCashier);
+        this.router.get('/', verifyToken, verifyAdmin, this.productController.getProductAdmin);
+        this.router.get('/cashier', verifyToken, this.productController.getProductCashier);
         this.router.get('/:id', this.productController.getProductById);
         this.router.post(
             '/',

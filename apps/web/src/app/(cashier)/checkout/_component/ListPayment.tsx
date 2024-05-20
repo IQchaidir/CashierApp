@@ -6,7 +6,7 @@ const ListPayment = ({ handleChangePayment }: { handleChangePayment: (payment: a
     const [selectedPayment, setSelectedPayment] = useState('CASH');
 
     return (
-        <div className="flex  flex-col w-1/3 bg-white border-r-2 border-t-2 h-[664px]">
+        <div className="flex  flex-col w-1/3 bg-white border-r-2 border-t-2  h-[685px]">
             <div className="flex w-full h-16 justify-center bg-[#04C99E] items-center px-2 mb-2">
                 <p className="text-white text-xl font-medium">Pilih Pembayaran</p>
             </div>

@@ -40,9 +40,14 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                     variant: 'destructive',
                     title: 'Pembayaran tidak boleh kurang dari total belanja!',
                 });
+            } else if (cartItems.length === 0) {
+                toast({
+                    variant: 'destructive',
+                    title: 'tidak ada produk yang dipilih!',
+                });
             } else {
                 let cardNumber = '';
-
+                console.log(cartItems);
                 if (selectedPayment === 'DEBIT') {
                     await validateDebit.validate({ cardNumber: inputValue });
                     cardNumber = inputValue;
@@ -81,7 +86,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
     };
 
     return (
-        <div className="flex flex-col  items-center w-2/3">
+        <div className="flex flex-col  items-center w-2/3 h-[685px]">
             <div className="flex w-full justify-between bg-[#04C99E] border-t-2  items-center px-2">
                 <div className="flex items-center">
                     {selectedPayment === 'CASH' ? (
@@ -159,7 +164,7 @@ const NumberPad = ({ selectedPayment }: { selectedPayment: string }) => {
                             {number === '00' ? '00' : number}
                         </button>
                     ))}
-                    <button className=" p-4 rounded text-4xl mb-10" onClick={handleClear}>
+                    <button className=" p-4 rounded text-4xl mb-16" onClick={handleClear}>
                         C
                     </button>
                     <button className="bg-[#04C99E] p-4  text-4xl col-span-3 text-white" onClick={handleEnter}>
