@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { cn } from '@/lib/utils';
@@ -20,6 +20,7 @@ export function FilterDateReport({
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+
     const initialDate: DateRange = {
         from: start_date,
         to: end_date,
@@ -41,8 +42,11 @@ export function FilterDateReport({
         router.replace(`${pathname}?${params.toString()}`);
     }, [date, pathname, router, searchParams]);
 
-    const handleReset = async () => {
-        setDate(undefined);
+    const handleReset = () => {
+        const now = new Date();
+        const defaultStartDate = new Date(format(addDays(now, -6), 'yyyy-MM-dd'));
+        const defaultEndDate = new Date(format(now, 'yyyy-MM-dd'));
+        setDate({ from: defaultStartDate, to: defaultEndDate });
     };
 
     return (
