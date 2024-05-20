@@ -12,27 +12,6 @@ export class ReportService {
         if (startDate && endDate) {
             startUtcDate = formattedUtcDate(startDate);
             endUtcDate = formattedUtcDate(endDate, true);
-        } else {
-            if (!startDate) {
-                const now = new Date();
-                let lastMonday = startOfWeek(now);
-                if (now.getDay() !== 1) {
-                    lastMonday = addDays(lastMonday, -7);
-                }
-                startDate = formatToDateTimeString(lastMonday);
-            }
-
-            if (!endDate) {
-                const now = new Date();
-                let lastSunday = endOfWeek(now);
-                if (now.getDay() !== 0) {
-                    lastSunday = addDays(lastSunday, -1);
-                }
-                endDate = formatToDateTimeString(lastSunday, true);
-            }
-
-            startUtcDate = new Date(startDate);
-            endUtcDate = new Date(endDate);
         }
 
         whereClause.createdAt = {
@@ -85,27 +64,6 @@ export class ReportService {
         if (startDate && endDate) {
             startUtcDate = formattedUtcDate(startDate);
             endUtcDate = formattedUtcDate(endDate, true);
-        } else {
-            if (!startDate) {
-                const now = new Date();
-                let lastMonday = startOfWeek(now);
-                if (now.getDay() !== 1) {
-                    lastMonday = addDays(lastMonday, -7);
-                }
-                startDate = formatToDateTimeString(lastMonday);
-            }
-
-            if (!endDate) {
-                const now = new Date();
-                let lastSunday = endOfWeek(now);
-                if (now.getDay() !== 0) {
-                    lastSunday = addDays(lastSunday, -1);
-                }
-                endDate = formatToDateTimeString(lastSunday, true);
-            }
-
-            startUtcDate = new Date(startDate);
-            endUtcDate = new Date(endDate);
         }
         whereClause.createdAt = {
             gte: startUtcDate,
