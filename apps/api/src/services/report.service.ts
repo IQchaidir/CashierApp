@@ -45,8 +45,13 @@ export class ReportService {
             _count: {
                 product_id: true,
             },
+            _sum: {
+                quantity: true,
+            },
             where: whereClause,
         });
+
+        console.log('Aggregated Sales Data:', salesData);
 
         const productIds = salesData.map((data) => data.product_id);
         const products = await prisma.product.findMany({
@@ -63,7 +68,7 @@ export class ReportService {
             const product = products.find((product) => product.id === data.product_id);
             return {
                 productName: product?.name || 'Unknown',
-                count: data._count.product_id,
+                count: data._sum.quantity, // Menggunakan hasil dari _sum.quantity
             };
         });
 
