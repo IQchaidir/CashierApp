@@ -10,6 +10,7 @@ const protectedRoutes = [
     '/shift',
     '/transaction',
     '/dashboard',
+    '/checkout',
     '/dashboard/cashier',
     '/dashboard/cashier/create',
     '/dashboard/products',
@@ -36,10 +37,7 @@ const adminOnly = [
 const adminOnlyDynamicRoutes = [/^\/dashboard\/products\/\d+$/, /^\/dashboard\/cashier\/\d+$/];
 
 export default async function middleware(req: NextRequest) {
-    // Combine all protected routes and dynamic route patterns
     const allProtectedRoutes = protectedRoutes.concat(adminOnlyDynamicRoutes.map((pattern) => pattern.source));
-
-    // Check if the route is protected
     const isProtectedRoute =
         protectedRoutes.includes(req.nextUrl.pathname) ||
         adminOnlyDynamicRoutes.some((pattern) => pattern.test(req.nextUrl.pathname));
