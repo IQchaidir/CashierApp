@@ -64,7 +64,9 @@ export function DetailShiftSheet({ shift, start_time }: { shift: any; start_time
                             </div>
                             <div className="col-span-2">
                                 <p className="text-gray-500">Total Kas Diharapkan:</p>
-                                <p className="text-lg font-semibold text-gray-800">{formatToRupiah(shift.totalCash)}</p>
+                                <p className="text-lg font-semibold text-gray-800">
+                                    {formatToRupiah(Number(shift.initial_cash) + shift.totalCash)}
+                                </p>
                             </div>
                             <div className="col-span-2">
                                 <p className="text-gray-500">Kas Aktual:</p>

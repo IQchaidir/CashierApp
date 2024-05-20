@@ -6,8 +6,6 @@ const DetailCurrentShift = ({ data }: { data: any }) => {
     let actualCash;
     if (data) {
         actualCash = Number(data.data.initial_cash) + Number(data.data.totalCash);
-        cashDifference = data.data.initial_cash + data.data.totalCash;
-        if (cashDifference < 0) cashDifference = 0;
     }
     return (
         <div className="w-1/2 p-8 bg-grey-50 h-full ">
