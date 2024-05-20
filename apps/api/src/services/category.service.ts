@@ -61,6 +61,7 @@ export class CategoryService {
         const productsWithCategory = await prisma.product.findMany({
             where: {
                 category: { id },
+                archive: false,
             },
         });
 
