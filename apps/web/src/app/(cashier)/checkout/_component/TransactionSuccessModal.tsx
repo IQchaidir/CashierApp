@@ -21,12 +21,10 @@ const TransactionSuccessModal = ({ selectedPayment, inputValue }: { selectedPaym
                 <CircleCheckBig className="h-36 w-36 text-green-700" />
                 <p className="text-2xl text-white font-semibold mb-4">{data.invoice}</p>
                 <div className="w-full flex flex-col items-start gap-4 mb-4">
-                    <p className="text-xl text-white font-semibold">
-                        Total pembayaran: Rp. {formatToRupiah(totalPrice)}
-                    </p>
+                    <p className="text-xl text-white font-semibold">Total pembayaran:{formatToRupiah(totalPrice)}</p>
                     {selectedPayment === 'CASH' ? (
                         <p className="text-xl text-white font-semibold">
-                            Total kembalian: Rp. {formatToRupiah(Number(inputValue) - totalPrice)}
+                            Total kembalian: {formatToRupiah(Number(inputValue) - totalPrice)}
                         </p>
                     ) : (
                         <p className="text-xl text-white font-semibold">Nomor Debit: {formatNumberDebit(inputValue)}</p>

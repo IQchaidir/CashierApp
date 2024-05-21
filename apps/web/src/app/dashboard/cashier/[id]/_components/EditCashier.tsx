@@ -55,7 +55,7 @@ export default function EditCashier({ id }: { id: number }) {
                         toast({
                             variant: 'destructive',
                             title: 'Failed to edit cashier !',
-                            description: res?.response?.data?.message,
+                            description: res?.response?.data,
                         });
                     },
                 },
