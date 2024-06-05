@@ -1,8 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import prisma from '@/prisma';
-import { compare, genSalt, hash } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
-import express from 'express';
 import { AuthService } from '@/services/auth.service';
 import { ShiftService } from '@/services/shift.service';
 

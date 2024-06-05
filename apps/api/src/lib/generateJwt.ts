@@ -8,7 +8,7 @@ export async function generateJwt(user: User) {
             role: user.role,
             email: user.email,
         },
-        process.env.SECRET_KEY as string,
+        process.env.JWT_SECRET_KEY as string,
         { expiresIn: '1d' },
     );
     return jwtToken;

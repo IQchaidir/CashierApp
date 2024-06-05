@@ -34,18 +34,24 @@ export function FilterPayment({ setCurrentPage }: { setCurrentPage: any }) {
         const params = new URLSearchParams(searchParams);
         const page = params.get('page');
         if (page && page !== '1') {
-            params.set('payment', selectPayment);
+            if (selectPayment && selectPayment !== 'All Payment') {
+                params.set('payment', selectPayment);
+            }
             setCurrentPage(page);
             router.replace(`${pathname}?${params.toString()}`);
         }
     }, []);
+
+    const handleChange = () => {
+        setCurrentPage(1);
+    };
 
     return (
         <Select value={selectPayment} onValueChange={setSelectPayment}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="All Payment" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent onChange={handleChange}>
                 <SelectItem value="All Payment">Semua Transaksi</SelectItem>
                 <SelectItem value="CASH">CASH</SelectItem>
                 <SelectItem value="DEBIT">DEBIT</SelectItem>

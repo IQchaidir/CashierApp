@@ -28,7 +28,9 @@ export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any 
         const params = new URLSearchParams(searchParams);
         const page = params.get('page');
         if (page && page !== '1') {
-            params.set('category', selectCategory);
+            if (selectCategory && selectCategory !== 'All Product') {
+                params.set('category', selectCategory);
+            }
             setCurrentPage(page);
             router.replace(`${pathname}?${params.toString()}`);
         }
@@ -36,6 +38,7 @@ export function FilterCategoryProduct({ setCurrentPage }: { setCurrentPage: any 
 
     const handleCategoryChange = (category: string) => {
         setSelectCategory(category);
+        setCurrentPage(1);
     };
 
     return (
